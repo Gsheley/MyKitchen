@@ -1,3 +1,3 @@
-public class List {
+public abstract class List {
     
 }
