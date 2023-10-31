@@ -1,5 +1,8 @@
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.management.RuntimeErrorException;
 
 public class MealDB extends API{
     //constructor
@@ -7,11 +10,7 @@ public class MealDB extends API{
     {
     }
 
-    //connect
-    public void connect()
-    {
-        System.out.println("MealDB has been connected to...");
-    }
+    
 
     //query API by recipe name
     public Recipe queryByName(String name)
@@ -19,7 +18,20 @@ public class MealDB extends API{
         try{
             String query = "https://www.themealdb.com/api/json/v1/1/search.php?s="+ name;
             URL url = new URL(query);
-            System.out.println(url);
+            HttpURLConnection url_connection = (HttpURLConnection) url.openConnection();
+            url_connection.setRequestMethod("GET");
+
+            url_connection.connect();
+
+            int response_code = url_connection.getResponseCode();
+
+            if(response_code != 200)
+            {
+                throw new RuntimeException("HttpResponseCode: " + response_code);
+            }
+            else{
+                System.out.println("Connection successful with response code: " + response_code);
+            }
         }
         catch (Exception e)
         {
