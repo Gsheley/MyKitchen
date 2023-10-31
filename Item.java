@@ -1,9 +1,9 @@
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Item {
     public int itemID;
     protected String name;
-    public LocalDate dateAdded;
+    public Date dateAdded;
     public int quantity;
-    public LocalDate expirationDate;
+    public Date expirationDate;
 }
