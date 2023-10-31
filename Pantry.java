@@ -4,9 +4,7 @@ import java.util.Date;
 public class Pantry {
     private int id;
     protected String name;
-    public ArrayList<Item> items ; 
-
-
+    public ArrayList<Item> items; 
 
     public Pantry(String name)
     {
@@ -15,7 +13,7 @@ public class Pantry {
 
     public Pantry retrievePantry()
     {
-
+        return null;
     }
 
     public void addItem(String name, Date dateAdded, int quantity, Date expirDate)
