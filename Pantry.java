@@ -9,6 +9,7 @@ public class Pantry {
 
     public Pantry(String name)
     {
+        
         this.name = name;
     }
 
@@ -19,7 +20,11 @@ public class Pantry {
 
     public void addItem(String name, Date dateAdded, int quantity, Date expirDate)
     {
-        items.add(new Item(currentItemID++, name, ));
+        items.add(new Item(currentItemID++, name, dateAdded, quantity, expirDate));
+    }
+
+    public void addItem(String name, Date dateAdded, int quantity) {
+
     }
    
     public void editItem()

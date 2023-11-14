@@ -1,19 +1,14 @@
 import java.util.Date;
 
 public abstract class Notification {
-    int notifID;
-    Date notificationDate;
+    private int notifID = 0;
+    private Date notificationDate = null;
 
-    public void addNotification() {
-        
+    public int getNotifID() {
+        return notifID;
     }
 
-    public void editNotification() {
-
+    public Date getNotificationDate() {
+        return notificationDate;
     }
-
-    public void deleteNotification() {
-        
-    }
-
 }
