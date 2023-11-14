@@ -6,4 +6,8 @@ public class Item {
     public Date dateAdded;
     public int quantity;
     public Date expirationDate;
+
+    public Item() {
+        
+    }
 }
