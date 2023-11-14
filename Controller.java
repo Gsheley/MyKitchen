@@ -3,7 +3,10 @@ import java.util.Date;
 public class Controller {
     public static void main(String[] args) 
     {
-        System.out.println("Test");
+        NotificationService ns = new NotificationService();
+        ns.checkForNotifications();
+        Navigation nv = new Navigation();
+        nv.printHomePage();
     }
 
     int numKitchens = 0;
@@ -32,5 +35,21 @@ public class Controller {
     public void addItem(String name, int quantity, Date expirationDate) 
     {
 
+    }
+
+    public int getNumKitchens() {
+        return numKitchens;
+    }
+
+    public int getNumCarts() {
+        return numCarts;
+    }
+
+    public void setNumKitchens(int num) {
+        numKitchens = num;
+    }
+
+    public void setNumCarts(int num) {
+        numCarts = num;
     }
 }
