@@ -4,8 +4,19 @@ public class Recipe {
     public String[] recipeIngredients;
     public String[] recipeSteps;
 
-    public void printRecipe(Recipe recipeName) {
+    public void printRecipe() 
+    {
         System.out.println("Recipe Name: " + recipeName);
-        System.out.println("Recipe Info: " + recipeInfo);
+        System.out.println("Recipe ID: " + recipeID);
+        System.out.println("Ingredient List: ");
+        for(String i:recipeIngredients)
+        {
+            System.out.println(i);
+        }
+        System.out.println("Steps: ");
+        for(String i:recipeSteps)
+        {
+            System.out.println(i);
+        }
     }
 }
