@@ -1,8 +1,8 @@
 import java.util.Date;
 
-public class Notification {
-    public String message;
-    public Date date;
+public abstract class Notification {
+    int notifID;
+    Date notificationDate;
 
     public void addNotification() {
         
