@@ -1,7 +1,9 @@
  public class PantryService 
 {
-    public static Pantry createPantry(String name)
+    private int nextPantryID = 0;
+
+    public Pantry createPantry(String name)
     {
-        return new Pantry(name);
+        return new Pantry(nextPantryID, name);
     }
 }
