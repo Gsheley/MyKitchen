@@ -2,8 +2,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Pantry {
-    private int id;
-    protected String name;
+    private int PantryID;
+    private int currentItemID = 0;
+    private String name;
     public ArrayList<Item> items; 
 
     public Pantry(String name)
@@ -13,12 +14,12 @@ public class Pantry {
 
     public Pantry retrievePantry()
     {
-        return null;
+        return this;
     }
 
     public void addItem(String name, Date dateAdded, int quantity, Date expirDate)
     {
-        items.add(new Item());
+        items.add(new Item(currentItemID++, name, ));
     }
    
     public void editItem()
