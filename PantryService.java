@@ -4,6 +4,6 @@
 
     public Pantry createPantry(String name)
     {
-        return new Pantry(nextPantryID, name);
+        return new Pantry(nextPantryID++, name);
     }
 }

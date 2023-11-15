@@ -4,13 +4,13 @@ import java.util.Date;
 public class Pantry {
     private int pantryID;
     private int currentItemID = 0;
-    private String name;
+    private String pantryName;
     public ArrayList<Item> items; 
 
-    public Pantry(int pantryID, String name)
+    public Pantry(int pantryID, String pantryName)
     {
         this.pantryID = pantryID;
-        this.name = name;
+        this.pantryName = pantryName;
     }
 
     public Pantry retrievePantry()
@@ -28,8 +28,30 @@ public class Pantry {
         items.add(new Item(currentItemID++, name, dateAdded, quantity));
     }
    
-    public void editItem()
+    public void editItem(int itemID, String name, Date dateAdded, int quantity, Date expirDate)
+    {
+        for (Item item : items) {
+            if (item.getItemID)
+        }
+    }
+
+    public void editItem(int itemID, String name, Date dateAdded, int quantity)
     {
 
+    }
+
+    public int getPantryID() 
+    {
+        return pantryID;
+    }
+
+    public String getPantryName() 
+    {
+        return pantryName;
+    }
+
+    public void setPantryName(String pantryName) 
+    {
+        this.pantryName = pantryName;
     }
 }

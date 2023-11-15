@@ -25,10 +25,6 @@ public class Item {
         return itemID;
     }
 
-    public void setItemID(int itemID) {
-        this.itemID = itemID;
-    }
-
     public String getName() {
         return name;
     }
