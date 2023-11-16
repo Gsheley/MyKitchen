@@ -3,8 +3,6 @@ import java.util.Date;
 public class Controller {
     public static void main(String[] args) 
     {
-        NotificationService ns = new NotificationService();
-        ns.checkForNotifications();
         Navigation nv = new Navigation();
         nv.printHomePage();
     }
@@ -51,5 +49,9 @@ public class Controller {
 
     public void setNumCarts(int num) {
         numCarts = num;
+    }
+
+    public static void print(String msg) {
+        System.out.println(msg);
     }
 }

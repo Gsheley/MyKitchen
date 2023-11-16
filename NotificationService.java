@@ -7,8 +7,8 @@ public class NotificationService {
         return notificationList;
     }
 
-    public void checkForNotifications() {
-
+    public boolean checkForNotifications() {
+        return true;
     }
 
     public void addNotification() {
