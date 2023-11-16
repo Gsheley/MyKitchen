@@ -5,19 +5,18 @@ import java.net.URL;
 import javax.management.RuntimeErrorException;
 
 public class MealDB extends API{
+    //attributes
+    private static final String BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
+
     //constructor
-    public MealDB()
-    {
-    }
-
+    public MealDB(){}
     
-
     //query API by recipe name
     public Recipe queryByName(String name)
     {
         try{
-            String query = "https://www.themealdb.com/api/json/v1/1/search.php?s="+ name;
-            URL url = new URL(query);
+            String queryURL = BASE_URL + "search.php?s="+ name;
+            URL url = new URL(queryURL);
             HttpURLConnection url_connection = (HttpURLConnection) url.openConnection();
             url_connection.setRequestMethod("GET");
 
