@@ -1,20 +1,20 @@
-import java.util.Date;
+import java.util.Calendar;
 
 public class Item {
     private int itemID;
     private String name;
-    private Date dateAdded;
+    private Calendar dateAdded;
     private int quantity;
-    private Date expirationDate;
+    private Calendar expirationDate;
 
-    public Item(int itemID, String name, Date dateAdded, int quantity, Date expirationDate) {
+    public Item(int itemID, String name, Calendar dateAdded, int quantity, Calendar expirationDate) {
         this.itemID = itemID;
         this.name = name;
         this.dateAdded = dateAdded;
         this.quantity = quantity;
         this.expirationDate = expirationDate;
     }
-    public Item(int itemID, String name, Date dateAdded, int quantity) {
+    public Item(int itemID, String name, Calendar dateAdded, int quantity) {
         this.itemID = itemID;
         this.name = name;
         this.dateAdded = dateAdded;
@@ -33,11 +33,11 @@ public class Item {
         this.name = name;
     }
 
-    public Date getDateAdded() {
+    public Calendar getDateAdded() {
         return dateAdded;
     }
 
-    public void setDateAdded(Date dateAdded) {
+    public void setDateAdded(Calendar dateAdded) {
         this.dateAdded = dateAdded;
     }
 
@@ -49,11 +49,11 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public Date getExpirationDate() {
+    public Calendar getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(Calendar expirationDate) {
         this.expirationDate = expirationDate;
     }
 }

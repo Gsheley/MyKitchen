@@ -1,12 +1,12 @@
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Iterator;
 
 public class NotificationService {
     private ArrayList<Notification> notificationList = new ArrayList<Notification>();
     private Iterator<Notification> iterator = notificationList.iterator();
     private NotificationFactory notifFactory = new NotificationFactory();
-    private int currentNotifID = 1;
+    private int currentNotifID = 1; // keeps track of the next notifID to be instantiated
 
     public ArrayList<Notification> getNotificationList() {
         return notificationList;
@@ -16,10 +16,10 @@ public class NotificationService {
         if (notificationList.isEmpty()) {
             return false;
         } else {
-            Date currentDate = new Date();
+            Calendar currentDate = Calendar.getInstance();
             while (iterator.hasNext()) {
                 Notification notif = iterator.next();
-                if (notif.getNotificationDate().before(currentDate)) { // If any notifications have triggered before the current date/time
+                if (notif.getNotifDate().before(currentDate)) { // If any notifications have triggered before the current date/time
                     return true;
                 }
             }
@@ -27,15 +27,16 @@ public class NotificationService {
         }
     }
 
-    public void addNotification() {
-        notifFactory.createNotification(currentNotifID);
+    public void addNotification(Calendar notifDate, String message) { // adding a message is optional if the type is not VIEW
+        notificationList.add(notifFactory.createNotification(currentNotifID, notifDate, NotifType.VIEW, message));
+        currentNotifID++;
     }
 
-    public void modifyNotification(int idToModify, Date newDate) {
+    public void modifyNotification(int idToModify, Calendar newDate) {
         while (iterator.hasNext()) {
             Notification notif = iterator.next();
             if (notif.getNotifID() == idToModify) {
-                // TODO -- iterator.set(new Notification(notif.getMessage(), notif.getAge() + 1));
+                notif.setNotifDate(newDate);
             }
         }
     }
