@@ -7,6 +7,13 @@ public class Recipe {
     public int recipeID;
     public String[] recipeIngredients;
     public String recipeSteps;
+
+    public Recipe(String recipeName, int recipeID, String[] recipeIngredients, String recipeSteps) {
+        this.recipeName = recipeName;
+        this.recipeID = recipeID;
+        this.recipeIngredients = recipeIngredients;
+        this.recipeSteps = recipeSteps;
+    }
     
     //temporary attribute used to manually test the setup
     public String stringJson = "{\"meals\":[{\r\n" + //
