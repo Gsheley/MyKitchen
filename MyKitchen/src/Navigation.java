@@ -9,4 +9,11 @@ public class Navigation {
             Controller.print("You have no new notifications.");
         }
     }
+
+    // Clears the screen for printint new menuse
+    public static void clearConsole() {
+        for (int i = 0; i < 50; i++) {
+            System.out.println();
+        }
+    }
 }

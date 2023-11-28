@@ -1,5 +1,8 @@
 public class NotificationFactory {
-    public Notification createNotification() {
+    NotificationFactory() {
+    }
+
+    public Notification createNotification(int id) {
         return null;
     }
 }
