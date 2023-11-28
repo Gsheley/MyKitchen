@@ -31,6 +31,8 @@ public class MealDB extends API{
             else{
                 System.out.println("Connection successful with response code: " + response_code);
             }
+            return new Recipe();
+
         }
         catch (Exception e)
         {
