@@ -1,11 +1,11 @@
 import java.util.Calendar;
 
 public class Item {
-    private int itemID;
-    private String name;
-    private Calendar dateAdded;
-    private int quantity;
-    private Calendar expirationDate;
+    public int itemID;
+    public String name;
+    public Calendar dateAdded;
+    public int quantity;
+    public Calendar expirationDate;
 
     public Item(int itemID, String name, Calendar dateAdded, int quantity, Calendar expirationDate) {
         this.itemID = itemID;

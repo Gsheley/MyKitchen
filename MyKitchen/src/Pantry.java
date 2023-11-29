@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 public class Pantry {
     private int pantryID;
@@ -18,26 +18,49 @@ public class Pantry {
         return this;
     }
 
-    public void addItem(String name, Date dateAdded, int quantity, Date expirDate)
+    //To add items that have expiration dates
+    public void addItem(String name, Calendar dateAdded, int quantity, Calendar expirDate)
     {
-        items.add(new Item(currentItemID++, name, dateAdded, quantity, expirDate));
+        Item newItem = new Item(currentItemID, name, dateAdded, quantity, expirDate);
+        items.add(newItem);
+        currentItemID++;
     }
 
-    public void addItem(String name, Date dateAdded, int quantity) 
+    //To add items without expiration dates
+    public void addItem(String name, Calendar dateAdded, int quantity) 
     {
-        items.add(new Item(currentItemID++, name, dateAdded, quantity));
+        Item newItem = new Item(currentItemID, name, dateAdded, quantity);
+        items.add(newItem);
+        currentItemID++;
     }
    
-    public void editItem(int itemID, String name, Date dateAdded, int quantity, Date expirDate)
+    //To edit Items that have an expiration dates
+    public void editItem(int itemID, String name, Calendar dateAdded, int quantity, Calendar expirDate)
     {
-        for (Item item : items) {
-            if (item.getItemID)
+        for(int i = 0; i < items.size(); i++) {
+            int curItemID = (items.get(i)).itemID;
+            if(curItemID == (itemID)){        
+                (items.get(i)).name = name;
+                (items.get(i)).dateAdded = dateAdded;
+                (items.get(i)).quantity = quantity;
+                (items.get(i)).expirationDate = expirDate;
+            }
+
         }
     }
 
-    public void editItem(int itemID, String name, Date dateAdded, int quantity)
+    //To edit Items without expiration dates
+    public void editItem(int itemID, String name, Calendar dateAdded, int quantity)
     {
+        for(int i = 0; i < items.size(); i++) {
+            int curItemID = (items.get(i)).itemID;
+            if(curItemID == (itemID)){        
+                (items.get(i)).name = name;
+                (items.get(i)).dateAdded = dateAdded;
+                (items.get(i)).quantity = quantity;
+            }
 
+        }
     }
 
     public int getPantryID() 

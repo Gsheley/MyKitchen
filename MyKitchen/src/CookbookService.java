@@ -9,7 +9,5 @@ public class CookbookService {
     public void deleteRecipe(Recipe recipe) {
         Cookbook.removeRecipe(recipe);
     }
-    public static void main(String[] args){
-    }
 }
 
