@@ -15,8 +15,8 @@ public class Kitchen
         //checks each recipe in the recipes array list
         Pantry foundPantry = null;
         for(int i = 0; i < Pantry.PantryList.size(); i++) {
-            String curRecipe = (PantryList.get(i)).pantryID;
-            if(curRecipe.equals(pantryID)){
+            Pantry curPantry = (PantryList.get(i)).pantryID;
+            if(curPantry.equals(pantryID)){
                 foundPantry = PantryList.get(i);
             }
         }
