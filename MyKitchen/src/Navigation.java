@@ -2,12 +2,13 @@ public class Navigation {
     NotificationService ns = new NotificationService();
 
     public void printHomePage() {
-        Controller.print("Welcome to MyKitchen!\n");
+        System.out.println("Welcome to MyKitchen!\n");
         if (ns.checkForNotifications()) {
-            Controller.print("You have new notification(s)!");
+            System.out.println("You have new notification(s)!");
         } else {
-            Controller.print("You have no new notifications.");
+            System.out.println("You have no new notifications.");
         }
+        System.out.println("\nSelect a navigation option below.");
     }
 
     public void printPantryPage() {

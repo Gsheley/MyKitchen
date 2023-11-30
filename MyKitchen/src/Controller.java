@@ -50,8 +50,4 @@ public class Controller {
     public void setNumCarts(int num) {
         numCarts = num;
     }
-
-    public static void print(String msg) {
-        System.out.println(msg);
-    }
 }
