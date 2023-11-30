@@ -8,11 +8,11 @@ public class Recipe {
     public String[] recipeIngredients;
     public String recipeSteps;
 
-    public Recipe(String recipeName, int recipeID, String[] recipeIngredients, String recipeSteps) {
-        this.recipeName = recipeName;
-        this.recipeID = recipeID;
-        this.recipeIngredients = recipeIngredients;
-        this.recipeSteps = recipeSteps;
+    public Recipe() {
+        //this.recipeName = recipeName;
+        //this.recipeID = recipeID;
+        //this.recipeIngredients = recipeIngredients;
+        //this.recipeSteps = recipeSteps;
     }
     
     //temporary attribute used to manually test the setup
@@ -90,7 +90,7 @@ public class Recipe {
         JsonParser jsonParser = new JsonParser();
         JsonElement jsonElement = jsonParser.parse(Arrabiata.stringJson);
         JsonObject jsonObject = jsonElement.getAsJsonObject();
-        Arrabiata.recipeID = jsonObject.get("idMeal").getAsInt();
+        //Arrabiata.recipeID = jsonObject.get("idMeal").getAsInt();
         System.err.println(Arrabiata.recipeID);
     }
 }
