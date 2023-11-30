@@ -3,8 +3,8 @@ import java.util.Calendar;
 
 public class Kitchen 
 {
-    public ArrayList<Pantry> inventory;
-    public ArrayList<Pantry> shoppingCart;
+    public ArrayList<Pantry> inventory = new ArrayList<Pantry>();
+    public ArrayList<Pantry> shoppingCart = new ArrayList<Pantry>();
     public Cookbook myCookbook;
 
     public Pantry createPantry(String name){
