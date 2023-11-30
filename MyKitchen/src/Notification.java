@@ -21,10 +21,5 @@ public abstract class Notification {
         this.notifDate = date;
     }
 
-    public void displayNotification() {
-        System.out.println("Notification #" + this.notifID);
-        System.out.println("Date of Notification: " 
-        + notifDate.get(Calendar.MONTH)
-        + notifDate.get(Calendar.DAY_OF_MONTH));
-    }
+    public abstract void displayNotification();
 }
