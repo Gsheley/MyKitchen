@@ -9,8 +9,8 @@ import com.google.gson.JsonParser;
 public class Recipe {
     public String recipeName;
     public int recipeID;
-    public String[] recipeIngredients;
-    public String[] recipeMeasurements;
+    public List<String> recipeIngredients;
+    public List<String> recipeMeasurements;
     public String recipeSteps;
 
     public Recipe(String jsonString) {
@@ -28,21 +28,33 @@ public class Recipe {
         this.recipeID = recipeID;
 
         //populate the ingredients list 
-        List<String> ingredientList = new ArrayList<>();
+        this.recipeIngredients = new ArrayList<>();
         for (int i = 1; i <= 20; i++){
             if(!mealObject.get("strIngredient"+i).isJsonNull())
             {
                 String ingredient = mealObject.get(("strIngredient"+i).toString()).getAsString();
                 if (ingredient != null && !ingredient.isEmpty())
                 {
-                    ingredientList.add(ingredient);
+                    this.recipeIngredients.add(ingredient);
                 }
             }
         }
 
-        this.recipeIngredients = ingredientList.toArray(new String[0]);
-        //this.recipeIngredients = recipeIngredients;
-        //this.recipeSteps = recipeSteps;
+        //populate measurements list
+        this.recipeMeasurements = new ArrayList<>();
+        for (int i = 1; i <= 20; i++){
+            if(!mealObject.get("strMeasure"+i).isJsonNull())
+            {
+                String measurement = mealObject.get(("strMeasure"+i).toString()).getAsString();
+                if (measurement != null && !measurement.isEmpty())
+                {
+                    this.recipeMeasurements.add(measurement);
+                }
+            }
+        }
+
+        //enter recipe instructions
+        this.recipeSteps = mealObject.get("strInstructions").toString();
     }
 
     public void printRecipe(int id) 
@@ -52,14 +64,13 @@ public class Recipe {
         System.out.println("Recipe ID: " + recipeID);
         System.out.println("Ingredient List: ");
         
-        for(String i:recipeIngredients)
+        for(int i = 0; i < this.recipeIngredients.size(); i++)
         {
-            System.out.println(i);
+            System.out.println(recipeMeasurements.get(i)+ " : "+recipeIngredients.get(i));
         }
-        /*
-        System.out.println("Steps: ");
-        System.out.println(recipeSteps);
-        */
+        
+        System.out.println("\nInstructions:\n\n"+recipeSteps);
+        
     }
 
     //ID getter
@@ -68,9 +79,16 @@ public class Recipe {
         return this.recipeID;
     }
 
+    //Meal name getter
+    public String getName()
+    {
+        return this.recipeName;
+    }
+
     public static void main(String [] args)
     {
         //temporary attribute used to manually test the setup
+        /*
         String stringJson = "{\"meals\":[{\r\n" + //
             "    \"idMeal\":\"52771\",\r\n" + //
             "    \"strMeal\":\"Spicy Arrabiata Penne\",\r\n" + //
@@ -132,5 +150,6 @@ public class Recipe {
         Recipe Arrabiata = new Recipe(stringJson);
 
         Arrabiata.printRecipe(52771);
+        */
     }
 }
