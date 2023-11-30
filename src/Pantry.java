@@ -10,7 +10,9 @@ public class Pantry {
     public Pantry(int pantryID, String pantryName)
     {
         this.pantryID = pantryID;
+        this.currentItemID = 0;
         this.pantryName = pantryName;
+        this.items = new ArrayList<Item>();
     }
 
     public Pantry retrievePantry()
