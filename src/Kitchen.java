@@ -1,23 +1,31 @@
 import java.util.ArrayList;
 import java.util.Calendar;
 
+enum PantryType {
+    KITCHEN_INVENTORY,
+    SHOPPING_CART
+}
+
 public class Kitchen 
 {
     public ArrayList<Pantry> inventory = new ArrayList<Pantry>();
     public ArrayList<Pantry> shoppingCart = new ArrayList<Pantry>();
     public Cookbook myCookbook;
 
-    public Pantry createPantry(String name){
-        return PantryService.createPantry(name);
+    public Pantry createPantry(PantryType type, String name){
+        return PantryService.createPantry(type, name);
     }
 
     public Pantry retrievePantry(int pantryID){
         //checks each recipe in the recipes array list
         Pantry foundPantry = null;
-        for(int i = 0; i < Pantry.PantryList.size(); i++) {
-            Pantry curPantry = (PantryList.get(i)).pantryID;
-            if(curPantry.equals(pantryID)){
-                foundPantry = PantryList.get(i);
+        if (pantryID < PantryService.range) {
+            if (pantryID < PantryService.nextPantrykiID) {
+                foundPantry = inventory.get(pantryID);
+            }
+        } else {
+            if (pantryID < PantryService.nextPantryscID) {
+                foundPantry = shoppingCart.get(pantryID);
             }
         }
         return foundPantry;

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 
 public class Navigation {
@@ -55,15 +57,40 @@ public class Navigation {
 
     public void printRecipe(int recipeID) {
         Navigation.clearConsole();
+        
         // Recipe needs to be finished for implementation
     }
 
-    public void printItem(int itemID) {
+    public void printItem(int pantryID, int itemID) {
         Navigation.clearConsole();
     }
 
-    public void printSearchResults() {
-        
+    public void printSearchResults(String query, ArrayList<Object> list) {
+        ArrayList<Object> searchResults = Search.search(query, list);
+
+        if(list.get(0) instanceof Item) {
+            ArrayList<Item> pantryResults = new ArrayList<Item>();
+
+            for (Object obj : searchResults) {
+                // Typecasting each Object to Item and adding it to the new ArrayList
+                Item item = (Item) obj;
+                pantryResults.add(item);
+            }
+            for (int i = 0; i < pantryResults.size(); i++) {
+                System.out.println(pantryResults.get(i).getName());
+            }
+        } else if (list.get(0) instanceof Recipe) {
+            ArrayList<Recipe> cookbookResults = new ArrayList<Recipe>();
+
+            for (Object obj : searchResults) {
+                // Typecasting each Object to Recipe and adding it to the new ArrayList
+                Recipe recipe = (Recipe) obj;
+                cookbookResults.add(recipe);
+            }
+            for (int i = 0; i <= cookbookResults.size(); i++) {
+                //System.out.println(cookbookResults[i].getRecipeName());
+            }
+        }
     }
 
     // Clears the screen for printing new menus
@@ -71,5 +98,20 @@ public class Navigation {
         for (int i = 0; i < 50; i++) {
             System.out.println();
         }
+    }
+
+    public static void main(String args[]) {
+        Navigation nv = new Navigation();
+        ArrayList<Object> items = new ArrayList<Object>();
+        Item testItem1 = new Item(1,"test", Calendar.getInstance(),12);
+        Item testItem2 = new Item(1,"apple", Calendar.getInstance(),12);
+        Item testItem3 = new Item(1,"banana", Calendar.getInstance(),12);
+        Item testItem4 = new Item(1,"pear", Calendar.getInstance(),12);
+        items.add(testItem1);
+        items.add(testItem2);
+        items.add(testItem3);
+        items.add(testItem4);
+
+        nv.printSearchResults("app", items);
     }
 }
