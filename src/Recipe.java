@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -6,17 +10,62 @@ public class Recipe {
     public String recipeName;
     public int recipeID;
     public String[] recipeIngredients;
+    public String[] recipeMeasurements;
     public String recipeSteps;
 
-    public Recipe() {
-        //this.recipeName = recipeName;
-        //this.recipeID = recipeID;
+    public Recipe(String jsonString) {
+        //Json setup for each object
+        JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+        JsonArray mealsArray = jsonObject.getAsJsonArray("meals");
+        JsonObject mealObject = mealsArray.get(0).getAsJsonObject();
+        
+        //retreive name + ID
+        String recipeName = mealObject.get("strMeal").getAsString();
+        int recipeID = mealObject.get("idMeal").getAsInt();
+        
+        //set the name + ID
+        this.recipeName = recipeName;
+        this.recipeID = recipeID;
+
+        //populate the ingredients list 
+        List<String> ingredientList = new ArrayList<>();
+        for (int i = 1; i <= 20; i++){
+            if(!mealObject.get("strIngredient"+i).isJsonNull())
+            {
+                String ingredient = mealObject.get(("strIngredient"+i).toString()).getAsString();
+                if (ingredient != null && !ingredient.isEmpty())
+                {
+                    ingredientList.add(ingredient);
+                }
+            }
+        }
+
+        this.recipeIngredients = ingredientList.toArray(new String[0]);
         //this.recipeIngredients = recipeIngredients;
         //this.recipeSteps = recipeSteps;
     }
-    
-    //temporary attribute used to manually test the setup
-    public String stringJson = "{\"meals\":[{\r\n" + //
+
+    public void printRecipe(int id) 
+    {
+        id = this.recipeID;
+        System.out.println("Recipe Name: " + recipeName);
+        System.out.println("Recipe ID: " + recipeID);
+        System.out.println("Ingredient List: ");
+        
+        for(String i:recipeIngredients)
+        {
+            System.out.println(i);
+        }
+        /*
+        System.out.println("Steps: ");
+        System.out.println(recipeSteps);
+        */
+    }
+
+    public static void main(String [] args)
+    {
+        //temporary attribute used to manually test the setup
+        String stringJson = "{\"meals\":[{\r\n" + //
             "    \"idMeal\":\"52771\",\r\n" + //
             "    \"strMeal\":\"Spicy Arrabiata Penne\",\r\n" + //
             "    \"strDrinkAlternate\":null,\r\n" + //
@@ -72,25 +121,10 @@ public class Recipe {
             "    \"strImageSource\":null,\r\n" + //
             "    \"strCreativeCommonsConfirmed\":null,\r\n" + //
             "    \"dateModified\":null}]}";
-    public void printRecipe() 
-    {
-        System.out.println("Recipe Name: " + recipeName);
-        System.out.println("Recipe ID: " + recipeID);
-        System.out.println("Ingredient List: ");
-        for(String i:recipeIngredients)
-        {
-            System.out.println(i);
-        }
-        System.out.println("Steps: ");
-        System.out.println(recipeSteps);
-    }
-    public static void main(String [] args)
-    {
-        Recipe Arrabiata = new Recipe();
-        JsonParser jsonParser = new JsonParser();
-        JsonElement jsonElement = jsonParser.parse(Arrabiata.stringJson);
-        JsonObject jsonObject = jsonElement.getAsJsonObject();
-        //Arrabiata.recipeID = jsonObject.get("idMeal").getAsInt();
-        System.err.println(Arrabiata.recipeID);
+        
+        
+        Recipe Arrabiata = new Recipe(stringJson);
+
+        Arrabiata.printRecipe(52771);
     }
 }
