@@ -12,7 +12,8 @@ public class Kitchen
     public ArrayList<Pantry> shoppingCart = new ArrayList<Pantry>();
     public Cookbook myCookbook;
 
-    public Pantry createPantry(PantryType type, String name){
+    public static Pantry createPantry(PantryType type){
+        // Call shared scanner for name here
         return PantryService.createPantry(type, name);
     }
 

@@ -16,14 +16,14 @@ public class Controller {
 
     }
 
-    public void createPantry(int id) 
+    public void createPantry() 
     {
-
+        Kitchen.createPantry(PantryType.KITCHEN_INVENTORY);
     }
 
     public void createCart() 
     {
-
+        Kitchen.createPantry(PantryType.SHOPPING_CART);
     }
 
     public void deleteCart(int id) 
