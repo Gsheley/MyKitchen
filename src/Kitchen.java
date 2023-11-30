@@ -46,4 +46,8 @@ public class Kitchen
     public void editItem(int itemID, String name, Calendar dateAdded, int quantity){
 
     }
+
+    public void saveRecipe(Recipe recipe){
+        CookbookService.saveRecipe(recipe);
+    }
 }
