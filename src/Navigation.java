@@ -57,7 +57,7 @@ public class Navigation {
 
     public void printRecipe(int recipeID) {
         Navigation.clearConsole();
-        
+        ArrayList<Recipe> recipeList = Cookbook.recipes;
         // Recipe needs to be finished for implementation
     }
 
