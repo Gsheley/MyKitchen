@@ -1,9 +1,16 @@
- public class PantryService 
-{
-    private int nextPantryID = 0;
+import java.util.ArrayList;
 
-    public Pantry createPantry(String name)
+public class PantryService 
+{
+    private static ArrayList<Pantry> PantryList = new ArrayList<Pantry>();
+    private static int nextPantryID = 1;
+
+    public static Pantry createPantry(String name)
     {
-        return new Pantry(nextPantryID++, name);
+        Pantry newPantry = new Pantry(nextPantryID,name);
+        PantryList.add(newPantry);
+        nextPantryID++;
+
+        return newPantry;
     }
 }

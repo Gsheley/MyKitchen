@@ -8,12 +8,19 @@ public class Kitchen
     public Cookbook myCookbook;
 
     public Pantry createPantry(String name){
-        Pantry newPantry = new Pantry(0,name);
-        return newPantry;
+        return PantryService.createPantry(name);
     }
 
     public Pantry retrievePantry(int pantryID){
-        return inventory;
+        //checks each recipe in the recipes array list
+        Pantry foundPantry = null;
+        for(int i = 0; i < Pantry.PantryList.size(); i++) {
+            String curRecipe = (PantryList.get(i)).pantryID;
+            if(curRecipe.equals(pantryID)){
+                foundPantry = PantryList.get(i);
+            }
+        }
+        return foundPantry;
     }
 
     public void addItem(String name, Calendar dateAdded, int quantity){
