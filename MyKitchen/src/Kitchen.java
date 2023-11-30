@@ -1,9 +1,10 @@
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Kitchen 
 {
-    public Pantry inventory ;
-    public Pantry shoppingCart;
+    public ArrayList<Pantry> inventory;
+    public ArrayList<Pantry> shoppingCart;
     public Cookbook myCookbook;
 
     public Pantry createPantry(String name){
