@@ -12,7 +12,8 @@ public class Kitchen
     public ArrayList<Pantry> shoppingCart = new ArrayList<Pantry>();
     public Cookbook myCookbook;
 
-    public Pantry createPantry(PantryType type, String name){
+    public static Pantry createPantry(PantryType type){
+        // Call shared scanner for name here
         return PantryService.createPantry(type, name);
     }
 
@@ -45,5 +46,9 @@ public class Kitchen
 
     public void editItem(int itemID, String name, Calendar dateAdded, int quantity){
 
+    }
+
+    public void saveRecipe(Recipe recipe){
+        CookbookService.saveRecipe(recipe);
     }
 }

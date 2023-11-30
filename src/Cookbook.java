@@ -6,7 +6,7 @@ public class Cookbook {
     public static ArrayList<Recipe> recipes;
     
     //function that grabs a recipe from the list of Recipes
-    public Recipe getRecipe(String name){
+    public static Recipe getRecipe(String name){
         //checks each recipe in the recipes array list
         Recipe foundRecipe = null;
         for(int i = 0; i < recipes.size(); i++) {
@@ -17,6 +17,12 @@ public class Cookbook {
         }
 
         return foundRecipe;
+    }
+
+    //stores the new recipe object in cookbooks recipes
+    public static Recipe saveRecipe(Recipe newRecipe) {
+        recipes.add(newRecipe);
+        return newRecipe;
     }
 
     //function that removesa recipe from the cookbook
