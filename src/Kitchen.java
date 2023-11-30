@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 
 enum PantryType {
     KITCHEN_INVENTORY,
@@ -12,7 +13,7 @@ public class Kitchen
     public ArrayList<Pantry> shoppingCart = new ArrayList<Pantry>();
     public Cookbook myCookbook;
 
-    public static Pantry createPantry(PantryType type){
+    public static Pantry createPantry(PantryType type, String name){
         // Call shared scanner for name here
         return PantryService.createPantry(type, name);
     }
@@ -50,5 +51,10 @@ public class Kitchen
 
     public void saveRecipe(Recipe recipe){
         CookbookService.saveRecipe(recipe);
+    }
+
+    public Pantry getPantryByID(int id) {
+        //private Iterator<Pantry> iterator = pantries.iterator();
+        return null;
     }
 }

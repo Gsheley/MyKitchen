@@ -63,6 +63,7 @@ public class Navigation {
 
     public void printItem(int pantryID, int itemID) {
         Navigation.clearConsole();
+        //ArrayList<Item> itemList = kitchen.getPantryByID(pantryID);
     }
 
     public void printSearchResults(String query, ArrayList<Object> list) {
