@@ -92,7 +92,7 @@ public class Navigation {
                 cookbookResults.add(recipe);
             }
             for (int i = 0; i <= cookbookResults.size(); i++) {
-                //System.out.println(cookbookResults[i].getRecipeName());
+                System.out.println(i + 1 + ". " + cookbookResults.get(i).getName());
             }
         }
     }
