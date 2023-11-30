@@ -66,9 +66,13 @@ public class Navigation {
     }
 
     public void printSearchResults(String query, ArrayList<Object> list) {
+        Navigation.clearConsole();
+        System.out.println("Search Results from query: " + query + "\n");
         ArrayList<Object> searchResults = Search.search(query, list);
 
-        if(list.get(0) instanceof Item) {
+        if (searchResults.isEmpty()) {
+            System.out.println("No Results Found.");
+        } else if(list.get(0) instanceof Item) {
             ArrayList<Item> pantryResults = new ArrayList<Item>();
 
             for (Object obj : searchResults) {
@@ -77,7 +81,7 @@ public class Navigation {
                 pantryResults.add(item);
             }
             for (int i = 0; i < pantryResults.size(); i++) {
-                System.out.println(pantryResults.get(i).getName());
+                System.out.println(i + 1 + ". " + pantryResults.get(i).getName());
             }
         } else if (list.get(0) instanceof Recipe) {
             ArrayList<Recipe> cookbookResults = new ArrayList<Recipe>();
@@ -104,14 +108,14 @@ public class Navigation {
         Navigation nv = new Navigation();
         ArrayList<Object> items = new ArrayList<Object>();
         Item testItem1 = new Item(1,"test", Calendar.getInstance(),12);
-        Item testItem2 = new Item(1,"apple", Calendar.getInstance(),12);
-        Item testItem3 = new Item(1,"banana", Calendar.getInstance(),12);
-        Item testItem4 = new Item(1,"pear", Calendar.getInstance(),12);
+        Item testItem2 = new Item(2,"apple", Calendar.getInstance(),12);
+        Item testItem3 = new Item(3,"apple guy", Calendar.getInstance(),12);
+        Item testItem4 = new Item(4,"pear", Calendar.getInstance(),12);
         items.add(testItem1);
         items.add(testItem2);
         items.add(testItem3);
         items.add(testItem4);
 
-        nv.printSearchResults("app", items);
+        nv.printSearchResults("ple", items);
     }
 }

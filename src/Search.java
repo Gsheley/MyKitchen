@@ -10,7 +10,7 @@ public class Search
             ArrayList<Object> results  = new ArrayList<Object>();
             for(int i =0; i < list.size(); i++)
             {
-                if(((Item)list.get(i)).getName()==query)
+                if(((Item)list.get(i)).getName().contains(query))
                 {
                     results.add(list.get(i));
                 }
@@ -24,7 +24,7 @@ public class Search
             ArrayList<Object> results  = new ArrayList<Object>();
             for(int i =0; i < list.size(); i++)
             {
-                if(((Recipe)list.get(i)).recipeName==query)
+                if(((Recipe)list.get(i)).recipeName.contains(query))
                 {
                     results.add(list.get(i));
                 }
