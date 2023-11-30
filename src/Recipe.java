@@ -71,6 +71,11 @@ public class Recipe {
         System.out.println("\nInstructions:\n\n"+recipeSteps);
         
     }
+    
+    public void printRecipe()
+    {
+        this.printRecipe(this.getID());
+    }
 
     //ID getter
     public int getID()
