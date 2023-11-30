@@ -1,7 +1,12 @@
 public class CookbookService {
+    // collects a recipe with a the requested name
+    public Recipe getRecipe(String recipeName) {
+        Recipe receivedRecipe = Cookbook.getRecipe(recipeName);
+        return receivedRecipe;
+    }
     //stores the new recipe object in cookbooks recipes
-    public Recipe saveRecipe(Recipe newRecipe) {
-        Cookbook.recipes.add(newRecipe);
+    public static Recipe saveRecipe(Recipe newRecipe) {
+        Cookbook.saveRecipe(newRecipe);
         return newRecipe;
     }
 
