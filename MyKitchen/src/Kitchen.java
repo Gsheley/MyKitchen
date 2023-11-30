@@ -7,7 +7,8 @@ public class Kitchen
     public Cookbook myCookbook;
 
     public Pantry createPantry(String name){
-        return inventory;
+        Pantry newPantry = new Pantry(0,name);
+        return newPantry;
     }
 
     public Pantry retrievePantry(int pantryID){
