@@ -10,11 +10,12 @@ public class SortByExpirationDate implements Sort
     }   
 }
 
+//Comparator class for comparing by ExpirationDate
 class ItemExDateComparator implements java.util.Comparator<Item>
 {
     public int compare(Item a, Item b)
     {
-        int result = a.getDateAdded().compareTo(b.getDateAdded());
+        int result = a.getExpirationDate().compareTo(b.getExpirationDate());
         return result;
     }
 }

@@ -10,6 +10,7 @@ public class SortByName implements Sort
     }   
 }
 
+//Compartor for comparing by name
 class ItemNameComparator implements java.util.Comparator<Item>
 {
     public int compare(Item a, Item b)
