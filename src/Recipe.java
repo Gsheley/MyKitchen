@@ -62,6 +62,12 @@ public class Recipe {
         */
     }
 
+    //ID getter
+    public int getID()
+    {
+        return this.recipeID;
+    }
+
     public static void main(String [] args)
     {
         //temporary attribute used to manually test the setup
