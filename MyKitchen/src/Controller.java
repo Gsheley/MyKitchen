@@ -1,14 +1,15 @@
-import java.util.Date;
+import java.util.Calendar;
 
 public class Controller {
+    static Kitchen kitchen = new Kitchen();
+    NotificationService ns = new NotificationService();
+    int numKitchens = 0;
+    int numCarts = 0;
     public static void main(String[] args) 
     {
         Navigation nv = new Navigation();
         nv.printHomePage();
     }
-
-    int numKitchens = 0;
-    int numCarts = 0;
 
     public void deletePantry(int id) 
     {
@@ -30,7 +31,7 @@ public class Controller {
 
     }
 
-    public void addItem(String name, int quantity, Date expirationDate) 
+    public void addItem(String name, int quantity, Calendar expirationDate) 
     {
 
     }
