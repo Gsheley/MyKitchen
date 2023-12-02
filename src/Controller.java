@@ -18,11 +18,13 @@ public class Controller {
 
     public void createPantry() 
     {
+        // Call to shared scanner class to ge the name of the new kitchen inventory
         Kitchen.createPantry(PantryType.KITCHEN_INVENTORY);
     }
 
     public void createCart() 
     {
+        // Call to shared scanner class to ge the name of the new shopping cart
         Kitchen.createPantry(PantryType.SHOPPING_CART);
     }
 

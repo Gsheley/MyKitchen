@@ -79,4 +79,8 @@ public class Pantry {
     {
         this.pantryName = pantryName;
     }
+
+    public Item getItem(int itemID) {
+        return items.get(itemID);
+    }
 }
