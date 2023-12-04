@@ -1,6 +1,7 @@
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
+import java.util.Scanner;
 
 public class Navigation {
     NotificationService ns = new NotificationService();
@@ -57,7 +58,7 @@ public class Navigation {
 
     public void printRecipe(int recipeID) {
         Navigation.clearConsole();
-        ArrayList<Recipe> recipeList = Cookbook.recipes;
+        //ArrayList<Recipe> recipeList = Cookbook.recipes;
         // Recipe needs to be finished for implementation
     }
 
@@ -103,6 +104,103 @@ public class Navigation {
         for (int i = 0; i < 50; i++) {
             System.out.println();
         }
+    }
+
+    public static int getUserInputInt(int min, int max) {
+        Scanner scanner = new Scanner(System.in);
+        int userInput;
+
+        do {
+            System.out.print("Your input: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next();
+            }
+            userInput = scanner.nextInt();
+
+            if (userInput < min || userInput > max) {
+                System.out.printf("Input out of range. Please enter an integer between %d and %d.\n", min, max);
+            }
+        } while (userInput < min || userInput > max);
+
+        scanner.close();
+        return userInput;
+    }
+
+    public static String getUserInputString(boolean allowSpaces) {
+        Scanner scanner = new Scanner(System.in);
+        String validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!,.?#()";
+        if (allowSpaces) {
+            validChars += " ";
+        }
+
+        System.out.print("Your Input: ");
+        String userInput;
+        boolean isValid;
+
+        do {
+            userInput = scanner.nextLine();
+
+            isValid = true;
+            for (char c : userInput.toCharArray()) {
+                if (validChars.indexOf(c) == -1) {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid) {
+                System.out.println("Invalid input. Your input may contain only alphanumeric"
+                                   + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#()");
+            }
+        } while (!isValid);
+
+        scanner.close();
+        return userInput;
+    }
+
+    public static Calendar getUserInputDate() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter year.");
+        int year = getUserInputInt(2000,3000);
+
+        System.out.println("Enter month. (1-12)");
+        int month = getUserInputInt(1,12);
+
+        int numDaysInMonth = getNumDaysInMonth(month); // calculate day range for selected month
+        System.out.println("Enter day of the month. (The month you selected has " + numDaysInMonth + " days.)");
+        int day = getUserInputInt(1, numDaysInMonth);
+
+        System.out.println("Enter hour. (0-23)");
+        int hour = getUserInputInt(0,23);
+
+        System.out.println("Enter minute. (0-59)");
+        int minute = getUserInputInt(0,59);
+
+        // Create a Calendar instance and set the provided values
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1); // Calendar months are zero-based (January is 0)
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        scanner.close();
+
+        return calendar;
+    }
+
+    private static int getNumDaysInMonth(int month) {
+        if (month < 1 || month > 12) {
+            throw new IllegalArgumentException("Invalid month. Month should be between 1 and 12.");
+        }
+
+        // Get the maximum number of days for the given month
+        YearMonth yearMonth = YearMonth.of(YearMonth.now().getYear(), month);
+        return yearMonth.lengthOfMonth();
     }
 
     public static void main(String args[]) {
