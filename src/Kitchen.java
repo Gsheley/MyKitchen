@@ -36,6 +36,14 @@ public class Kitchen
         return foundPantry;
     }
 
+    public void deletePantry(int pantryID) {
+        inventory.remove(pantryID);
+    }
+
+    public void deleteCart(int cartID) {
+        shoppingCart.remove(cartID);
+    }
+
     public void addItem(int pantryID, String name, Calendar dateAdded, int quantity){
         shoppingCart.get(pantryID).addItem(name, dateAdded, quantity);
     }
