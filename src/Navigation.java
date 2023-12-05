@@ -4,9 +4,14 @@ import java.util.Calendar;
 import java.util.Scanner;
 import java.util.Iterator;
 
+enum AccessContext { // the context in which a list is accessed. Different printing based on different contexts
+    DISPLAY,
+    CREATE,
+    REMOVE
+}
+
 public class Navigation {
     NotificationService ns = new NotificationService();
-    Kitchen kitchen = Controller.kitchen;
 
     public void printHomePage() {
         Navigation.clearConsole();
@@ -22,32 +27,69 @@ public class Navigation {
         "3. Cookbook\n" +
         "4. Notifications\n" +
         "5. Exit MyKitchen\n");
+
+        int userInput = Navigation.getUserInputInt(1, 5, Controller.universalScanner);
+        switch (userInput) {
+            case 1:
+                printPantryPage();                     
+            case 2:
+                printShoppingCartPage();
+            case 3:
+                printCookbookPage();
+            case 4:
+                printNotificationPage();
+            case 5:
+                System.exit(0);
+        }
     }
 
     public void printPantryPage() {
         Navigation.clearConsole();
         System.out.println("Pantry Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
-        "1. View/Edit Contents of a Pantry\n" +
+        "1. View/Edit/Delete Contents of a Pantry\n" +
         "2. Create a New Pantry\n" +
         "3. Remove an Existing Pantry\n" +
         "\n" +
         "4. Go Back\n");
+
+        int userInput = Navigation.getUserInputInt(1, 4, Controller.universalScanner);
+        switch (userInput) {
+            case 1:
+                printPantryList(PantryType.KITCHEN_INVENTORY, AccessContext.DISPLAY); // print list of pantries                      
+            case 2:
+                Controller.createPantry(); // add a new pantry
+            case 3:
+                printPantryList(PantryType.KITCHEN_INVENTORY, AccessContext.REMOVE); // remove a pantry
+            case 4:
+                printHomePage();
+        }
     }
 
     public void printShoppingCartPage() {
         Navigation.clearConsole();
         System.out.println("Shopping Cart Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
-        "1. View/Edit Contents of a Shopping Cart\n" +
+        "1. View/Edit/Delete Contents of a Shopping Cart\n" +
         "2. Create a New Shopping Cart\n" +
         "3. Remove an Existing Shopping Cart\n" +
         "\n" +
         "4. Go Back\n");
+
+        int userInput = Navigation.getUserInputInt(1, 4, Controller.universalScanner);
+        switch (userInput) {
+            case 1:
+                // print list of shopping carts                      
+            case 2:
+                // add new shopping cart
+            case 3:
+                // remove a shopping cart
+            case 4:
+                printHomePage();
+        }
     }
 
     public void printCookbookPage() {
-        Navigation.clearConsole();
         Navigation.clearConsole();
         System.out.println("Cookbook Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
@@ -55,9 +97,42 @@ public class Navigation {
         "2. Find New Recipes\n" +
         "\n" +
         "3. Go Back\n");
+
+        int userInput = Navigation.getUserInputInt(1, 3, Controller.universalScanner);
+        switch (userInput) {
+            case 1:
+                // print list of recipes in cookbook                       
+            case 2:
+                // print recipe search page
+            case 3:
+                printHomePage();
+        }
     }
 
-    public void printRecipe(int recipeID) {
+    public void printNotificationPage() {
+        Navigation.clearConsole();
+        System.out.println("Notificiation Menu\n");
+        System.out.println("\nSelect a navigation option below.\n" +
+        "1. View/Edit/Delete Upcoming Notifications\n" +
+        "2. Create a New Notification\n" +
+        "3. Remove an Existing Shopping Cart\n" +
+        "\n" +
+        "4. Go Back\n");
+
+        int userInput = Navigation.getUserInputInt(1, 4, Controller.universalScanner);
+        switch (userInput) {
+            case 1:
+                // print notification list                         
+            case 2:
+                // add new notification
+            case 3:
+                // remove a notification
+            case 4:
+                printHomePage();
+        }
+    }
+
+    public void printRecipe(int recipeID, boolean fromSearch) {
         Navigation.clearConsole();
         ArrayList<Recipe> recipeList = Cookbook.recipes;
         Iterator<Recipe> iterator = recipeList.iterator();
@@ -68,11 +143,34 @@ public class Navigation {
                 r.printRecipe();
             }
         }
+
+        System.out.println("\nSelect a navigation option below.");
+        if (fromSearch) {
+            System.out.println("1. Save this recipe to your Cookbook\n" +
+            "\n" +
+            "2. Go Back\n");
+        } else {
+            System.out.println("1. Remove this recipe from your Cookbook\n" +
+            "\n" +
+            "2. Go Back\n");
+        }
+
+        int userInput = Navigation.getUserInputInt(1, 2, Controller.universalScanner);
+        switch (userInput) {
+            case 1:
+                if (fromSearch) {
+                    // save recipe to cookbook
+                } else {
+                    // remove recipe from cookbook
+                }
+            case 2:
+                printCookbookPage();
+        }
     }
 
     public void printItem(int pantryID, int itemID) {
         Navigation.clearConsole();
-        Pantry pantry = kitchen.getPantryByID(pantryID);
+        Pantry pantry = Kitchen.retrievePantry(pantryID);
         Iterator<Item> iterator = pantry.items.iterator();
 
         while (iterator.hasNext()) {
@@ -89,12 +187,26 @@ public class Navigation {
             } else {
                 System.out.println("Could not find an item of the specified ID inside the specified list.");
             }
+        }
 
-            System.out.println("\nSelect a navigation option below.\n" +
+        System.out.println("\nSelect a navigation option below.\n" +
             "1. Edit this Item\n" +
             "2. Delete this Item\n" +
             "\n" +
             "3. Go Back\n");
+
+        int userInput = Navigation.getUserInputInt(1, 3, Controller.universalScanner);
+        switch (userInput) {
+            case 1:
+                                    
+            case 2:
+
+            case 3:
+                if (pantryID < PantryService.getRange()) {
+                    printPantryPage();
+                } else {
+                    printShoppingCartPage();
+                }
         }
     }
 
@@ -130,6 +242,21 @@ public class Navigation {
         }
     }
 
+    public void printPantryList(PantryType type, AccessContext context) {
+        Navigation.clearConsole();
+        switch (context) {
+            case DISPLAY:
+            case REMOVE:
+                System.out.println("Choose a " + type.name().toLowerCase() + " to " + context.name().toLowerCase() + ".");
+            default: // if somehow an invalid context is given
+                printHomePage();
+        }
+
+        for (int i = 0; i < Kitchen.inventory.size(); i++) {
+            System.out.println(i + 1 + ". " + Kitchen.inventory.get(i).getPantryName());
+        }
+    }
+
     // Clears the screen for printing new menus
     public static void clearConsole() {
         for (int i = 0; i < 50; i++) {
@@ -137,34 +264,7 @@ public class Navigation {
         }
     }
 
-    public static int getUserInputInt(int min, int max) {
-        Scanner scanInt = new Scanner(System.in);
-        int userInput;
-
-        do {
-            System.out.print("Your input: ");
-            while (!scanInt.hasNextInt()) {
-                System.out.println("Invalid input. Please enter an integer.");
-                System.out.print("Your input: ");
-                scanInt.next();
-            }
-            userInput = scanInt.nextInt();
-
-            if (userInput < min || userInput > max) {
-                System.out.printf("Input out of range. Please enter an integer between %d and %d.\n", min, max);
-            }
-        } while (userInput < min || userInput > max);
-
-        scanInt.close();
-        return userInput;
-    }
-
-
-    /*  
-        Alternate Version of getUserInputInt that allows a scanner to be passed as an argument. 
-        Useful for calling this method multiple times within other method, such as in getUserInputDate.
-    */
-    public static int getUserInputIntWithScanner(int min, int max, Scanner scanInt) {
+    public static int getUserInputInt(int min, int max, Scanner scanInt) {
         int userInput;
 
         do {
@@ -184,8 +284,7 @@ public class Navigation {
         return userInput;
     }
 
-    public static String getUserInputString(boolean allowSpaces) {
-        Scanner scanString = new Scanner(System.in);
+    public static String getUserInputString(boolean allowSpaces, int maxLength, Scanner scanString) {
         String validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!,.?#()";
         if (allowSpaces) {
             validChars += " ";
@@ -200,7 +299,7 @@ public class Navigation {
 
             isValid = true;
             for (char c : userInput.toCharArray()) {
-                if (validChars.indexOf(c) == -1) {
+                if (validChars.indexOf(c) == -1 || userInput.length() > maxLength) {
                     isValid = false;
                     break;
                 }
@@ -208,7 +307,7 @@ public class Navigation {
 
             if (!isValid) {
                 System.out.println("Invalid input. Your input may contain only alphanumeric"
-                                   + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#()");
+                                   + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#(). Input must also be less than " + maxLength + " characters.");
             }
         } while (!isValid);
 
@@ -220,23 +319,23 @@ public class Navigation {
         Scanner scanDate = new Scanner(System.in);
         
         System.out.println("Enter year.");
-        int year = getUserInputIntWithScanner(2000,3000,scanDate);
+        int year = getUserInputInt(2000,3000,scanDate);
 
         System.out.println("Enter month. (1-12)");
-        int month = getUserInputIntWithScanner(1,12,scanDate);
+        int month = getUserInputInt(1,12,scanDate);
 
         int numDaysInMonth = getNumDaysInMonth(month); // calculate day range for selected month
         System.out.println("Enter day of the month. (The month you selected has " + numDaysInMonth + " days.)");
-        int day = getUserInputIntWithScanner(1, numDaysInMonth,scanDate);
+        int day = getUserInputInt(1, numDaysInMonth,scanDate);
 
         int hour = 0;
         int minute = 0;
         if (includeHoursMinutes) {
             System.out.println("Enter hour. (0-23)");
-            hour = getUserInputIntWithScanner(0,23,scanDate);
+            hour = getUserInputInt(0,23,scanDate);
 
             System.out.println("Enter minute. (0-59)");
-            minute = getUserInputIntWithScanner(0,59,scanDate);
+            minute = getUserInputInt(0,59,scanDate);
         }
 
         // Create a Calendar instance and set the provided values
@@ -288,7 +387,7 @@ public class Navigation {
         //String testString = getUserInputString(true);
         //System.out.println(testString);
 
-        int testInt = getUserInputInt(12,100);
+        int testInt = getUserInputInt(12,100, Controller.universalScanner);
         System.out.println(testInt);
     }
 }

@@ -11,9 +11,10 @@ public class PantryService
         if (PantryType.KITCHEN_INVENTORY == type) { 
             if (nextPantrykiID >= range) {
                 System.out.println("Sorry, you have reached the maximum amount of Kitchen Inventories");
+            } else {
+                newPantry = new Pantry(nextPantrykiID, name);
+                nextPantrykiID++;
             }
-            newPantry = new Pantry(nextPantrykiID, name);
-            nextPantrykiID++;
         } else { 
             newPantry = new Pantry(nextPantryscID, name);
             nextPantryscID++;
