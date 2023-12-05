@@ -4,6 +4,12 @@ import java.util.Calendar;
 import java.util.Scanner;
 import java.util.Iterator;
 
+enum AccessContext { // the context in which a list is accessed. Different printing based on different contexts
+    DISPLAY,
+    CREATE,
+    REMOVE
+}
+
 public class Navigation {
     NotificationService ns = new NotificationService();
 
@@ -50,11 +56,11 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 4);
         switch (userInput) {
             case 1:
-                // print list of pantries                      
+                printPantryList(PantryType.KITCHEN_INVENTORY, AccessContext.DISPLAY); // print list of pantries                      
             case 2:
-                // add a new pantry
+                Controller.createPantry(); // add a new pantry
             case 3:
-                // remove a pantry
+                printPantryList(PantryType.KITCHEN_INVENTORY, AccessContext.REMOVE); // remove a pantry
             case 4:
                 printHomePage();
         }
@@ -236,6 +242,17 @@ public class Navigation {
         }
     }
 
+    public void printPantryList(PantryType type, AccessContext context) {
+        Navigation.clearConsole();
+        switch (context) {
+            case DISPLAY:
+            case REMOVE:
+                System.out.println("Choose a " + type.name().toLowerCase() + " to " + context.name().toLowerCase() + ".");
+            default: // if somehow an invalid context is given
+                printHomePage();
+        }
+    }
+
     // Clears the screen for printing new menus
     public static void clearConsole() {
         for (int i = 0; i < 50; i++) {
@@ -290,7 +307,7 @@ public class Navigation {
         return userInput;
     }
 
-    public static String getUserInputString(boolean allowSpaces) {
+    public static String getUserInputString(boolean allowSpaces, int maxLength) {
         Scanner scanString = new Scanner(System.in);
         String validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!,.?#()";
         if (allowSpaces) {
@@ -306,7 +323,7 @@ public class Navigation {
 
             isValid = true;
             for (char c : userInput.toCharArray()) {
-                if (validChars.indexOf(c) == -1) {
+                if (validChars.indexOf(c) == -1 || userInput.length() > maxLength) {
                     isValid = false;
                     break;
                 }
@@ -314,7 +331,7 @@ public class Navigation {
 
             if (!isValid) {
                 System.out.println("Invalid input. Your input may contain only alphanumeric"
-                                   + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#()");
+                                   + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#(). Input must also be less than 30 characters.");
             }
         } while (!isValid);
 
