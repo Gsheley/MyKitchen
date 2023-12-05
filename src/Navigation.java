@@ -331,7 +331,7 @@ public class Navigation {
 
             if (!isValid) {
                 System.out.println("Invalid input. Your input may contain only alphanumeric"
-                                   + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#(). Input must also be less than 30 characters.");
+                                   + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#(). Input must also be less than " + maxLength + " characters.");
             }
         } while (!isValid);
 
