@@ -19,13 +19,13 @@ public class Controller {
 
     public static void createPantry() 
     {
-        Kitchen.createPantry(PantryType.KITCHEN_INVENTORY, Navigation.getUserInputString(true));
+        Kitchen.createPantry(PantryType.KITCHEN_INVENTORY, Navigation.getUserInputString(true, 30));
         numKitchens++;
     }
 
     public static void createCart() 
     {
-        Kitchen.createPantry(PantryType.SHOPPING_CART, Navigation.getUserInputString(true));
+        Kitchen.createPantry(PantryType.SHOPPING_CART, Navigation.getUserInputString(true, 30));
         numCarts++;
     }
 
