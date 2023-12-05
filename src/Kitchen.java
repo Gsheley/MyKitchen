@@ -22,7 +22,7 @@ public class Kitchen
     }
 
     public Pantry retrievePantry(int pantryID){
-        //checks each recipe in the recipes array list
+        //checks each item in the items array list
         Pantry foundPantry = null;
         if (pantryID < PantryService.range) {
             if (pantryID < PantryService.nextPantrykiID) {

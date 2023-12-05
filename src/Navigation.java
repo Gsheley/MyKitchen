@@ -2,6 +2,7 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
+import java.util.Iterator;
 
 public class Navigation {
     NotificationService ns = new NotificationService();
@@ -58,13 +59,43 @@ public class Navigation {
 
     public void printRecipe(int recipeID) {
         Navigation.clearConsole();
-        //ArrayList<Recipe> recipeList = Cookbook.recipes;
-        // Recipe needs to be finished for implementation
+        ArrayList<Recipe> recipeList = Cookbook.recipes;
+        Iterator<Recipe> iterator = recipeList.iterator();
+        
+        while (iterator.hasNext()) {
+            Recipe r = iterator.next();
+            if (r.getID() == recipeID) {
+                r.printRecipe();
+            }
+        }
     }
 
     public void printItem(int pantryID, int itemID) {
         Navigation.clearConsole();
-        //ArrayList<Item> itemList = kitchen.getPantryByID(pantryID);
+        Pantry pantry = kitchen.getPantryByID(pantryID);
+        Iterator<Item> iterator = pantry.items.iterator();
+
+        while (iterator.hasNext()) {
+            Item i = iterator.next();
+
+            if (i.getItemID() == itemID) {
+                System.out.println("Item ID: " + i.getItemID() +
+                "\nItem Name: " + i.getName() + 
+                "\nDate Added: " + i.getDateAdded().getTime() +
+                "\nQuantity: " + i.getQuantity());
+                if (i.getExpirationDate() != null) {
+                    System.out.println("Expiration Date: " + i.getExpirationDate().getTime());
+                }
+            } else {
+                System.out.println("Could not find an item of the specified ID inside the specified list.");
+            }
+
+            System.out.println("\nSelect a navigation option below.\n" +
+            "1. Edit this Item\n" +
+            "2. Delete this Item\n" +
+            "\n" +
+            "3. Go Back\n");
+        }
     }
 
     public void printSearchResults(String query, ArrayList<Object> list) {
@@ -234,7 +265,7 @@ public class Navigation {
     }
 
     public static void main(String args[]) {
-        Navigation nv = new Navigation();
+        //Navigation nv = new Navigation();
         // Search test
         /* 
         ArrayList<Object> items = new ArrayList<Object>();
