@@ -6,7 +6,6 @@ import java.util.Iterator;
 
 public class Navigation {
     NotificationService ns = new NotificationService();
-    Kitchen kitchen = Controller.kitchen;
 
     public void printHomePage() {
         Navigation.clearConsole();
@@ -22,32 +21,69 @@ public class Navigation {
         "3. Cookbook\n" +
         "4. Notifications\n" +
         "5. Exit MyKitchen\n");
+
+        int userInput = Navigation.getUserInputInt(1, 5);
+        switch (userInput) {
+            case 1:
+                printPantryPage();                     
+            case 2:
+                printShoppingCartPage();
+            case 3:
+                printCookbookPage();
+            case 4:
+                printNotificationPage();
+            case 5:
+                System.exit(0);
+        }
     }
 
     public void printPantryPage() {
         Navigation.clearConsole();
         System.out.println("Pantry Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
-        "1. View/Edit Contents of a Pantry\n" +
+        "1. View/Edit/Delete Contents of a Pantry\n" +
         "2. Create a New Pantry\n" +
         "3. Remove an Existing Pantry\n" +
         "\n" +
         "4. Go Back\n");
+
+        int userInput = Navigation.getUserInputInt(1, 4);
+        switch (userInput) {
+            case 1:
+                // print list of pantries                      
+            case 2:
+                // add a new pantry
+            case 3:
+                // remove a pantry
+            case 4:
+                printHomePage();
+        }
     }
 
     public void printShoppingCartPage() {
         Navigation.clearConsole();
         System.out.println("Shopping Cart Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
-        "1. View/Edit Contents of a Shopping Cart\n" +
+        "1. View/Edit/Delete Contents of a Shopping Cart\n" +
         "2. Create a New Shopping Cart\n" +
         "3. Remove an Existing Shopping Cart\n" +
         "\n" +
         "4. Go Back\n");
+
+        int userInput = Navigation.getUserInputInt(1, 4);
+        switch (userInput) {
+            case 1:
+                // print list of shopping carts                      
+            case 2:
+                // add new shopping cart
+            case 3:
+                // remove a shopping cart
+            case 4:
+                printHomePage();
+        }
     }
 
     public void printCookbookPage() {
-        Navigation.clearConsole();
         Navigation.clearConsole();
         System.out.println("Cookbook Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
@@ -55,9 +91,42 @@ public class Navigation {
         "2. Find New Recipes\n" +
         "\n" +
         "3. Go Back\n");
+
+        int userInput = Navigation.getUserInputInt(1, 3);
+        switch (userInput) {
+            case 1:
+                // print list of recipes in cookbook                       
+            case 2:
+                // print recipe search page
+            case 3:
+                printHomePage();
+        }
     }
 
-    public void printRecipe(int recipeID) {
+    public void printNotificationPage() {
+        Navigation.clearConsole();
+        System.out.println("Notificiation Menu\n");
+        System.out.println("\nSelect a navigation option below.\n" +
+        "1. View/Edit/Delete Upcoming Notifications\n" +
+        "2. Create a New Notification\n" +
+        "3. Remove an Existing Shopping Cart\n" +
+        "\n" +
+        "4. Go Back\n");
+
+        int userInput = Navigation.getUserInputInt(1, 4);
+        switch (userInput) {
+            case 1:
+                // print notification list                         
+            case 2:
+                // add new notification
+            case 3:
+                // remove a notification
+            case 4:
+                printHomePage();
+        }
+    }
+
+    public void printRecipe(int recipeID, boolean fromSearch) {
         Navigation.clearConsole();
         ArrayList<Recipe> recipeList = Cookbook.recipes;
         Iterator<Recipe> iterator = recipeList.iterator();
@@ -68,11 +137,34 @@ public class Navigation {
                 r.printRecipe();
             }
         }
+
+        System.out.println("\nSelect a navigation option below.");
+        if (fromSearch) {
+            System.out.println("1. Save this recipe to your Cookbook\n" +
+            "\n" +
+            "2. Go Back\n");
+        } else {
+            System.out.println("1. Remove this recipe from your Cookbook\n" +
+            "\n" +
+            "2. Go Back\n");
+        }
+
+        int userInput = Navigation.getUserInputInt(1, 2);
+        switch (userInput) {
+            case 1:
+                if (fromSearch) {
+                    // save recipe to cookbook
+                } else {
+                    // remove recipe from cookbook
+                }
+            case 2:
+                printCookbookPage();
+        }
     }
 
     public void printItem(int pantryID, int itemID) {
         Navigation.clearConsole();
-        Pantry pantry = kitchen.getPantryByID(pantryID);
+        Pantry pantry = Kitchen.retrievePantry(pantryID);
         Iterator<Item> iterator = pantry.items.iterator();
 
         while (iterator.hasNext()) {
@@ -89,12 +181,26 @@ public class Navigation {
             } else {
                 System.out.println("Could not find an item of the specified ID inside the specified list.");
             }
+        }
 
-            System.out.println("\nSelect a navigation option below.\n" +
+        System.out.println("\nSelect a navigation option below.\n" +
             "1. Edit this Item\n" +
             "2. Delete this Item\n" +
             "\n" +
             "3. Go Back\n");
+
+        int userInput = Navigation.getUserInputInt(1, 3);
+        switch (userInput) {
+            case 1:
+                                    
+            case 2:
+
+            case 3:
+                if (pantryID < PantryService.getRange()) {
+                    printPantryPage();
+                } else {
+                    printShoppingCartPage();
+                }
         }
     }
 
