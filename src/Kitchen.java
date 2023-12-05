@@ -9,7 +9,7 @@ enum PantryType {
 
 public class Kitchen 
 {
-    private static ArrayList<Pantry> inventory = new ArrayList<Pantry>();
+    public static ArrayList<Pantry> inventory = new ArrayList<Pantry>();
     public Cookbook myCookbook;
 
     public static void createPantry(PantryType type, String name){
