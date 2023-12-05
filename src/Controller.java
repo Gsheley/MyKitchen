@@ -38,10 +38,16 @@ public class Controller {
     public static void addItem(int pantryID) 
     {
         System.out.println("Please enter the name of the Item: ");
-        String name = Navigation.getUserInputString(true);
+        String name = Navigation.getUserInputString(true, 30);
         System.out.println("Please enter the quantity of the Item: ");
         int quantity = Navigation.getUserInputInt(1, Integer.MAX_VALUE);
-        Kitchen.addItem()
+        if (pantryID < 10000) {
+            System.out.println("Please enter the expiration date of the Item: ");
+            Calendar expirDate = Navigation.getUserInputDate(false);
+            Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate);
+        } else {
+            Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity);
+        }
     }
 
     public static int getNumKitchens() {
