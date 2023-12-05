@@ -5,7 +5,7 @@ public class Search
     public static ArrayList<Object> search(String query, ArrayList<Object> list )
     {
         ArrayList<Object> results = new ArrayList<Object>();
-        if(list.size()>=1)
+        if(list.size()>0)
         {
             
             //Search case for Item objects 
