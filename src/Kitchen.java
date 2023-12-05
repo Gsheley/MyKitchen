@@ -18,34 +18,47 @@ public class Kitchen
 
     public static Pantry retrievePantry(int pantryID){
         //checks each item in the items array list
-        return foundPantry;
+        int index = getPantryIndex(pantryID);
+        if (index == -1) {
+            return null; 
+        } else {
+            return inventory.get(pantryID);
+        }
     }
 
     public static void deletePantry(int pantryID) {
-        Iterator<Pantry> iterator = inventory.iterator();
-        while(iterator.hasNext()) {
-            Pantry list = iterator.next();
-            if (list.getPantryID() == pantryID) {
-                iterator.remove();
-            }
+        int index = getPantryIndex(pantryID);
+        if (index != -1) {
+            inventory.remove(index);
         }
-        System.out.println("Pantry with ID: " + pantryID + " cannot be found");
     }
 
     public static void addItem(int pantryID, String name, Calendar dateAdded, int quantity){
-        inventory.get(pantryID).addItem(name, dateAdded, quantity);
+        int index = getPantryIndex(pantryID);
+        if (index != -1) {
+            inventory.get(index).addItem(name, dateAdded, quantity);
+        }
     }
 
     public static void addItem(int pantryID, String name, Calendar dateAdded, int quantity, Calendar expirDate){
-        inventory.get(pantryID).addItem(name, dateAdded, quantity, expirDate);
+        int index = getPantryIndex(pantryID);
+        if (index != -1) {
+            inventory.get(index).addItem(name, dateAdded, quantity, expirDate);
+        }
     }
 
     public static void editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity, Calendar expirDate){
-        inventory.get(pantryID).editItem(itemID, name, dateAdded, quantity, expirDate);
+        int index = getPantryIndex(pantryID);
+        if (index != -1) {
+            inventory.get(index).editItem(itemID, name, dateAdded, quantity, expirDate);
+        }
     }
 
     public static void editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity){
-        inventory.get(pantryID).editItem(itemID, name, dateAdded, quantity);
+        int index = getPantryIndex(pantryID);
+        if (index != -1) {
+            inventory.get(index).editItem(itemID, name, dateAdded, quantity);
+        }
     }
 
     public static void saveRecipe(Recipe recipe){
