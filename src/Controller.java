@@ -19,14 +19,14 @@ public class Controller {
 
     public void createPantry() 
     {
-        Kitchen.createPantry(PantryType.KITCHEN_INVENTORY,Navigation.getUserInputString(false));
+        kitchen.createPantry(PantryType.KITCHEN_INVENTORY,Navigation.getUserInputString(false));
         numKitchens++;
     }
 
     public void createCart() 
     {
         // Call to shared scanner class to ge the name of the new shopping cart
-        Kitchen.createPantry(PantryType.SHOPPING_CART, Navigation.getUserInputString(false));
+        kitchen.createPantry(PantryType.SHOPPING_CART, Navigation.getUserInputString(false));
         numCarts++;
     }
 
