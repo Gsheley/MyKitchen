@@ -24,12 +24,12 @@ public class Kitchen
     public Pantry retrievePantry(int pantryID){
         //checks each item in the items array list
         Pantry foundPantry = null;
-        if (pantryID < PantryService.range) {
-            if (pantryID < PantryService.nextPantrykiID) {
+        if (pantryID < PantryService.getRange()) {
+            if (pantryID < PantryService.getNextKitchenInventoryID()) {
                 foundPantry = inventory.get(pantryID);
             }
         } else {
-            if (pantryID < PantryService.nextPantryscID) {
+            if (pantryID < PantryService.getNextShoppingCartID()) {
                 foundPantry = shoppingCart.get(pantryID);
             }
         }
