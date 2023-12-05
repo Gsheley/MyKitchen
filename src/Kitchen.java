@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 
 enum PantryType {
     KITCHEN_INVENTORY,
@@ -9,43 +10,30 @@ enum PantryType {
 public class Kitchen 
 {
     private static ArrayList<Pantry> inventory = new ArrayList<Pantry>();
-    private static ArrayList<Pantry> shoppingCart = new ArrayList<Pantry>();
     public Cookbook myCookbook;
 
     public static void createPantry(PantryType type, String name){
-        // Call shared scanner for name here
-        if (type == PantryType.KITCHEN_INVENTORY) { 
-            inventory.add(PantryService.createPantry(type, name));
-        } else {
-            shoppingCart.add(PantryService.createPantry(type, name));
-        }
+        inventory.add(PantryService.createPantry(type, name));
     }
 
     public static Pantry retrievePantry(int pantryID){
         //checks each item in the items array list
-        Pantry foundPantry = null;
-        if (pantryID < PantryService.getRange()) {
-            if (pantryID < PantryService.getNextKitchenInventoryID()) {
-                foundPantry = inventory.get(pantryID);
-            }
-        } else {
-            if (pantryID < PantryService.getNextShoppingCartID()) {
-                foundPantry = shoppingCart.get(pantryID);
-            }
-        }
         return foundPantry;
     }
 
-    public static void deletePantry(PantryType type, int pantryID) {
-        if (type == PantryType.KITCHEN_INVENTORY) {
-            inventory.remove(pantryID);
-        } else {
-            shoppingCart.remove(pantryID);
+    public static void deletePantry(int pantryID) {
+        Iterator<Pantry> iterator = inventory.iterator();
+        while(iterator.hasNext()) {
+            Pantry list = iterator.next();
+            if (list.getPantryID() == pantryID) {
+                iterator.remove();
+            }
         }
+        System.out.println("Pantry with ID: " + pantryID + " cannot be found");
     }
 
     public static void addItem(int pantryID, String name, Calendar dateAdded, int quantity){
-        shoppingCart.get(pantryID).addItem(name, dateAdded, quantity);
+        inventory.get(pantryID).addItem(name, dateAdded, quantity);
     }
 
     public static void addItem(int pantryID, String name, Calendar dateAdded, int quantity, Calendar expirDate){
@@ -64,9 +52,24 @@ public class Kitchen
         CookbookService.saveRecipe(recipe);
     }
 
-    public Pantry getPantryByID(int id) {
-        //private Iterator<Pantry> iterator = pantries.iterator();
-        return null;
+    private static int getPantryIndex(int pantryID) {
+        Iterator<Pantry> iterator = inventory.iterator();
+        Pantry foundPantry = null;
+        int count = 0;
+        while(iterator.hasNext()) {
+            Pantry list = iterator.next();
+            if (list.getPantryID() == pantryID) {
+                foundPantry = list;
+                break;
+            }
+            count++;
+        }
+        if (foundPantry == null) {
+            System.out.println("Pantry with ID: " + pantryID + " cannot be found");
+            return -1;
+        } else {
+            return count;
+        }
     }
 
     public static void main(String[] args) {
@@ -75,7 +78,7 @@ public class Kitchen
         addItem(0, "Milk", testDate, 2, testDate);
         System.out.println(inventory.get(0).getPantryName());
         System.out.println(inventory.get(0).getItem(0).getName());
-        deletePantry(PantryType.KITCHEN_INVENTORY, 0);
+        deletePantry(0);
         System.out.println("Pantry has been deleted");
     }
 }

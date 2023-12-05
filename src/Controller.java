@@ -13,7 +13,7 @@ public class Controller {
 
     public void deletePantry(int id) 
     {
-        kitchen.deletePantry(PantryType.KITCHEN_INVENTORY, id);
+        kitchen.deletePantry(id);
         numKitchens--;
     }
 
@@ -32,7 +32,7 @@ public class Controller {
 
     public void deleteCart(int id) 
     {
-        kitchen.deletePantry(PantryType.SHOPPING_CART, id);
+        kitchen.deletePantry(id);
         numCarts--;
     }
 
