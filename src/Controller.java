@@ -14,22 +14,26 @@ public class Controller {
     public void deletePantry(int id) 
     {
         kitchen.deletePantry(id);
+        numKitchens--;
     }
 
     public void createPantry() 
     {
         Kitchen.createPantry(PantryType.KITCHEN_INVENTORY,Navigation.getUserInputString(false));
+        numKitchens++;
     }
 
     public void createCart() 
     {
         // Call to shared scanner class to ge the name of the new shopping cart
         Kitchen.createPantry(PantryType.SHOPPING_CART, Navigation.getUserInputString(false));
+        numCarts++;
     }
 
     public void deleteCart(int id) 
     {
         kitchen.deleteCart(id);
+        numCarts--;
     }
 
     public void addItem(String name, int quantity, Calendar expirationDate) 
