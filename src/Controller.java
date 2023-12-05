@@ -21,12 +21,14 @@ public class Controller {
 
     public static void createPantry() 
     {
+        System.out.println("Please enter the name of the new Kitchen Inventory: ");
         Kitchen.createPantry(PantryType.KITCHEN_INVENTORY, Navigation.getUserInputString(true, 30, universalScanner));
         numKitchens++;
     }
 
     public static void createCart() 
     {
+        System.out.println("Please enter the name of the new Shopping Cart: ");
         Kitchen.createPantry(PantryType.SHOPPING_CART, Navigation.getUserInputString(true, 30, universalScanner));
         numCarts++;
     }
