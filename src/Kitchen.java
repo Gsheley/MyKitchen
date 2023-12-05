@@ -8,8 +8,8 @@ enum PantryType {
 
 public class Kitchen 
 {
-    public static ArrayList<Pantry> inventory = new ArrayList<Pantry>();
-    public static ArrayList<Pantry> shoppingCart = new ArrayList<Pantry>();
+    private static ArrayList<Pantry> inventory = new ArrayList<Pantry>();
+    private static ArrayList<Pantry> shoppingCart = new ArrayList<Pantry>();
     public Cookbook myCookbook;
 
     public static void createPantry(PantryType type, String name){
@@ -21,7 +21,7 @@ public class Kitchen
         }
     }
 
-    public Pantry retrievePantry(int pantryID){
+    public static Pantry retrievePantry(int pantryID){
         //checks each item in the items array list
         Pantry foundPantry = null;
         if (pantryID < PantryService.getRange()) {
@@ -36,15 +36,15 @@ public class Kitchen
         return foundPantry;
     }
 
-    public void deletePantry(int pantryID) {
+    public static void deletePantry(int pantryID) {
         inventory.remove(pantryID);
     }
 
-    public void deleteCart(int cartID) {
+    public static void deleteCart(int cartID) {
         shoppingCart.remove(cartID);
     }
 
-    public void addItem(int pantryID, String name, Calendar dateAdded, int quantity){
+    public static void addItem(int pantryID, String name, Calendar dateAdded, int quantity){
         shoppingCart.get(pantryID).addItem(name, dateAdded, quantity);
     }
 
@@ -52,15 +52,15 @@ public class Kitchen
         inventory.get(pantryID).addItem(name, dateAdded, quantity, expirDate);
     }
 
-    public void editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity, Calendar expirDate){
+    public static void editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity, Calendar expirDate){
         inventory.get(pantryID).editItem(itemID, name, dateAdded, quantity, expirDate);
     }
 
-    public void editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity){
+    public static void editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity){
         inventory.get(pantryID).editItem(itemID, name, dateAdded, quantity);
     }
 
-    public void saveRecipe(Recipe recipe){
+    public static void saveRecipe(Recipe recipe){
         CookbookService.saveRecipe(recipe);
     }
 
@@ -75,5 +75,7 @@ public class Kitchen
         addItem(0, "Milk", testDate, 2, testDate);
         System.out.println(inventory.get(0).getPantryName());
         System.out.println(inventory.get(0).getItem(0).getName());
+        deletePantry(0);
+        System.out.println("Pantry has been deleted");
     }
 }
