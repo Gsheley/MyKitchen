@@ -1,8 +1,8 @@
 public class PantryService 
 {
-    public static int nextPantrykiID = 0;
-    public static int nextPantryscID = 10000;
-    public static int range = 10000;
+    private static int nextPantrykiID = 0;
+    private static int nextPantryscID = 10000;
+    private static int range = 10000;
 
     public static Pantry createPantry(PantryType type, String name)
     {
@@ -20,5 +20,17 @@ public class PantryService
         }
 
         return newPantry;
+    }
+
+    public static int getNextKitchenInventoryID() {
+        return nextPantrykiID;
+    }
+
+    public static int getNextShoppingCartID() {
+        return nextPantryscID;
+    }
+
+    public static int getRange() {
+        return range;
     }
 }

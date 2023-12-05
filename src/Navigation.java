@@ -1,5 +1,7 @@
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Scanner;
 import java.util.Iterator;
 
 public class Navigation {
@@ -58,11 +60,42 @@ public class Navigation {
     public void printRecipe(int recipeID) {
         Navigation.clearConsole();
         ArrayList<Recipe> recipeList = Cookbook.recipes;
-        // Recipe needs to be finished for implementation
+        Iterator<Recipe> iterator = recipeList.iterator();
+        
+        while (iterator.hasNext()) {
+            Recipe r = iterator.next();
+            if (r.getID() == recipeID) {
+                r.printRecipe();
+            }
+        }
     }
 
     public void printItem(int pantryID, int itemID) {
         Navigation.clearConsole();
+        Pantry pantry = kitchen.getPantryByID(pantryID);
+        Iterator<Item> iterator = pantry.items.iterator();
+
+        while (iterator.hasNext()) {
+            Item i = iterator.next();
+
+            if (i.getItemID() == itemID) {
+                System.out.println("Item ID: " + i.getItemID() +
+                "\nItem Name: " + i.getName() + 
+                "\nDate Added: " + i.getDateAdded().getTime() +
+                "\nQuantity: " + i.getQuantity());
+                if (i.getExpirationDate() != null) {
+                    System.out.println("Expiration Date: " + i.getExpirationDate().getTime());
+                }
+            } else {
+                System.out.println("Could not find an item of the specified ID inside the specified list.");
+            }
+
+            System.out.println("\nSelect a navigation option below.\n" +
+            "1. Edit this Item\n" +
+            "2. Delete this Item\n" +
+            "\n" +
+            "3. Go Back\n");
+        }
     }
 
     public void printSearchResults(String query, ArrayList<Object> list) {
@@ -104,8 +137,137 @@ public class Navigation {
         }
     }
 
+    public static int getUserInputInt(int min, int max) {
+        Scanner scanInt = new Scanner(System.in);
+        int userInput;
+
+        do {
+            System.out.print("Your input: ");
+            while (!scanInt.hasNextInt()) {
+                System.out.println("Invalid input. Please enter an integer.");
+                System.out.print("Your input: ");
+                scanInt.next();
+            }
+            userInput = scanInt.nextInt();
+
+            if (userInput < min || userInput > max) {
+                System.out.printf("Input out of range. Please enter an integer between %d and %d.\n", min, max);
+            }
+        } while (userInput < min || userInput > max);
+
+        scanInt.close();
+        return userInput;
+    }
+
+
+    /*  
+        Alternate Version of getUserInputInt that allows a scanner to be passed as an argument. 
+        Useful for calling this method multiple times within other method, such as in getUserInputDate.
+    */
+    public static int getUserInputIntWithScanner(int min, int max, Scanner scanInt) {
+        int userInput;
+
+        do {
+            System.out.print("Your input: ");
+            while (!scanInt.hasNextInt()) {
+                System.out.println("Invalid input. Please enter an integer.");
+                System.out.print("Your input: ");
+                scanInt.next();
+            }
+            userInput = scanInt.nextInt();
+
+            if (userInput < min || userInput > max) {
+                System.out.printf("Input out of range. Please enter an integer between %d and %d.\n", min, max);
+            }
+        } while (userInput < min || userInput > max);
+
+        return userInput;
+    }
+
+    public static String getUserInputString(boolean allowSpaces) {
+        Scanner scanString = new Scanner(System.in);
+        String validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!,.?#()";
+        if (allowSpaces) {
+            validChars += " ";
+        }
+
+        System.out.print("Your Input: ");
+        String userInput;
+        boolean isValid;
+
+        do {
+            userInput = scanString.nextLine();
+
+            isValid = true;
+            for (char c : userInput.toCharArray()) {
+                if (validChars.indexOf(c) == -1) {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid) {
+                System.out.println("Invalid input. Your input may contain only alphanumeric"
+                                   + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#()");
+            }
+        } while (!isValid);
+
+        scanString.close();
+        return userInput;
+    }
+
+    public static Calendar getUserInputDate(boolean includeHoursMinutes) {
+        Scanner scanDate = new Scanner(System.in);
+        
+        System.out.println("Enter year.");
+        int year = getUserInputIntWithScanner(2000,3000,scanDate);
+
+        System.out.println("Enter month. (1-12)");
+        int month = getUserInputIntWithScanner(1,12,scanDate);
+
+        int numDaysInMonth = getNumDaysInMonth(month); // calculate day range for selected month
+        System.out.println("Enter day of the month. (The month you selected has " + numDaysInMonth + " days.)");
+        int day = getUserInputIntWithScanner(1, numDaysInMonth,scanDate);
+
+        int hour = 0;
+        int minute = 0;
+        if (includeHoursMinutes) {
+            System.out.println("Enter hour. (0-23)");
+            hour = getUserInputIntWithScanner(0,23,scanDate);
+
+            System.out.println("Enter minute. (0-59)");
+            minute = getUserInputIntWithScanner(0,59,scanDate);
+        }
+
+        // Create a Calendar instance and set the provided values
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1); // Calendar months are zero-based (January is 0)
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        scanDate.close();
+
+        return calendar;
+    }
+
+    private static int getNumDaysInMonth(int month) {
+        if (month < 1 || month > 12) {
+            throw new IllegalArgumentException("Invalid month. Month should be between 1 and 12.");
+        }
+
+        // Get the maximum number of days for the given month
+        YearMonth yearMonth = YearMonth.of(YearMonth.now().getYear(), month);
+        return yearMonth.lengthOfMonth();
+    }
+
     public static void main(String args[]) {
-        Navigation nv = new Navigation();
+        //Navigation nv = new Navigation();
+        // Search test
+        /* 
         ArrayList<Object> items = new ArrayList<Object>();
         Item testItem1 = new Item(1,"test", Calendar.getInstance(),12);
         Item testItem2 = new Item(2,"apple", Calendar.getInstance(),12);
@@ -117,5 +279,16 @@ public class Navigation {
         items.add(testItem4);
 
         nv.printSearchResults("ple", items);
+        */
+
+        // Input test
+        //Calendar testCal = getUserInputDate(true);
+        //System.out.println(testCal.getTime());
+
+        //String testString = getUserInputString(true);
+        //System.out.println(testString);
+
+        int testInt = getUserInputInt(12,100);
+        System.out.println(testInt);
     }
 }
