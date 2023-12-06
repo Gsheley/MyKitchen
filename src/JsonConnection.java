@@ -16,11 +16,12 @@ public class JsonConnection extends Connection {
     // An overall Json Object for the file
     private JsonObject jsonObject;
     // 3 Json Objects for saving and retrieving different kinds of data
-    public JsonArray inventory;
-    public JsonObject cookbook;
-    public JsonObject notifications;
+    public static JsonArray inventory;
+    public static JsonObject cookbook;
+    public static JsonArray recipes;
+    public static JsonObject notifications;
     // A constant for the file name
-    private final String FILE_NAME = "AppData.json";
+    private final String FILE_NAME = "MyKitchenData.json";
     
     public void open() {
         // Trying to retrieve the file
@@ -99,7 +100,7 @@ public class JsonConnection extends Connection {
         if (cookbook != null) {
             // Getting the data from the original Cookbook
             String cookbookName = cookbook.get("cookbookName").getAsString();
-            JsonArray recipes = cookbook.getAsJsonArray("recipes");
+            recipes = cookbook.getAsJsonArray("recipes");
             // Setting up the values for the cookbook
             Cookbook.setName(cookbookName);
             // Populating the Cookbook with its recipes
@@ -157,6 +158,7 @@ public class JsonConnection extends Connection {
             }
             FileWriter jsonFile = new FileWriter(FILE_NAME);
             JsonObject newObject = new JsonObject();
+            cookbook.add("recipes", recipes);
             newObject.add("inventory", inventory);
             newObject.add("cookbook", cookbook);
             newObject.add("notifications", notifications);
@@ -173,13 +175,13 @@ public class JsonConnection extends Connection {
         try {
             // If it is present, then we need to close it
             inputFile.close();
-        // If the file is not present, simply print it out and exit the method
+        // If the file is not present, simply print out the error and exit the method
         } catch (IOException e) {
-            System.out.println("App data file could not be found");
-            return;
+            System.out.println("Data file could not be found");
         }
     }
 
+    // Private helper method for the conversion of json objects to Calendar objects
     private Calendar jsonToCalendar(JsonObject obj) {
         // Creating a new Calendar Object
         Calendar newDate = Calendar.getInstance();
