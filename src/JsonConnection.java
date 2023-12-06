@@ -1,9 +1,9 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Calendar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -11,16 +11,22 @@ import com.google.gson.JsonParser;
 import java.util.ArrayList;
 
 public class JsonConnection extends Connection {
+    // Creating an object to get input from the json file
+    InputStream inputFile;
+    // An overall Json Object for the file
     private JsonObject jsonObject;
-    private final String FILENAME = "AppData.json";
+    // 3 Json Objects for saving and retrieving different kinds of data
+    public JsonArray inventory;
+    public JsonObject cookbook;
+    public JsonObject notifications;
+    // A constant for the file name
+    private final String FILE_NAME = "AppData.json";
     
     public void open() {
-        // Creating an object to get input from the json file
-        InputStream inputFile;
         // Trying to retrieve the file
         try {
             // If it is present, get the contents of the file into a String
-            inputFile = new FileInputStream(FILENAME);
+            inputFile = new FileInputStream(FILE_NAME);
         // If the file is not present, simply print it out and exit the method
         } catch (FileNotFoundException e) {
             System.out.println("Previous data file could not be found");
@@ -31,7 +37,7 @@ public class JsonConnection extends Connection {
         // Using the file contents to go through and recover data
         jsonObject = JsonParser.parseString(fileData).getAsJsonObject();
         // Starting with the inventory of Pantries to get the contents of items
-        JsonArray inventory = jsonObject.getAsJsonArray("inventory");
+        inventory = jsonObject.getAsJsonArray("inventory");
         // If the inventory has elements, then we need to find and record them
         if (inventory != null) {
             // New object for the pantry to record
@@ -88,7 +94,7 @@ public class JsonConnection extends Connection {
             }
         }
         // Getting the data from the cookbook in the json file
-        JsonObject cookbook = jsonObject.getAsJsonObject("cookbook");
+        cookbook = jsonObject.getAsJsonObject("cookbook");
         // If the cookbook has elements, then we need to find and record them
         if (cookbook != null) {
             // Getting the data from the original Cookbook
@@ -103,7 +109,7 @@ public class JsonConnection extends Connection {
             }
         }
         // Getting the data from the Notifications in the json file
-        JsonObject notifications = jsonObject.getAsJsonObject("notifications");
+        notifications = jsonObject.getAsJsonObject("notifications");
         // If there is data regarding notifications, we need to record it
         if (notifications != null) {
             // Getting the data from the original Notification aggreagte
@@ -140,24 +146,50 @@ public class JsonConnection extends Connection {
             Controller.setNotificationService(newService);
         }
     }
+
     public void save() {
-        
+       // Trying to retrieve the file
+        try {
+            File newFile = new File(FILE_NAME);
+            // If the file is not present, simply print it out and create a new file
+            if (newFile.createNewFile()) {
+                System.out.println("Previous data file could not be found, creating a new file to save");
+            }
+            FileWriter jsonFile = new FileWriter(FILE_NAME);
+            JsonObject newObject = new JsonObject();
+            newObject.add("inventory", inventory);
+            newObject.add("cookbook", cookbook);
+            newObject.add("notifications", notifications);
+            jsonFile.write(newObject.toString());
+            jsonFile.close();
+        // Catching any errors that may come when trying to create or retrieve the file
+        } catch (IOException e) {
+            System.out.println("An Error occured when trying to save to the file");
+        } 
     }
+
     public void close() {
-        jsonObject = new JsonObject();
-        JsonArray kitchen = jsonObject.getJsonArray("kitchen");
-        jsonObject.
-        JsonArray mealsArray = jsonObject.getAsJsonArray("meals");
-        JsonObject mealObject = mealsArray.get(0).getAsJsonObject();
+        // Trying to close the json file
+        try {
+            // If it is present, then we need to close it
+            inputFile.close();
+        // If the file is not present, simply print it out and exit the method
+        } catch (IOException e) {
+            System.out.println("App data file could not be found");
+            return;
+        }
     }
 
     private Calendar jsonToCalendar(JsonObject obj) {
+        // Creating a new Calendar Object
         Calendar newDate = Calendar.getInstance();
+        // Getting each of the time measurements from the JsonObject
         int year = obj.get("year").getAsInt();
         int month = obj.get("month").getAsInt();
         int day = obj.get("day").getAsInt();
         int hour = obj.get("hour").getAsInt();
         int minute = obj.get("minute").getAsInt();
+        // Setting the time measurement into the Calendar
         newDate.set(Calendar.YEAR, year);
         newDate.set(Calendar.MONTH, month - 1);
         newDate.set(Calendar.DAY_OF_MONTH, day);
@@ -165,10 +197,7 @@ public class JsonConnection extends Connection {
         newDate.set(Calendar.MINUTE, minute);
         newDate.set(Calendar.SECOND, 0);
         newDate.set(Calendar.MILLISECOND, 0);
+        // Returning the Calendar
         return newDate;
-    }
-
-    private JsonObject calendarToJson(Calendar date, JsonObject obj) {
-
     }
 }
