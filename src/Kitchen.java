@@ -3,7 +3,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 
 enum PantryType {
-    KITCHEN_INVENTORY,
+    PANTRY,
     SHOPPING_CART
 }
 
@@ -85,7 +85,7 @@ public class Kitchen
     }
 
     public static void main(String[] args) {
-        createPantry(PantryType.KITCHEN_INVENTORY, "test1");
+        createPantry(PantryType.PANTRY, "test1");
         Calendar testDate = Calendar.getInstance();
         addItem(0, "Milk", testDate, 2, testDate);
         System.out.println(inventory.get(0).getPantryName());

@@ -1,19 +1,18 @@
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Scanner;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 enum AccessContext { // the context in which a list is accessed. Different printing based on different contexts
     DISPLAY,
-    CREATE,
     REMOVE
 }
 
 public class Navigation {
-    NotificationService ns = new NotificationService();
+    static NotificationService ns = new NotificationService();
 
-    public void printHomePage() {
+    public static void printHomePage() {
         Navigation.clearConsole();
         System.out.println("Welcome to MyKitchen!\n");
         if (ns.checkForNotifications()) {
@@ -28,7 +27,7 @@ public class Navigation {
         "4. Notifications\n" +
         "5. Exit MyKitchen\n");
 
-        int userInput = Navigation.getUserInputInt(1, 5, Controller.universalScanner);
+        int userInput = Navigation.getUserInputInt(1, 5);
         switch (userInput) {
             case 1:
                 printPantryPage();                     
@@ -43,7 +42,7 @@ public class Navigation {
         }
     }
 
-    public void printPantryPage() {
+    public static void printPantryPage() {
         Navigation.clearConsole();
         System.out.println("Pantry Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
@@ -53,20 +52,20 @@ public class Navigation {
         "\n" +
         "4. Go Back\n");
 
-        int userInput = Navigation.getUserInputInt(1, 4, Controller.universalScanner);
+        int userInput = Navigation.getUserInputInt(1, 4);
         switch (userInput) {
             case 1:
-                printPantryList(PantryType.KITCHEN_INVENTORY, AccessContext.DISPLAY); // print list of pantries                      
+                printPantryList(PantryType.PANTRY, AccessContext.DISPLAY); // print list of pantries                      
             case 2:
                 Controller.createPantry(); // add a new pantry
             case 3:
-                printPantryList(PantryType.KITCHEN_INVENTORY, AccessContext.REMOVE); // remove a pantry
+                printPantryList(PantryType.PANTRY, AccessContext.REMOVE); // remove a pantry
             case 4:
                 printHomePage();
         }
     }
 
-    public void printShoppingCartPage() {
+    public static void printShoppingCartPage() {
         Navigation.clearConsole();
         System.out.println("Shopping Cart Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
@@ -76,20 +75,20 @@ public class Navigation {
         "\n" +
         "4. Go Back\n");
 
-        int userInput = Navigation.getUserInputInt(1, 4, Controller.universalScanner);
+        int userInput = Navigation.getUserInputInt(1, 4);
         switch (userInput) {
             case 1:
-                // print list of shopping carts                      
+                printPantryList(PantryType.SHOPPING_CART, AccessContext.DISPLAY); // print list of shopping carts                      
             case 2:
-                // add new shopping cart
+                Controller.createCart(); // add new shopping cart
             case 3:
-                // remove a shopping cart
+                printPantryList(PantryType.SHOPPING_CART, AccessContext.REMOVE); // remove a shopping cart
             case 4:
                 printHomePage();
         }
     }
 
-    public void printCookbookPage() {
+    public static void printCookbookPage() {
         Navigation.clearConsole();
         System.out.println("Cookbook Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
@@ -98,7 +97,7 @@ public class Navigation {
         "\n" +
         "3. Go Back\n");
 
-        int userInput = Navigation.getUserInputInt(1, 3, Controller.universalScanner);
+        int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
                 // print list of recipes in cookbook                       
@@ -109,7 +108,7 @@ public class Navigation {
         }
     }
 
-    public void printNotificationPage() {
+    public static void printNotificationPage() {
         Navigation.clearConsole();
         System.out.println("Notificiation Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
@@ -119,7 +118,7 @@ public class Navigation {
         "\n" +
         "4. Go Back\n");
 
-        int userInput = Navigation.getUserInputInt(1, 4, Controller.universalScanner);
+        int userInput = Navigation.getUserInputInt(1, 4);
         switch (userInput) {
             case 1:
                 // print notification list                         
@@ -132,14 +131,16 @@ public class Navigation {
         }
     }
 
-    public void printRecipe(int recipeID, boolean fromSearch) {
+    public static void printRecipe(int recipeID, boolean fromSearch) {
         Navigation.clearConsole();
         ArrayList<Recipe> recipeList = Cookbook.recipes;
         Iterator<Recipe> iterator = recipeList.iterator();
+        Recipe recipe = new Recipe(null);
         
         while (iterator.hasNext()) {
             Recipe r = iterator.next();
             if (r.getID() == recipeID) {
+                recipe = r;
                 r.printRecipe();
             }
         }
@@ -155,20 +156,20 @@ public class Navigation {
             "2. Go Back\n");
         }
 
-        int userInput = Navigation.getUserInputInt(1, 2, Controller.universalScanner);
+        int userInput = Navigation.getUserInputInt(1, 2);
         switch (userInput) {
             case 1:
                 if (fromSearch) {
-                    // save recipe to cookbook
+                    Cookbook.saveRecipe(recipe);
                 } else {
-                    // remove recipe from cookbook
+                    Cookbook.removeRecipe(recipe);
                 }
             case 2:
                 printCookbookPage();
         }
     }
 
-    public void printItem(int pantryID, int itemID) {
+    public static void printItem(int pantryID, int itemID) {
         Navigation.clearConsole();
         Pantry pantry = Kitchen.retrievePantry(pantryID);
         Iterator<Item> iterator = pantry.items.iterator();
@@ -195,7 +196,7 @@ public class Navigation {
             "\n" +
             "3. Go Back\n");
 
-        int userInput = Navigation.getUserInputInt(1, 3, Controller.universalScanner);
+        int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
                 // delete an item                         
@@ -210,7 +211,7 @@ public class Navigation {
         }
     }
 
-    public void printSearchResults(String query, ArrayList<Object> list) {
+    public static void printSearchResults(String query, ArrayList<Object> list) {
         Navigation.clearConsole();
         System.out.println("Search Results from query: " + query + "\n");
         ArrayList<Object> searchResults = Search.search(query, list);
@@ -242,47 +243,60 @@ public class Navigation {
         }
     }
 
-    public void printPantryList(PantryType type, AccessContext context) {
+    public static void printPantryList(PantryType type, AccessContext context) {
         Navigation.clearConsole();
-        switch (context) {
-            case DISPLAY:
-            case REMOVE:
-                System.out.println("Choose a " + type.name().toLowerCase() + " to " + context.name().toLowerCase() + ".");
-            default: // if somehow an invalid context is given
-                printHomePage();
+        int listSize = 1;
+
+        if (Kitchen.inventory.isEmpty()) {
+            System.out.println("You do not currently have any " + type.name().replace("_", " ").toLowerCase() + "s. Return to the previous menu to create one!");
+        } else {
+            System.out.println("Choose a " + type.name().replace("_", " ").toLowerCase() + " to " + context.name().toLowerCase() + ".\n");
+            for (int i = 0; i < Kitchen.inventory.size(); i++) {
+                System.out.println(i + 1 + ". " + Kitchen.inventory.get(i).getPantryName());
+                listSize = Kitchen.inventory.size() + 1;
+            }
         }
 
-        for (int i = 0; i < Kitchen.inventory.size(); i++) {
-            System.out.println(i + 1 + ". " + Kitchen.inventory.get(i).getPantryName());
+        System.out.println("\n" + listSize + ". Go Back");
+
+        int userInput = Navigation.getUserInputInt(1, listSize);
+
+        if (Kitchen.inventory.isEmpty()) {
+            switch (type) {
+                case PANTRY:
+                    printPantryPage();
+                case SHOPPING_CART:
+                    printShoppingCartPage();
+            }
+        } else {
+            switch (context) {
+                case DISPLAY:
+                    viewItemList(PantryType.PANTRY, Kitchen.inventory.get(userInput - 1).getPantryID());
+                case REMOVE:
+                    Controller.deletePantry(Kitchen.inventory.get(userInput - 1).getPantryID());
         }
-
-        System.out.println("\n" + Kitchen.inventory.size() + 1 + ". Go Back");
-
-        int userInput = Navigation.getUserInputInt(1, Kitchen.inventory.size(), Controller.universalScanner);
-
-        switch (context) {
-            case DISPLAY:
-                viewItemList(PantryType.KITCHEN_INVENTORY, Kitchen.inventory.get(userInput - 1).getPantryID());
-            case REMOVE:
-                Controller.deletePantry(Kitchen.inventory.get(userInput - 1).getPantryID());
-            default: // if somehow an invalid context is given
-                printHomePage();
         }
     }
 
-    public void viewItemList(PantryType type, int pantryToModify) {
+    public static void viewItemList(PantryType type, int pantryToModify) {
         Navigation.clearConsole();
+        int listSize = 1;
         Pantry pantry = Kitchen.retrievePantry(pantryToModify);
-        System.out.println("Items in" + type.name().replace("_", " ").toLowerCase() + " named " + pantry.getPantryName());
+        System.out.println("Items in " + type.name().replace("_", " ").toLowerCase() + " named " + pantry.getPantryName() + 
+        "\nChoose an item to view/edit its contents.\n");
 
-        switch (type) {
-            case KITCHEN_INVENTORY:
-                for (int i = 0; i < pantry.items.size(); i++) {
-                    System.out.println(i + 1 + ". " + Kitchen.inventory.get(i).getPantryName());
+        if (pantry.items.isEmpty()) {
+            System.out.println("This " + type.name().replace("_", " ").toLowerCase() + " is empty!");
+        } else {
+            for (int i = 0; i < pantry.items.size(); i++) {
+                System.out.print(i + 1 + ". " + pantry.items.get(i).getName() + "    " + "Quantity: " + pantry.items.get(i).getQuantity() + "    " + "Date Added: " + pantry.items.get(i).getDateAdded().getTime());
+                if (pantry.items.get(i).getExpirationDate() != null) {
+                    System.out.println("    Expires: " + pantry.items.get(i).getExpirationDate().getTime());
                 }
-            case SHOPPING_CART:
-
+            }
         }
+        
+        System.out.println("\n" + listSize + ". Go Back");
     }
 
     // Clears the screen for printing new menus
@@ -292,79 +306,89 @@ public class Navigation {
         }
     }
 
-    public static int getUserInputInt(int min, int max, Scanner scanInt) {
-        int userInput;
+    public static int getUserInputInt(int min, int max) {
+        int userInput = -1;
 
-        do {
-            System.out.print("Your input: ");
-            while (!scanInt.hasNextInt()) {
-                System.out.println("Invalid input. Please enter an integer.");
+        try {
+            do {
                 System.out.print("Your input: ");
-                scanInt.next();
-            }
-            userInput = scanInt.nextInt();
+                while (!Controller.universalScanner.hasNextInt()) {
+                    System.out.println("Invalid input. Please enter an integer.");
+                    System.out.print("Your input: ");
+                    Controller.universalScanner.next();
+                }
+                userInput = Controller.universalScanner.nextInt();
 
-            if (userInput < min || userInput > max) {
-                System.out.printf("Input out of range. Please enter an integer between %d and %d.\n", min, max);
-            }
-        } while (userInput < min || userInput > max);
+                if (userInput < min || userInput > max) {
+                    System.out.printf("Input out of range. Please enter an integer between %d and %d.\n", min, max);
+                }
+            } while (userInput < min || userInput > max);
+        } catch (NoSuchElementException e) {
+            System.err.println("No input was given. Exiting.");
+        } catch (IllegalArgumentException e) {
+            System.err.println("Illegal input was given. Exiting.");
+        }
 
         return userInput;
     }
 
-    public static String getUserInputString(boolean allowSpaces, int maxLength, Scanner scanString) {
+    public static String getUserInputString(boolean allowSpaces, int maxLength) {
         String validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!,.?#()";
         if (allowSpaces) {
             validChars += " ";
         }
 
         System.out.print("Your Input: ");
-        String userInput;
+        String userInput = "";
         boolean isValid;
 
-        do {
-            userInput = scanString.nextLine();
+        try {
+            do {
+                userInput = Controller.universalScanner.nextLine();
 
-            isValid = true;
-            for (char c : userInput.toCharArray()) {
-                if (validChars.indexOf(c) == -1 || userInput.length() > maxLength) {
-                    isValid = false;
-                    break;
+                isValid = true;
+                for (char c : userInput.toCharArray()) {
+                    if (validChars.indexOf(c) == -1 || userInput.length() > maxLength) {
+                        isValid = false;
+                        break;
+                    }
                 }
-            }
 
-            if (!isValid) {
-                System.out.println("Invalid input. Your input may contain only alphanumeric"
-                                   + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#(). Input must also be less than " + maxLength + " characters.");
-            }
-        } while (!isValid);
+                if (!isValid) {
+                    System.out.println("Invalid input. Your input may contain only alphanumeric"
+                                    + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#(). Input must also be less than " + maxLength + " characters.");
+                }
+            } while (!isValid);
+        } catch (NoSuchElementException e) {
+            System.err.println("No input was given. Exiting.");
+        } catch (IllegalArgumentException e) {
+            System.err.println("Illegal input was given. Exiting.");
+        }
 
-        scanString.close();
         return userInput;
     }
 
     public static Calendar getUserInputDate(boolean includeHoursMinutes) {
-        Scanner scanDate = new Scanner(System.in);
-        
-        System.out.println("Enter year.");
-        int year = getUserInputInt(2000,3000,scanDate);
+        try {
+            System.out.println("Enter year.");
+            int year = getUserInputInt(2000,3000);
 
-        System.out.println("Enter month. (1-12)");
-        int month = getUserInputInt(1,12,scanDate);
+            System.out.println("Enter month. (1-12)");
+            int month = getUserInputInt(1,12);
 
-        int numDaysInMonth = getNumDaysInMonth(month); // calculate day range for selected month
-        System.out.println("Enter day of the month. (The month you selected has " + numDaysInMonth + " days.)");
-        int day = getUserInputInt(1, numDaysInMonth,scanDate);
+            int numDaysInMonth = getNumDaysInMonth(month); // calculate day range for selected month
+            System.out.println("Enter day of the month. (The month you selected has " + numDaysInMonth + " days.)");
+            int day = getUserInputInt(1, numDaysInMonth);
 
-        int hour = 0;
-        int minute = 0;
-        if (includeHoursMinutes) {
-            System.out.println("Enter hour. (0-23)");
-            hour = getUserInputInt(0,23,scanDate);
+            int hour = 0;
+            int minute = 0;
+            if (includeHoursMinutes) {
+                System.out.println("Enter hour. (0-23)");
+                hour = getUserInputInt(0,23);
 
-            System.out.println("Enter minute. (0-59)");
-            minute = getUserInputInt(0,59,scanDate);
-        }
+                System.out.println("Enter minute. (0-59)");
+                minute = getUserInputInt(0,59);
+            }
 
         // Create a Calendar instance and set the provided values
         Calendar calendar = Calendar.getInstance();
@@ -376,9 +400,17 @@ public class Navigation {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        scanDate.close();
-
         return calendar;
+
+        } catch (NoSuchElementException e) {
+            System.err.println("No input was given. Exiting.");
+        } catch (IllegalArgumentException e) {
+            System.err.println("Illegal input was given. Exiting.");
+        } catch (NullPointerException e) {
+            System.err.println("Input was null. Exiting.");
+        }
+
+        return Calendar.getInstance(); // unreachable but necessary statement
     }
 
     private static int getNumDaysInMonth(int month) {
@@ -412,10 +444,10 @@ public class Navigation {
         //Calendar testCal = getUserInputDate(true);
         //System.out.println(testCal.getTime());
 
-        //String testString = getUserInputString(true);
-        //System.out.println(testString);
+        String testString = getUserInputString(true, 30);
+        System.out.println(testString);
 
-        int testInt = getUserInputInt(12,100, Controller.universalScanner);
+        int testInt = getUserInputInt(12,100);
         System.out.println(testInt);
     }
 }
