@@ -49,4 +49,12 @@ public class NotificationService {
             }
         }
     }
+
+    public void setCurrentNotifID(int newID) {
+        currentNotifID = newID;
+    }
+
+    public void setNotificationList(ArrayList<Notification> newList) {
+        notificationList = newList;
+    }
 }

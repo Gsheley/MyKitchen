@@ -2,7 +2,7 @@ import java.util.Calendar;
 import java.util.Scanner;
 
 public class Controller {
-    NotificationService ns = new NotificationService();
+    static NotificationService ns = new NotificationService();
     static int numKitchens = 0;
     static int numCarts = 0;
     static Scanner universalScanner = new Scanner(System.in);
@@ -68,5 +68,13 @@ public class Controller {
 
     public static void setNumCarts(int num) {
         numCarts = num;
+    }
+
+    public static NotificationService getNotificationService() {
+        return ns;
+    }
+
+    public static void setNotificationService(NotificationService obj) {
+        ns = obj;
     }
 }

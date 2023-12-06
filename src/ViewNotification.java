@@ -13,7 +13,7 @@ public class ViewNotification extends Notification {
         return this.notifDate;
     }
 
-    ViewNotification(int notifID, Calendar notifDate, String message) {
+    public ViewNotification(int notifID, Calendar notifDate, String message) {
         super(notifID, notifDate);
         this.message = message;
     }
