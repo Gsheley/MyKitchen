@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Cookbook {
-    protected String cookbookName = "";
+    protected static String cookbookName = "";
     //Recipe object containing multiple recipes(recipeName: recipeID: recipeIngredients: recipeSteps:)
     public static ArrayList<Recipe> recipes;
     
@@ -32,5 +32,9 @@ public class Cookbook {
                 recipes.remove(i);
             }
         }
+    }
+    //function to set the cookbook name
+    public static void setName(String newName){
+        cookbookName = newName;
     }
 }
