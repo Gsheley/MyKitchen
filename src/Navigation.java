@@ -198,9 +198,9 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 3, Controller.universalScanner);
         switch (userInput) {
             case 1:
-                                    
+                // delete an item                         
             case 2:
-
+                // remove an item
             case 3:
                 if (pantryID < PantryService.getRange()) {
                     printPantryPage();
@@ -254,6 +254,34 @@ public class Navigation {
 
         for (int i = 0; i < Kitchen.inventory.size(); i++) {
             System.out.println(i + 1 + ". " + Kitchen.inventory.get(i).getPantryName());
+        }
+
+        System.out.println("\n" + Kitchen.inventory.size() + 1 + ". Go Back");
+
+        int userInput = Navigation.getUserInputInt(1, Kitchen.inventory.size(), Controller.universalScanner);
+
+        switch (context) {
+            case DISPLAY:
+                viewItemList(PantryType.KITCHEN_INVENTORY, Kitchen.inventory.get(userInput - 1).getPantryID());
+            case REMOVE:
+                Controller.deletePantry(Kitchen.inventory.get(userInput - 1).getPantryID());
+            default: // if somehow an invalid context is given
+                printHomePage();
+        }
+    }
+
+    public void viewItemList(PantryType type, int pantryToModify) {
+        Navigation.clearConsole();
+        Pantry pantry = Kitchen.retrievePantry(pantryToModify);
+        System.out.println("Items in" + type.name().replace("_", " ").toLowerCase() + " named " + pantry.getPantryName());
+
+        switch (type) {
+            case KITCHEN_INVENTORY:
+                for (int i = 0; i < pantry.items.size(); i++) {
+                    System.out.println(i + 1 + ". " + Kitchen.inventory.get(i).getPantryName());
+                }
+            case SHOPPING_CART:
+
         }
     }
 
