@@ -3,7 +3,6 @@ import java.util.Calendar;
 public abstract class Notification {
     protected int notifID = 0;
     protected Calendar notifDate = Calendar.getInstance();
-    protected String message;
 
 
     Notification(int notifID, Calendar notifDate) {
@@ -24,4 +23,8 @@ public abstract class Notification {
     }
 
     public abstract void displayNotification();
+
+    public abstract String getMessage();
+
+    public abstract void setMessage(String message);
 }
