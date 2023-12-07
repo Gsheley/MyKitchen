@@ -142,13 +142,14 @@ public class Navigation {
         System.out.println("\nSelect a navigation option below.\n" +
         "1. View/Edit/Delete Upcoming Notifications\n" +
         "2. Create a New Notification\n" +
+        "3. View Triggered Notifications\n" +
         "\n" +
-        "3. Go Back\n");
+        "4. Go Back\n");
 
-        int userInput = Navigation.getUserInputInt(1, 3);
+        int userInput = Navigation.getUserInputInt(1, 4);
         switch (userInput) {
             case 1:
-                printNotificationList(); 
+                printNotificationList(AccessContext.DISPLAY); 
                 break;                               
             case 2:
                 Navigation.clearConsole();
@@ -164,8 +165,11 @@ public class Navigation {
                 System.out.println("\nNotification Created!\n\"" + message + "\" will trigger on " + date.getTime() + "\n1. Continue");
                 getUserInputInt(1, 1);
                 printNotificationPage();
-                break;               
+                break;    
             case 3:
+                printNotificationList(AccessContext.REMOVE);
+                break;
+            case 4:
                 printHomePage();
                 break;         
         }
@@ -254,34 +258,61 @@ public class Navigation {
         }
     }
 
-    public static void printSearchResults(String query, ArrayList<Object> list) {
+    public static void printSearchResults(String query, ArrayList<Object> list, int pantryID, PantryType type) { // last two arguments can be null if searching from cookbook
         Navigation.clearConsole();
         System.out.println("Search Results from query: " + query + "\n");
         ArrayList<Object> searchResults = Search.search(query, list);
+        int listSize = 1;
+        boolean isPantry = false;
+        ArrayList<Item> pantryResults = new ArrayList<Item>();
+        ArrayList<Recipe> cookbookResults = new ArrayList<Recipe>();
 
         if (searchResults.isEmpty()) {
             System.out.println("No Results Found.");
+
+            System.out.println("\n1. Continue");
         } else if(list.get(0) instanceof Item) {
-            ArrayList<Item> pantryResults = new ArrayList<Item>();
+            isPantry = true;
 
             for (Object obj : searchResults) {
                 // Typecasting each Object to Item and adding it to the new ArrayList
                 Item item = (Item) obj;
                 pantryResults.add(item);
+                listSize++;
             }
             for (int i = 0; i < pantryResults.size(); i++) {
                 System.out.println(i + 1 + ". " + pantryResults.get(i).getName());
             }
+
+            System.out.println("\n" + pantryResults.size() +". Continue");
         } else if (list.get(0) instanceof Recipe) {
-            ArrayList<Recipe> cookbookResults = new ArrayList<Recipe>();
 
             for (Object obj : searchResults) {
                 // Typecasting each Object to Recipe and adding it to the new ArrayList
                 Recipe recipe = (Recipe) obj;
                 cookbookResults.add(recipe);
+                listSize++;
             }
-            for (int i = 0; i <= cookbookResults.size(); i++) {
+            for (int i = 0; i < cookbookResults.size(); i++) {
                 System.out.println(i + 1 + ". " + cookbookResults.get(i).getName());
+            }
+
+            System.out.println("\n" + cookbookResults.size() +". Continue");
+        }
+
+        int userInput = Navigation.getUserInputInt(1, listSize);
+
+        if (userInput == listSize) {
+            if (isPantry) {
+                viewItemList(type, pantryID);
+            } else {
+                printRecipeList();
+            }
+        } else {
+            if (isPantry) {
+                printItem(pantryID, pantryResults.get(userInput - 1).getItemID());
+            } else {
+                printRecipe(cookbookResults.get(userInput - 1).getID(), true);
             }
         }
     }
@@ -376,14 +407,25 @@ public class Navigation {
             }
         }
         
-        int goBackNum = listSize + 1;
+        int goBackNum = listSize + 2;
         System.out.println("\n" + listSize + ". Add a New Item" + 
+                            "\n" + (listSize + 1) + ". Search this " + type.name().replace("_"," ").toLowerCase() +
                             "\n" + goBackNum + ". Go Back");
 
         int userInput = Navigation.getUserInputInt(1, goBackNum);
 
         if (userInput == listSize) {
             Controller.addItem(type, pantryToModify);
+        } else if (userInput == listSize + 1) {
+            System.out.println("Enter search query.");
+            String query = getUserInputString(true, 30);
+
+            ArrayList<Object> objectList = new ArrayList<>();
+            for (Item item : pantry.items) {
+                objectList.add(item); // Adding each Item object to the Object list
+            }
+
+            printSearchResults(query, objectList, pantryToModify, type);
         } else if (userInput == goBackNum) {
             switch (type) {
                 case PANTRY:
@@ -398,22 +440,88 @@ public class Navigation {
         }
     }
 
-    public static void printNotificationList() {
+    public static void printNotificationList(AccessContext context) {
         Navigation.clearConsole();
         ArrayList<Notification> list = Controller.ns.getNotificationList();
-        int listSize = list.size();
+        int listSize = 1;
 
-        if (list.isEmpty()) {
-            System.out.println("Your notification list is empty! Return to the previous menu to create a new notification.");
-            listSize = 1;
-        } else {
-            System.out.println("Choose a notification below.");
-            for (int i = 0; i < listSize; i++) {
-                System.out.println((i + 1) + ". " + list.get(listSize - 1).getNotifDate());
-            }
+        switch (context) {
+            case DISPLAY:
+                if (list.isEmpty()) {
+                    System.out.println("Your notification list is empty! Return to the previous menu to create a new notification.");
+                    listSize = 1;
+                } else {
+                    System.out.println("Choose a notification below.");
+                    for (int i = 0; i < list.size(); i++) {
+                        // Calculate the number of spaces needed for alignment
+                        int spacesToAdd = 50 - list.get(i).getMessage().length() + 4;
+                        // Create a string of spaces to align the quantity
+                        String spaces = new String(new char[spacesToAdd]).replace('\0', ' ');
+                        System.out.println((i + 1) + ". " + list.get(listSize - 1).getMessage() + spaces + list.get(listSize - 1).getNotifDate().getTime());
+                        listSize++;
+                    }
+                }
+                break;
+            case REMOVE:
+                Iterator<Notification> iterator = list.iterator();
+                if (list.isEmpty()) {
+                    System.out.println("You do not have any triggered notifications.");
+                } else {
+                    Calendar currentDate = Calendar.getInstance();
+                    while (iterator.hasNext()) {
+                        Notification notif = iterator.next();
+                        if (notif.getNotifDate().before(currentDate)) { // If any notifications have triggered before the current date/time
+                            // Calculate the number of spaces needed for alignment
+                            int spacesToAdd = 50 - notif.getMessage().length() + 4;
+                            // Create a string of spaces to align the quantity
+                            String spaces = new String(new char[spacesToAdd]).replace('\0', ' ');
+                            System.out.println((listSize) + ". " + notif.getMessage() + spaces + notif.getNotifDate().getTime());
+                            listSize++;
+                        }
+                    }
+                }
+                break;
         }
         
         System.out.println("\n" + listSize + ". Go Back");
+
+        int userInput = getUserInputInt(1, listSize);
+
+        if (userInput == listSize) {
+            printNotificationPage();
+        } else {
+            printNotification(list.get(userInput - 1).getNotifID(), context);
+        }
+    }
+
+    public static void printNotification(int notifID, AccessContext context) {
+        ArrayList<Notification> list = Controller.ns.getNotificationList(); 
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getNotifID() == notifID) {
+                list.get(i).displayNotification();
+            }
+        }
+
+        System.out.println("\n1. Remove this Notification" +
+                            "\n2. Edit this Notification" +
+                            "\n3. Go Back");
+
+        int userInput = getUserInputInt(1, 3);
+
+        switch (userInput) {
+            case 1:
+                // remove the notification
+                Controller.deleteNotification(notifID);
+                break;
+            case 2:
+                // edit the notification
+                break;
+            case 3:
+                printNotificationList(context);
+                break;
+        }
+        // TODO
     }
 
     public static void printRecipeList() {
