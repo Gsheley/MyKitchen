@@ -90,7 +90,7 @@ public class JsonConnection extends Connection {
                             dateAdded = jsonToCalendar(itemAddedEntry);
                         }
                         int itemQuantity = currentItem.get("quantity").getAsInt();
-                        if (pantryID < PantryService.getRange()) {
+                        if (currentItem.has("expirationDate")) {
                             JsonObject expirationEntry = currentItem.get("expirationDate").getAsJsonObject();
                             Calendar expirationDate = null;
                             if (expirationEntry != null) { 
@@ -112,10 +112,12 @@ public class JsonConnection extends Connection {
         // If the cookbook has elements, then we need to find and record them
         if (cookbook != null) {
             // Getting the data from the original Cookbook
-            String cookbookName = cookbook.get("cookbookName").getAsString();
+            if (cookbook.has("cookbookName")) {
+                String cookbookName = cookbook.get("cookbookName").getAsString();
+                // Setting up the values for the cookbook
+                Cookbook.setName(cookbookName);
+            }
             recipes = cookbook.getAsJsonArray("recipes");
-            // Setting up the values for the cookbook
-            Cookbook.setName(cookbookName);
             // Populating the Cookbook with its recipes
             for (int index = 0; index < recipes.size(); index++) {
                 // Getting each recipe from the JsonArray was a JsonString
@@ -126,37 +128,40 @@ public class JsonConnection extends Connection {
         notifications = jsonObject.getAsJsonObject("notifications");
         // If there is data regarding notifications, we need to record it
         if (notifications != null) {
-            // Getting the data from the original Notification aggreagte
-            int currentID = notifications.get("currentID").getAsInt();
-            // Getting the list of notifications for record
-            listNotifications = notifications.getAsJsonArray("listNotifications");
             // Making a new NotificationService object
             NotificationService newService = new NotificationService();
-            newService.setCurrentNotifID(currentID);
-            ArrayList<Notification> newNotificationList = new ArrayList<Notification>();
-             // If the list of notifications has elements, then we need to find and record them
-            if (listNotifications != null) {
-                // New object for the notification to record
-                JsonObject notificationObject;
-                // Looping through each of the notifications
-                for(int index = 0; index < listNotifications.size(); index++) {
-                    // Getting the notification object
-                    notificationObject = listNotifications.get(index).getAsJsonObject();
-                    // Getting the notification message
-                    String notificationMessage = notificationObject.get("message").getAsString();
-                    // Getting the notification ID
-                    int notificationID = notificationObject.get("notificationID").getAsInt();
-                    // Getting the notify date for the notification
-                    JsonObject notifyDate = notificationObject.get("notifyDate").getAsJsonObject();
-                    Calendar notifyCalendar = null;
-                    if (notifyDate != null) { 
-                        notifyCalendar = jsonToCalendar(notifyDate);
+            // Getting the data from the original Notification aggreagte
+            if (notifications.has("currentID")) {
+                int currentID = notifications.get("currentID").getAsInt();
+                newService.setCurrentNotifID(currentID);
+            }
+            // Getting the list of notifications for record
+            if (notifications.has("listNotifications")) {
+                listNotifications = notifications.getAsJsonArray("listNotifications");
+                ArrayList<Notification> newNotificationList = new ArrayList<Notification>();
+                // If the list of notifications has elements, then we need to find and record them
+                if (listNotifications != null) {
+                    // New object for the notification to record
+                    JsonObject notificationObject;
+                    // Looping through each of the notifications
+                    for(int index = 0; index < listNotifications.size(); index++) {
+                        // Getting the notification object
+                        notificationObject = listNotifications.get(index).getAsJsonObject();
+                        // Getting the notification message
+                        String notificationMessage = notificationObject.get("message").getAsString();
+                        // Getting the notification ID
+                        int notificationID = notificationObject.get("notificationID").getAsInt();
+                        // Getting the notify date for the notification
+                        JsonObject notifyDate = notificationObject.get("notifyDate").getAsJsonObject();
+                        Calendar notifyCalendar = null;
+                        if (notifyDate != null) { 
+                            notifyCalendar = jsonToCalendar(notifyDate);
+                        }
+                        newNotificationList.add(new ViewNotification(notificationID, notifyCalendar, notificationMessage));
                     }
-                    newNotificationList.add(new ViewNotification(notificationID, notifyCalendar, notificationMessage));
+                    newService.setNotificationList(newNotificationList);
                 }
             }
-            newService.setCurrentNotifID(currentID);
-            newService.setNotificationList(newNotificationList);
             Controller.setNotificationService(newService);
         }
     }
