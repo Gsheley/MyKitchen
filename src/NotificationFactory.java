@@ -8,7 +8,7 @@ public class NotificationFactory {
     NotificationFactory() {
     }
 
-    public Notification createNotification(int id, Calendar notifDate, NotifType type, String message) {
+    public ViewNotification createNotification(int id, Calendar notifDate, NotifType type, String message) {
         switch (type) {
             case VIEW:
                 return new ViewNotification(id, notifDate, message);
