@@ -3,12 +3,12 @@ import java.util.Calendar;
 import java.util.Iterator;
 
 public class NotificationService {
-    private ArrayList<Notification> notificationList = new ArrayList<Notification>();
-    private Iterator<Notification> iterator = notificationList.iterator();
+    private ArrayList<ViewNotification> notificationList = new ArrayList<ViewNotification>();
+    private Iterator<ViewNotification> iterator = notificationList.iterator();
     private NotificationFactory notifFactory = new NotificationFactory();
     private int currentNotifID = 1; // keeps track of the next notifID to be instantiated
 
-    public ArrayList<Notification> getNotificationList() {
+    public ArrayList<ViewNotification> getNotificationList() {
         return notificationList;
     }
 
@@ -54,7 +54,7 @@ public class NotificationService {
         currentNotifID = newID;
     }
 
-    public void setNotificationList(ArrayList<Notification> newList) {
+    public void setNotificationList(ArrayList<ViewNotification> newList) {
         notificationList = newList;
     }
 }
