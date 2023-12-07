@@ -12,12 +12,12 @@ public class Controller {
     public static void main(String[] args) 
     {   
         saveJson.open();
-        Controller.createPantry("New Test Pantry");
+        /*Controller.createPantry("New Test Pantry");
         Kitchen.addItem(0,"Apple",Calendar.getInstance(),12,Calendar.getInstance());
         Kitchen.addItem(0,"Banana",Calendar.getInstance(),9,Calendar.getInstance());
         Kitchen.addItem(0,"Pear",Calendar.getInstance(),6,Calendar.getInstance());
         Kitchen.addItem(0,"Lettuce",Calendar.getInstance(),4,Calendar.getInstance());
-        Kitchen.addItem(0,"Chips",Calendar.getInstance(),2212,Calendar.getInstance());
+        Kitchen.addItem(0,"Chips",Calendar.getInstance(),2212,Calendar.getInstance());*/
         Navigation.printHomePage();
     }
 
@@ -38,8 +38,8 @@ public class Controller {
         saveJson.delete(deletedPantry);
 
         Navigation.clearConsole();
-        System.out.println("Pantry removed!\n\n1. Continue");
-        Navigation.getUserInputInt(1, 1);
+        System.out.println("Pantry removed!\n");
+        Navigation.bufferContinue();
         Navigation.printPantryPage();
     }
 
@@ -58,8 +58,8 @@ public class Controller {
         saveJson.delete(deletedPantry);
 
         Navigation.clearConsole();
-        System.out.println("Shopping Cart removed!\n\n1. Continue");
-        Navigation.getUserInputInt(1, 1);
+        System.out.println("Shopping Cart removed!\n");
+        Navigation.bufferContinue();
         Navigation.printShoppingCartPage();
     }
 
@@ -95,25 +95,69 @@ public class Controller {
         saveJson.update(updatedPantry);
 
         Navigation.clearConsole();
-        System.out.println("Item added!\n1. Continue");
-        Navigation.getUserInputInt(1, 1);
+        System.out.println("Item added!\n");
+        Navigation.bufferContinue();
         Navigation.viewItemList(type,pantryID);
     }
 
-    public static void editItem(int pantryID, int idToEdit) {
+    public static void editItem(int pantryID, int idToEdit, PantryType type) {
         Navigation.clearConsole();
+        Item item = Kitchen.retrievePantry(pantryID).getItem(idToEdit);
         System.out.println("What would you like to edit about this item?\n" +
-        "Name: " + Kitchen.retrievePantry(pantryID).items);
-        // TODO
+        "1. Name: " + item.getName() +
+        "\n2. Quantity: " + item.getQuantity());
+        if (item.expirationDate != null) {
+            System.out.println("3. Expiration Date: " + item.getExpirationDate().getTime());
+        }
+        System.out.println("\n4. Cancel edit");
 
+        int userInput = Navigation.getUserInputInt(1, 4);
+
+        switch (userInput) {
+            case 1:
+            case 2:
+            case 3:
+                switch (userInput) {
+                    case 1:
+                        System.out.println("Enter new name");
+                        String userString = Navigation.getUserInputString(true, 30);
+                        Kitchen.retrievePantry(pantryID).getItem(idToEdit).setName(userString);
+                        System.out.println("Name updated!\n");
+                        break;
+                    case 2:
+                        System.out.println("Enter new quantity");
+                        int userInt = Navigation.getUserInputInt(1, Integer.MAX_VALUE);
+                        Kitchen.retrievePantry(pantryID).getItem(idToEdit).setQuantity(userInt);
+                        System.out.println("Quantity updated!\n");
+                        break;
+                    case 3:
+                        System.out.println("Enter new date");
+                        Calendar userDate = Navigation.getUserInputDate(false);
+                        Kitchen.retrievePantry(pantryID).getItem(idToEdit).setExpirationDate(userDate);
+                        Navigation.clearConsole();
+                        System.out.println("Expiration Date updated!\n");
+                        break;
+                }
+                
+                Navigation.bufferContinue();
+            case 4:
+                Navigation.viewItemList(type, pantryID);
+                break;
+        }
 
         saveJson.update(Kitchen.retrievePantry(pantryID));
     }
 
-    public static void deleteItem(int idToRemove) {
+    public static void deleteItem(int pantryID, int idToRemove) {
         // TODO
+        Pantry pantry = Kitchen.retrievePantry(pantryID);
+        pantry.deleteItem(idToRemove);
 
-        saveJson.update(Kitchen.retrievePantry(idToRemove));
+        Navigation.clearConsole();
+        System.out.println("Item Removed!");
+        Navigation.bufferContinue();
+
+        saveJson.update(pantry);
     }
 
     // NOTIFICATIONS //
@@ -124,12 +168,19 @@ public class Controller {
     }
 
     public static void editNotification(int idToEdit, String editedMessage, Calendar editedDate) {
-        // TODO ns.modifyNotification(idToEdit, editedMessage, editedDate);
+        // TODO 
+        
+        ns.modifyNotification(idToEdit, editedMessage, editedDate);
     }
 
     public static void deleteNotification(int idToDelete) {
         Notification removedNotification = ns.removeNotification(idToDelete);
         saveJson.delete(removedNotification);
+
+        Navigation.clearConsole();
+        System.out.println("Notification Removed!");
+        Navigation.bufferContinue();
+        Navigation.printNotificationList(AccessContext.DISPLAY);
     }
 
     // RECIPES //

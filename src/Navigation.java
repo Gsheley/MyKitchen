@@ -167,7 +167,7 @@ public class Navigation {
                 printNotificationPage();
                 break;    
             case 3:
-                printNotificationList(AccessContext.REMOVE);
+                printNotificationList(AccessContext.REMOVE); // REMOVE is misnomer, means viewing triggered notifications in this context
                 break;
             case 4:
                 printHomePage();
@@ -215,7 +215,7 @@ public class Navigation {
         }
     }
 
-    public static void printItem(int pantryID, int itemID) {
+    public static void printItem(int pantryID, int itemID, PantryType type) {
         Navigation.clearConsole();
         Pantry pantry = Kitchen.retrievePantry(pantryID);
         Iterator<Item> iterator = pantry.items.iterator();
@@ -243,10 +243,11 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
-                Controller.editItem(pantryID, itemID); 
+                Controller.editItem(pantryID, itemID, type); 
                 break;                                 
             case 2:
-                // TODO remove an item
+                Controller.deleteItem(pantryID, itemID);
+                viewItemList(type, pantryID);
                 break;         
             case 3:
                 if (pantryID < PantryService.getRange()) {
@@ -258,7 +259,7 @@ public class Navigation {
         }
     }
 
-    public static void printSearchResults(String query, ArrayList<Object> list, int pantryID, PantryType type) { // last two arguments can be null if searching from cookbook
+    public static void printSearchResults(String query, ArrayList<Object> list, int pantryID, PantryType type) { // last three arguments can be null if searching from cookbook
         Navigation.clearConsole();
         System.out.println("Search Results from query: " + query + "\n");
         ArrayList<Object> searchResults = Search.search(query, list);
@@ -268,6 +269,9 @@ public class Navigation {
         ArrayList<Recipe> cookbookResults = new ArrayList<Recipe>();
 
         if (searchResults.isEmpty()) {
+            if (type != null) {
+                isPantry = true;
+            }
             System.out.println("No Results Found.");
 
             System.out.println("\n1. Continue");
@@ -310,7 +314,7 @@ public class Navigation {
             }
         } else {
             if (isPantry) {
-                printItem(pantryID, pantryResults.get(userInput - 1).getItemID());
+                printItem(pantryID, pantryResults.get(userInput - 1).getItemID(), type);
             } else {
                 printRecipe(cookbookResults.get(userInput - 1).getID(), true);
             }
@@ -427,16 +431,9 @@ public class Navigation {
 
             printSearchResults(query, objectList, pantryToModify, type);
         } else if (userInput == goBackNum) {
-            switch (type) {
-                case PANTRY:
-                    printPantryPage();
-                    break;         
-                case SHOPPING_CART:
-                    printShoppingCartPage();
-                    break;          
-            }
+            printPantryList(type, AccessContext.DISPLAY);        
         } else {
-            printItem(pantryToModify, pantry.items.get(userInput - 1).getItemID());
+            printItem(pantryToModify, pantry.items.get(userInput - 1).getItemID(), type);
         }
     }
 
@@ -462,7 +459,7 @@ public class Navigation {
                     }
                 }
                 break;
-            case REMOVE:
+            case REMOVE: // REMOVE is misnomer, means viewing triggered notifications in this context
                 Iterator<Notification> iterator = list.iterator();
                 if (list.isEmpty()) {
                     System.out.println("You do not have any triggered notifications.");
@@ -479,11 +476,13 @@ public class Navigation {
                             listSize++;
                         }
                     }
+                    System.out.println("\n" + listSize + ". Clear all triggered notifications");
+                    listSize++;
                 }
                 break;
         }
         
-        System.out.println("\n" + listSize + ". Go Back");
+        System.out.println(listSize + ". Go Back");
 
         int userInput = getUserInputInt(1, listSize);
 
@@ -537,6 +536,12 @@ public class Navigation {
         for (int i = 0; i < 50; i++) {
             System.out.println();
         }
+    }
+
+    // Prevents further printing until user inputs 1 to continue
+    public static void bufferContinue() {
+        System.out.println("1. Continue");
+        Navigation.getUserInputInt(1, 1);
     }
 
     public static int getUserInputInt(int min, int max) {

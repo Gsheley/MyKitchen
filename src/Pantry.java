@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 
 public class Pantry {
     private int pantryID;
@@ -62,6 +63,17 @@ public class Pantry {
                 (items.get(i)).quantity = quantity;
             }
 
+        }
+    }
+
+    public void deleteItem(int itemID) {
+        Iterator<Item> iterator = this.items.iterator();
+
+        while (iterator.hasNext()) {
+            Item item = iterator.next();
+            if (item.getItemID() == itemID) {
+                iterator.remove();
+            }
         }
     }
 

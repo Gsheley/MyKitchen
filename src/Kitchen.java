@@ -29,10 +29,13 @@ public class Kitchen
 
     public static Pantry deletePantry(int pantryID) {
         Pantry deletedPantry = null;
-        int index = getPantryIndex(pantryID);
-        if (index != -1) {
-            deletedPantry = inventory.get(index);
-            inventory.remove(index);
+        Iterator<Pantry> iterator = inventory.iterator();
+        while (iterator.hasNext()) {
+            Pantry pantry = iterator.next();
+            if (pantry.getPantryID() == pantryID) {
+                deletedPantry = pantry;
+                iterator.remove();
+            }
         }
         return deletedPantry;
     }
