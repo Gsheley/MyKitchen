@@ -152,7 +152,7 @@ public class MealDB extends API{
             int response_code = url_connection.getResponseCode();
             if(response_code != 200)
             {
-                throw new RuntimeException("HttpResponseCode: " + response_code);
+                return null;
             }
 
             //read in from url_connection
