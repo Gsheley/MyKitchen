@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class SearchTest 
 {
     ArrayList<Object> emptyList;
@@ -12,27 +11,31 @@ public class SearchTest
     ArrayList<Object> recipeList;
     ArrayList<Object> emptyItemList;
     ArrayList<Object> emptyRecipeList;
-    ArrayList<Object> correct;
+    ArrayList<Object> correctItem;
+    ArrayList<Object> correctRecipe;
 
     @Before
     public void setup()
     {
+        correctItem= new ArrayList<>();
+        correctRecipe = new ArrayList<>();
         emptyList= new ArrayList<>();
         itemList= new ArrayList<>();
         recipeList= new ArrayList<>();
         emptyItemList= new ArrayList<>();
         emptyRecipeList= new ArrayList<>();
         String[] itemNames = {"apple", "bannana", "taco", "pancake", "tomato"};
-        String[] recipeNames = {"Taco", "Pizza", "Steak", "Soup" };
+        String[] recipeNames = {"Taco", "Pizza", "Steak", "Soup", "cheese" };
         for(int i =0; i < 5; i++)
         {
             itemList.add(new Item(i, itemNames[i], null, i));
+            recipeList.add(new Recipe(recipeNames[i], i));
         }
-        correct.add(itemList.get(0));
+        correctItem.add(itemList.get(0));
+        correctRecipe.add(recipeList.get(0));
 
 
     }
-
 
     @Test
     public void emptyItemList()
@@ -46,7 +49,7 @@ public class SearchTest
     public void itemFound()
     {
         ArrayList<Object> result = Search.search("apple", itemList);
-        assertArrayEquals(correct.toArray(), result.toArray());
+        assertArrayEquals(correctItem.toArray(), result.toArray());
         
     }
 
@@ -64,18 +67,26 @@ public class SearchTest
         assertArrayEquals(emptyList.toArray(), result.toArray());
     }
 
+    @Test
+    public void recipeFound()
+    {
+        ArrayList<Object> result = Search.search("Taco", recipeList);
+        assertArrayEquals(correctRecipe.toArray(), result.toArray());
+        
+    }
 
-
+    @Test
+    public void recipeNotFound()
+    {
+        ArrayList<Object> result = Search.search("blueberry", emptyItemList);
+        assertArrayEquals(emptyList.toArray(), result.toArray());
+    }
 
     @After 
     public void cleanUp()
     {
 
     }
-
-
-
-
 }
 
 

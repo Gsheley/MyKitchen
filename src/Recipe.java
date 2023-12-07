@@ -56,6 +56,12 @@ public class Recipe {
         this.recipeSteps = mealObject.get("strInstructions").toString();
     }
 
+    public Recipe(String name, int recipeID)
+    {
+        this.recipeName = name;
+        this.recipeID = recipeID;
+    }
+
     public void printRecipe(int id) 
     {
         id = this.recipeID;
