@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 public class NotificationService {
     private ArrayList<Notification> notificationList = new ArrayList<Notification>();
-    private Iterator<Notification> iterator = notificationList.iterator();
     private NotificationFactory notifFactory = new NotificationFactory();
     private int currentNotifID = 1; // keeps track of the next notifID to be instantiated
 
@@ -13,6 +12,7 @@ public class NotificationService {
     }
 
     public boolean checkForNotifications() {
+        Iterator<Notification> iterator = notificationList.iterator();
         if (notificationList.isEmpty()) {
             return false;
         } else {
@@ -33,6 +33,7 @@ public class NotificationService {
     }
 
     public void modifyNotification(int idToModify, Calendar newDate) {
+        Iterator<Notification> iterator = notificationList.iterator();
         while (iterator.hasNext()) {
             Notification notif = iterator.next();
             if (notif.getNotifID() == idToModify) {
@@ -42,6 +43,7 @@ public class NotificationService {
     }
 
     public void removeNotification(int idToRemove) {
+        Iterator<Notification> iterator = notificationList.iterator();
         while (iterator.hasNext()) {
             Notification notif = iterator.next();
             if (notif.getNotifID() == idToRemove) {

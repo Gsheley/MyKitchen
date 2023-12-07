@@ -10,12 +10,10 @@ enum AccessContext { // the context in which a list is accessed. Different print
 }
 
 public class Navigation {
-    static NotificationService ns = new NotificationService();
-
     public static void printHomePage() {
         Navigation.clearConsole();
         System.out.println("Welcome to MyKitchen!\n");
-        if (ns.checkForNotifications()) {
+        if (Controller.ns.checkForNotifications()) {
             System.out.println("You have new notification(s)! View them in the notifications menu.");
         } else {
             System.out.println("You have no new notifications.");
@@ -42,7 +40,7 @@ public class Navigation {
                 printNotificationPage();
                 break;         
             case 5:
-            System.out.println("Goodbye!");
+                System.out.println("Goodbye!");
                 System.exit(0);
         }
     }
@@ -67,6 +65,9 @@ public class Navigation {
                 System.out.println("Please enter the name of the new Pantry: ");
                 String pantryName = Navigation.getUserInputString(true, 30);
                 Controller.createPantry(pantryName); // add a new pantry
+                Navigation.clearConsole();
+                System.out.println("Pantry created!\n\n1. Continue");
+                Navigation.getUserInputInt(1, 1);
                 printPantryPage();
                 break; 
             case 3:
@@ -98,6 +99,9 @@ public class Navigation {
                 System.out.println("Please enter the name of the new Shopping Cart: ");
                 String cartName = Navigation.getUserInputString(true, 30);
                 Controller.createCart(cartName); // add new shopping cart
+                Navigation.clearConsole();
+                System.out.println("Shopping Cart created!\n\n1. Continue");
+                Navigation.getUserInputInt(1, 1);
                 printShoppingCartPage();
                 break;         
             case 3:
@@ -113,7 +117,7 @@ public class Navigation {
         Navigation.clearConsole();
         System.out.println("Cookbook Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
-        "1. View Recipes in Cookbook\n" +
+        "1. View/Remove Recipes in Cookbook\n" +
         "2. Find New Recipes\n" +
         "\n" +
         "3. Go Back\n");
@@ -121,10 +125,10 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
-                // print list of recipes in cookbook  
+                // TODO print list of recipes in cookbook  
                 break;                              
             case 2:
-                // print recipe search page
+                // TODO print recipe query options page
                 break;         
             case 3:
                 printHomePage();
@@ -138,22 +142,30 @@ public class Navigation {
         System.out.println("\nSelect a navigation option below.\n" +
         "1. View/Edit/Delete Upcoming Notifications\n" +
         "2. Create a New Notification\n" +
-        "3. Remove an Existing Shopping Cart\n" +
         "\n" +
-        "4. Go Back\n");
+        "3. Go Back\n");
 
-        int userInput = Navigation.getUserInputInt(1, 4);
+        int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
-                // print notification list  
+                printNotificationList(); 
                 break;                               
             case 2:
-                // add new notification
-                break;         
+                Navigation.clearConsole();
+                System.out.println("What message should be included with the notification?");
+                String message = getUserInputString(true, 50);
+                Navigation.clearConsole();
+
+                System.out.println("When should the notification trigger?");
+                Calendar date = getUserInputDate(true);
+                Controller.ns.addNotification(date, message);
+                Navigation.clearConsole();
+
+                System.out.println("\nNotification Created!\n\"" + message + "\" will trigger on " + date.getTime() + "\n1. Continue");
+                getUserInputInt(1, 1);
+                printNotificationPage();
+                break;               
             case 3:
-                // remove a notification
-                break;         
-            case 4:
                 printHomePage();
                 break;         
         }
@@ -215,8 +227,6 @@ public class Navigation {
                 if (i.getExpirationDate() != null) {
                     System.out.println("Expiration Date: " + i.getExpirationDate().getTime());
                 }
-            } else {
-                System.out.println("Could not find an item of the specified ID inside the specified list.");
             }
         }
 
@@ -229,10 +239,10 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
-                // edit an item 
+                Controller.editItem(pantryID, itemID); 
                 break;                                 
             case 2:
-                // remove an item
+                // TODO remove an item
                 break;         
             case 3:
                 if (pantryID < PantryService.getRange()) {
@@ -389,15 +399,29 @@ public class Navigation {
     }
 
     public static void printNotificationList() {
+        Navigation.clearConsole();
+        ArrayList<Notification> list = Controller.ns.getNotificationList();
+        int listSize = list.size();
 
+        if (list.isEmpty()) {
+            System.out.println("Your notification list is empty! Return to the previous menu to create a new notification.");
+            listSize = 1;
+        } else {
+            System.out.println("Choose a notification below.");
+            for (int i = 0; i < listSize; i++) {
+                System.out.println((i + 1) + ". " + list.get(listSize - 1).getNotifDate());
+            }
+        }
+        
+        System.out.println("\n" + listSize + ". Go Back");
     }
 
     public static void printRecipeList() {
-
+        // TODO
     }
 
     public static void printRecipeQueryOptions() {
-        
+        // TODO
     }
 
     // Clears the screen for printing new menus

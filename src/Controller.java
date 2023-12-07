@@ -19,21 +19,23 @@ public class Controller {
         Navigation.printHomePage();
     }
 
+    // PANTRIES & SHOPPING CARTS //
+
+    public static void createPantry(String pantryName) 
+    {
+        Kitchen.createPantry(PantryType.PANTRY, pantryName);
+        numPantries++;
+    }
+
     public static void deletePantry(int id) 
     {
         Kitchen.deletePantry(id);
         numPantries--;
 
         Navigation.clearConsole();
-        System.out.println("Pantry removed!\n\n1. Go Back");
+        System.out.println("Pantry removed!\n\n1. Continue");
         Navigation.getUserInputInt(1, 1);
         Navigation.printPantryPage();
-    }
-
-    public static void createPantry(String pantryName) 
-    {
-        Kitchen.createPantry(PantryType.PANTRY, pantryName);
-        numPantries++;
     }
 
     public static void createCart(String cartName) 
@@ -48,10 +50,12 @@ public class Controller {
         numCarts--;
 
         Navigation.clearConsole();
-        System.out.println("Shopping Cart removed!\n\n1. Go Back");
+        System.out.println("Shopping Cart removed!\n\n1. Continue");
         Navigation.getUserInputInt(1, 1);
         Navigation.printShoppingCartPage();
     }
+
+    // ITEMS //
 
     public static void addItem(PantryType type, int pantryID) 
     {   
@@ -81,10 +85,41 @@ public class Controller {
         }
 
         Navigation.clearConsole();
-        System.out.println("Item added!\n1. Go Back");
+        System.out.println("Item added!\n1. Continue");
         Navigation.getUserInputInt(1, 1);
         Navigation.viewItemList(type,pantryID);
     }
+
+    public static void editItem(int pantryID, int idToEdit) {
+        Navigation.clearConsole();
+        System.out.println("What would you like to edit about this item?\n" +
+        "Name: " + Kitchen.retrievePantry(pantryID).items);
+        // TODO
+    }
+
+    public static void deleteItem(int idToRemove) {
+        // TODO
+    }
+
+    // NOTIFICATIONS //
+
+    public static void addNotification(Calendar dateOfNotif, String notifMessage) {
+        ns.addNotification(dateOfNotif, notifMessage);
+    }
+
+    public static void editNotification(int idToEdit, String editedMessage, Calendar editedDate) {
+        // TODO ns.modifyNotification(idToEdit, editedMessage, editedDate);
+    }
+
+    public static void deleteNotification(int idToDelete) {
+        ns.removeNotification(idToDelete);
+    }
+
+    // RECIPES //
+
+    // not sure if anything needs to go here yet
+
+    // SETTERS & GETTERS //
 
     public static int getNumPantries() {
         return numPantries;
