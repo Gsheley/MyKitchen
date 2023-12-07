@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -8,8 +7,6 @@ import java.util.ArrayList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import javax.management.RuntimeErrorException;
 import com.google.gson.JsonParser;
 
 public class MealDB extends API{
@@ -114,8 +111,7 @@ public class MealDB extends API{
             line = content.toString();
             JsonObject jsonObject = JsonParser.parseString(line).getAsJsonObject();
             JsonArray mealsArray = jsonObject.getAsJsonArray("meals");
-            StringBuilder mealNames = new StringBuilder();
-            
+
             for (JsonElement mealElement :mealsArray){
                 JsonObject mealObject = mealElement.getAsJsonObject();
                 int ID = mealObject.get("idMeal").getAsInt();
