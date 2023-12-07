@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Cookbook {
     protected static String cookbookName = "";
     //Recipe object containing multiple recipes(recipeName: recipeID: recipeIngredients: recipeSteps:)
-    public static ArrayList<Recipe> recipes;
+    public static ArrayList<Recipe> recipes = new ArrayList<Recipe>();
     
     //function that grabs a recipe from the list of Recipes
     public static Recipe getRecipe(String name){

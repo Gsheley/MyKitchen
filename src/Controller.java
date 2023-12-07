@@ -12,12 +12,18 @@ public class Controller {
     public static void main(String[] args) 
     {   
         saveJson.open();
+        MealDB meal = new MealDB();
         /*Controller.createPantry("New Test Pantry");
         Kitchen.addItem(0,"Apple",Calendar.getInstance(),12,Calendar.getInstance());
         Kitchen.addItem(0,"Banana",Calendar.getInstance(),9,Calendar.getInstance());
         Kitchen.addItem(0,"Pear",Calendar.getInstance(),6,Calendar.getInstance());
         Kitchen.addItem(0,"Lettuce",Calendar.getInstance(),4,Calendar.getInstance());
-        Kitchen.addItem(0,"Chips",Calendar.getInstance(),2212,Calendar.getInstance());*/
+        Kitchen.addItem(0,"Chips",Calendar.getInstance(),2212,Calendar.getInstance());
+
+        for (int i = 0; i < 5; i++) {
+            Cookbook.recipes.add(meal.queryRandom());
+        }*/
+
         Navigation.printHomePage();
     }
 
@@ -102,16 +108,21 @@ public class Controller {
 
     public static void editItem(int pantryID, int idToEdit, PantryType type) {
         Navigation.clearConsole();
+        int nextOptionValue = 3;
         Item item = Kitchen.retrievePantry(pantryID).getItem(idToEdit);
         System.out.println("What would you like to edit about this item?\n" +
         "1. Name: " + item.getName() +
         "\n2. Quantity: " + item.getQuantity());
         if (item.expirationDate != null) {
-            System.out.println("3. Expiration Date: " + item.getExpirationDate().getTime());
+            System.out.println(nextOptionValue + ". Expiration Date: " + item.getExpirationDate().getTime());
+            nextOptionValue++;
         }
-        System.out.println("\n4. Cancel edit");
+        System.out.println("\n" + nextOptionValue + ". Cancel edit");
 
-        int userInput = Navigation.getUserInputInt(1, 4);
+        int userInput = Navigation.getUserInputInt(1, nextOptionValue);
+        String newName = item.getName();
+        int newQuantity = item.getQuantity();
+        Calendar newExpirationDate = item.getExpirationDate();
 
         switch (userInput) {
             case 1:
@@ -120,24 +131,29 @@ public class Controller {
                 switch (userInput) {
                     case 1:
                         System.out.println("Enter new name");
-                        String userString = Navigation.getUserInputString(true, 30);
-                        Kitchen.retrievePantry(pantryID).getItem(idToEdit).setName(userString);
+                        newName = Navigation.getUserInputString(true, 30);
+                        Navigation.clearConsole();
                         System.out.println("Name updated!\n");
                         break;
                     case 2:
                         System.out.println("Enter new quantity");
-                        int userInt = Navigation.getUserInputInt(1, Integer.MAX_VALUE);
-                        Kitchen.retrievePantry(pantryID).getItem(idToEdit).setQuantity(userInt);
+                        newQuantity = Navigation.getUserInputInt(1, Integer.MAX_VALUE);
+                        Navigation.clearConsole();
                         System.out.println("Quantity updated!\n");
                         break;
                     case 3:
-                        System.out.println("Enter new date");
-                        Calendar userDate = Navigation.getUserInputDate(false);
-                        Kitchen.retrievePantry(pantryID).getItem(idToEdit).setExpirationDate(userDate);
-                        Navigation.clearConsole();
-                        System.out.println("Expiration Date updated!\n");
+                        if (newExpirationDate != null) {
+                            System.out.println("Enter new date");
+                            newExpirationDate = Navigation.getUserInputDate(false);
+                            Navigation.clearConsole();
+                            System.out.println("Expiration Date updated!\n");
+                        } else {
+                            Navigation.viewItemList(type, pantryID);
+                        }
                         break;
                 }
+
+                Kitchen.retrievePantry(pantryID).editItem(item.getItemID(), newName, newExpirationDate, newQuantity);
                 
                 Navigation.bufferContinue();
             case 4:
@@ -169,8 +185,13 @@ public class Controller {
 
     public static void editNotification(int idToEdit, String editedMessage, Calendar editedDate) {
         // TODO 
+        Notification editedNotification = ns.modifyNotification(idToEdit, editedMessage, editedDate);
+        saveJson.update(editedNotification);
         
-        ns.modifyNotification(idToEdit, editedMessage, editedDate);
+        Navigation.clearConsole();
+        System.out.println("Notification Edited!");
+        Navigation.bufferContinue();
+        Navigation.printNotificationList(AccessContext.DISPLAY);
     }
 
     public static void deleteNotification(int idToDelete) {

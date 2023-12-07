@@ -125,10 +125,10 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
-                // TODO print list of recipes in cookbook  
+                printRecipeList(); 
                 break;                              
             case 2:
-                // TODO print recipe query options page
+                printRecipeQueryOptions();
                 break;         
             case 3:
                 printHomePage();
@@ -179,7 +179,7 @@ public class Navigation {
         Navigation.clearConsole();
         ArrayList<Recipe> recipeList = Cookbook.recipes;
         Iterator<Recipe> iterator = recipeList.iterator();
-        Recipe recipe = new Recipe(null);
+        Recipe recipe = null;
         
         while (iterator.hasNext()) {
             Recipe r = iterator.next();
@@ -410,7 +410,7 @@ public class Navigation {
                 }
             }
         }
-        
+        // TODO add option to sort list
         int goBackNum = listSize + 2;
         System.out.println("\n" + listSize + ". Add a New Item" + 
                             "\n" + (listSize + 1) + ". Search this " + type.name().replace("_"," ").toLowerCase() +
@@ -495,9 +495,11 @@ public class Navigation {
 
     public static void printNotification(int notifID, AccessContext context) {
         ArrayList<Notification> list = Controller.ns.getNotificationList(); 
+        Notification notif = null;
 
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getNotifID() == notifID) {
+                notif = list.get(i);
                 list.get(i).displayNotification();
             }
         }
@@ -515,16 +517,59 @@ public class Navigation {
                 break;
             case 2:
                 // edit the notification
+                Navigation.clearConsole();
+
+                System.out.println("What would you like to edit about this notification?\n" +
+                "1. Message: " + notif.getMessage() +
+                "\n2. Date: " + notif.getNotifDate().getTime() +
+                "\n\n3. Cancel edit");
+
+                int userInt = getUserInputInt(1, 3);
+                String newMessage = notif.getMessage();
+                Calendar newDate = notif.getNotifDate();
+
+                switch (userInt) {
+                    case 1: 
+                        System.out.println("Enter new message");
+                        newMessage = Navigation.getUserInputString(true, 50);
+                    case 2:
+                        System.out.println("Enter new date");
+                        newDate = Navigation.getUserInputDate(true);
+                    case 3:
+                        printNotificationList(AccessContext.DISPLAY);
+                }
+
+                Controller.editNotification(notif.getNotifID(), newMessage, newDate);
                 break;
             case 3:
                 printNotificationList(context);
                 break;
         }
-        // TODO
     }
 
     public static void printRecipeList() {
-        // TODO
+        Navigation.clearConsole();
+        int listSize = 1;
+
+        if (Cookbook.recipes.isEmpty()) {
+            System.out.println("You do not have any saved recipes! Return to the previous menu to discover some!");
+        } else {
+            System.out.println("Choose a recipe below to view its contents.\n");
+            for (int i = 0; i < Cookbook.recipes.size(); i++) {
+                System.out.println((i + 1) + ". " + Cookbook.recipes.get(i).getName());
+                listSize++;
+            }
+        }
+
+        System.out.println("\n" + listSize + ". Go back");
+
+        int userInput = getUserInputInt(1, listSize);
+
+        if (userInput == listSize) {
+            printCookbookPage();
+        } else {
+            printRecipe(Cookbook.recipes.get(userInput - 1).getID(), false);
+        }
     }
 
     public static void printRecipeQueryOptions() {
