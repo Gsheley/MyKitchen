@@ -27,8 +27,7 @@ public class Controller {
     {
         Pantry newPantry = Kitchen.createPantry(PantryType.PANTRY, pantryName);
         numPantries++;
-        saveJson.create(newPantry);
-        saveJson.save();
+        //saveJson.create(newPantry);
     }
 
     public static void deletePantry(int id) 
@@ -36,8 +35,7 @@ public class Controller {
         Pantry deletedPantry = Kitchen.deletePantry(id);
         numPantries--;
 
-        saveJson.delete(deletedPantry);
-        saveJson.save();
+        //saveJson.delete(deletedPantry);
 
         Navigation.clearConsole();
         System.out.println("Pantry removed!\n\n1. Continue");
@@ -49,8 +47,7 @@ public class Controller {
     {
         Pantry newPantry = Kitchen.createPantry(PantryType.SHOPPING_CART, cartName);
         numCarts++;
-        saveJson.create(newPantry);
-        saveJson.save();
+        //saveJson.create(newPantry);
     }
 
     public static void deleteCart(int id) 
@@ -58,8 +55,7 @@ public class Controller {
         Pantry deletedPantry = Kitchen.deletePantry(id);
         numCarts--;
 
-        saveJson.delete(deletedPantry);
-        saveJson.save();
+        //saveJson.delete(deletedPantry);
 
         Navigation.clearConsole();
         System.out.println("Shopping Cart removed!\n\n1. Continue");
@@ -96,8 +92,7 @@ public class Controller {
         } else {
             updatedPantry = Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity);
         }
-        saveJson.update(updatedPantry);
-        saveJson.save();
+        //saveJson.update(updatedPantry);
 
         Navigation.clearConsole();
         System.out.println("Item added!\n1. Continue");
@@ -112,23 +107,20 @@ public class Controller {
         // TODO
 
 
-        saveJson.update(Kitchen.retrievePantry(pantryID));
-        saveJson.save();
+        //saveJson.update(Kitchen.retrievePantry(pantryID));
     }
 
     public static void deleteItem(int idToRemove) {
         // TODO
 
-        saveJson.update(Kitchen.retrievePantry(idToRemove));
-        saveJson.save();
+        //saveJson.update(Kitchen.retrievePantry(idToRemove));
     }
 
     // NOTIFICATIONS //
 
     public static void addNotification(Calendar dateOfNotif, String notifMessage) {
         Notification newNotification = ns.addNotification(dateOfNotif, notifMessage);
-        saveJson.create(newNotification);
-        saveJson.save();
+        //saveJson.create(newNotification);
     }
 
     public static void editNotification(int idToEdit, String editedMessage, Calendar editedDate) {
@@ -137,8 +129,7 @@ public class Controller {
 
     public static void deleteNotification(int idToDelete) {
         Notification removedNotification = ns.removeNotification(idToDelete);
-        saveJson.delete(removedNotification);
-        saveJson.save();
+        //saveJson.delete(removedNotification);
     }
 
     // RECIPES //

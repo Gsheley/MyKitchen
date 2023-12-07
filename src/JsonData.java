@@ -28,6 +28,7 @@ public class JsonData extends SaveAppData {
         // we connect with, it is necessary to give each Recipe its own single array
         aggregate.add("meals", mealsArray);
         conn.recipes.add(aggregate);
+        save();
     }
 
     public void update(Recipe obj) {
@@ -63,6 +64,7 @@ public class JsonData extends SaveAppData {
             replacementArray.add(jsonRecipe);
             conn.recipes.set(index, replacementArray);
         }
+        save();
     }
 
     public void delete(Recipe obj) {
@@ -78,6 +80,7 @@ public class JsonData extends SaveAppData {
                 break;
             }
         }
+        save();
     }
 
     public void create(Pantry obj) {
@@ -102,6 +105,7 @@ public class JsonData extends SaveAppData {
             conn.numShoppingCarts = Controller.getNumCarts();
             conn.nextShoppingCartID = PantryService.getNextShoppingCartID();
         }
+        save();
     }
 
     public void update(Pantry obj) {
@@ -129,6 +133,7 @@ public class JsonData extends SaveAppData {
             }
             jsonPantry.add("items", items);
             conn.inventory.set(index, jsonPantry);
+            save();
         }
     }
 
@@ -142,6 +147,7 @@ public class JsonData extends SaveAppData {
                 break;
             }
         }
+        save();
     }
 
     public void create(Notification obj) {
@@ -150,6 +156,7 @@ public class JsonData extends SaveAppData {
         conn.notifications.addProperty("currentID", obj.getNotifID());
         // Creating a new JsonObject for the new notification
         conn.listNotifications.add(notificationToJson(obj));
+        save();
     }
 
     public void update(Notification obj) {
@@ -166,6 +173,7 @@ public class JsonData extends SaveAppData {
             }
         }
         conn.listNotifications.set(index, jsonNotification);
+        save();
     }
 
     public void delete(Notification obj) {
@@ -182,6 +190,7 @@ public class JsonData extends SaveAppData {
                 break;
             }
         }
+        save();
     }
 
     private JsonObject calendarToJson(Calendar date) {
