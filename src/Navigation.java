@@ -42,6 +42,7 @@ public class Navigation {
                 printNotificationPage();
                 break;         
             case 5:
+            System.out.println("Goodbye!");
                 System.exit(0);
         }
     }
@@ -278,6 +279,7 @@ public class Navigation {
     public static void printPantryList(PantryType type, AccessContext context) {
         Navigation.clearConsole();
         int listSize = 1;
+        ArrayList<Pantry> listToPrint = new ArrayList<Pantry>();
 
         if (type == PantryType.PANTRY && Controller.numPantries == 0 || type == PantryType.SHOPPING_CART && Controller.numCarts == 0) {
             System.out.println("You do not currently have any " + type.name().replace("_", " ").toLowerCase() + "s. Return to the previous menu to create one!");
@@ -285,13 +287,14 @@ public class Navigation {
             System.out.println("Choose a " + type.name().replace("_", " ").toLowerCase() + " to " + context.name().toLowerCase() + ".\n");
             for (int i = 0; i < Kitchen.inventory.size(); i++) {
                 if (type == PantryType.PANTRY && Kitchen.inventory.get(i).getPantryID() < PantryService.getRange()) {
-                    System.out.println(listSize + ". " + Kitchen.inventory.get(i).getPantryName());
+                    listToPrint.add(Kitchen.inventory.get(i));
+                    System.out.println(listToPrint.size() + ". " + listToPrint.get(listToPrint.size() - 1).getPantryName());
                     listSize++;
                 } else if (type == PantryType.SHOPPING_CART && Kitchen.inventory.get(i).getPantryID() >= PantryService.getRange()) {
-                    System.out.println(listSize + ". " + Kitchen.inventory.get(i).getPantryName());
+                    listToPrint.add(Kitchen.inventory.get(i));
+                    System.out.println(listToPrint.size() + ". " + listToPrint.get(listToPrint.size() - 1).getPantryName());
                     listSize++;
                 }
-                
             }
         }
 
@@ -311,10 +314,20 @@ public class Navigation {
         } else {
             switch (context) {
                 case DISPLAY:
-                    viewItemList(PantryType.PANTRY, Kitchen.inventory.get(userInput - 1).getPantryID());
+                    switch (type) {
+                        case PANTRY:
+                            viewItemList(PantryType.PANTRY, listToPrint.get(userInput - 1).getPantryID());
+                        case SHOPPING_CART:
+                            viewItemList(PantryType.SHOPPING_CART, listToPrint.get(userInput - 1).getPantryID());
+                    }
                     break;         
                 case REMOVE:
-                    Controller.deletePantry(Kitchen.inventory.get(userInput - 1).getPantryID());
+                    switch (type) {
+                        case PANTRY:
+                            Controller.deletePantry(Kitchen.inventory.get(userInput - 1).getPantryID());
+                        case SHOPPING_CART:
+                            Controller.deleteCart(Kitchen.inventory.get(userInput - 1).getPantryID());
+                    }
                     break;         
             }
         }
@@ -373,6 +386,18 @@ public class Navigation {
         } else {
             printItem(pantryToModify, pantry.items.get(userInput - 1).getItemID());
         }
+    }
+
+    public static void printNotificationList() {
+
+    }
+
+    public static void printRecipeList() {
+
+    }
+
+    public static void printRecipeQueryOptions() {
+        
     }
 
     // Clears the screen for printing new menus

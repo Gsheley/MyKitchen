@@ -10,9 +10,12 @@ public class Controller {
     
     public static void main(String[] args) 
     {   
-        Kitchen.createPantry(PantryType.PANTRY, "My Pantry");
-        numPantries++;
-        Kitchen.inventory.get(0).items.add(new Item(1,"Apple",Calendar.getInstance(),12,Calendar.getInstance()));
+        Controller.createPantry("My Pantry");
+        Kitchen.addItem(0,"Apple",Calendar.getInstance(),12,Calendar.getInstance());
+        Kitchen.addItem(0,"Banana",Calendar.getInstance(),9,Calendar.getInstance());
+        Kitchen.addItem(0,"Pear",Calendar.getInstance(),6,Calendar.getInstance());
+        Kitchen.addItem(0,"Lettuce",Calendar.getInstance(),4,Calendar.getInstance());
+        Kitchen.addItem(0,"Chips",Calendar.getInstance(),2212,Calendar.getInstance());
         Navigation.printHomePage();
     }
 
@@ -43,6 +46,7 @@ public class Controller {
     {
         Kitchen.deletePantry(id);
         numCarts--;
+
         Navigation.clearConsole();
         System.out.println("Shopping Cart removed!\n\n1. Go Back");
         Navigation.getUserInputInt(1, 1);

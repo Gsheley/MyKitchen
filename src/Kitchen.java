@@ -21,7 +21,7 @@ public class Kitchen
         if (index == -1) {
             return null; 
         } else {
-            return inventory.get(pantryID);
+            return inventory.get(index);
         }
     }
 
