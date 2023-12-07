@@ -34,13 +34,14 @@ public class NotificationService {
         return newNotification;
     }
 
-    public Notification modifyNotification(int idToModify, Calendar newDate) {
+    public Notification modifyNotification(int idToModify, String newMessage, Calendar newDate) {
         Notification output = null;
         Iterator<Notification> iterator = notificationList.iterator();
         while (iterator.hasNext()) {
             Notification notif = iterator.next();
             if (notif.getNotifID() == idToModify) {
                 notif.setNotifDate(newDate);
+                notif.setMessage(newMessage);
                 output = notif;
                 break;
             }
