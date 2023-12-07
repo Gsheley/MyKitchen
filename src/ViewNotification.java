@@ -1,9 +1,6 @@
 import java.util.Calendar;
 
 public class ViewNotification extends Notification {
-    private String message;
-    private int notifID;
-    private Calendar notifDate;
 
     public String getMessage() {
         return this.message;

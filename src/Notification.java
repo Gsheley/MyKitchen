@@ -1,8 +1,10 @@
 import java.util.Calendar;
 
 public abstract class Notification {
-    private int notifID = 0;
-    private Calendar notifDate = Calendar.getInstance();
+    protected int notifID = 0;
+    protected Calendar notifDate = Calendar.getInstance();
+    protected String message;
+
 
     Notification(int notifID, Calendar notifDate) {
         this.notifID = notifID;
