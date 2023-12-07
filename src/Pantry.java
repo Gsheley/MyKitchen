@@ -43,10 +43,10 @@ public class Pantry {
         for(int i = 0; i < items.size(); i++) {
             int curItemID = (items.get(i)).itemID;
             if(curItemID == (itemID)){        
-                (items.get(i)).name = name;
-                (items.get(i)).dateAdded = dateAdded;
-                (items.get(i)).quantity = quantity;
-                (items.get(i)).expirationDate = expirDate;
+                (items.get(i)).setName(name);
+                (items.get(i)).setDateAdded(dateAdded);
+                (items.get(i)).setQuantity(quantity);
+                (items.get(i)).setExpirationDate(expirDate);
             }
 
         }
@@ -58,9 +58,9 @@ public class Pantry {
         for(int i = 0; i < items.size(); i++) {
             int curItemID = (items.get(i)).itemID;
             if(curItemID == (itemID)){        
-                (items.get(i)).name = name;
-                (items.get(i)).dateAdded = dateAdded;
-                (items.get(i)).quantity = quantity;
+                (items.get(i)).setName(name);
+                (items.get(i)).setDateAdded(dateAdded);
+                (items.get(i)).setQuantity(quantity);
             }
 
         }
