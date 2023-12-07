@@ -30,13 +30,17 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 5);
         switch (userInput) {
             case 1:
-                printPantryPage();                     
+                printPantryPage();    
+                break;                          
             case 2:
                 printShoppingCartPage();
+                break;         
             case 3:
                 printCookbookPage();
+                break;         
             case 4:
                 printNotificationPage();
+                break;         
             case 5:
                 System.exit(0);
         }
@@ -55,13 +59,21 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 4);
         switch (userInput) {
             case 1:
-                printPantryList(PantryType.PANTRY, AccessContext.DISPLAY); // print list of pantries                      
+                printPantryList(PantryType.PANTRY, AccessContext.DISPLAY); // print list of pantries 
+                break;                     
             case 2:
-                Controller.createPantry(); // add a new pantry
+                Navigation.clearConsole();
+                System.out.println("Please enter the name of the new Pantry: ");
+                String pantryName = Navigation.getUserInputString(true, 30);
+                Controller.createPantry(pantryName); // add a new pantry
+                printPantryPage();
+                break; 
             case 3:
                 printPantryList(PantryType.PANTRY, AccessContext.REMOVE); // remove a pantry
+                break; 
             case 4:
                 printHomePage();
+                break; 
         }
     }
 
@@ -78,13 +90,21 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 4);
         switch (userInput) {
             case 1:
-                printPantryList(PantryType.SHOPPING_CART, AccessContext.DISPLAY); // print list of shopping carts                      
+                printPantryList(PantryType.SHOPPING_CART, AccessContext.DISPLAY); // print list of shopping carts
+                break;                       
             case 2:
-                Controller.createCart(); // add new shopping cart
+                Navigation.clearConsole();
+                System.out.println("Please enter the name of the new Shopping Cart: ");
+                String cartName = Navigation.getUserInputString(true, 30);
+                Controller.createCart(cartName); // add new shopping cart
+                printShoppingCartPage();
+                break;         
             case 3:
                 printPantryList(PantryType.SHOPPING_CART, AccessContext.REMOVE); // remove a shopping cart
+                break;         
             case 4:
                 printHomePage();
+                break;         
         }
     }
 
@@ -100,11 +120,14 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
-                // print list of recipes in cookbook                       
+                // print list of recipes in cookbook  
+                break;                              
             case 2:
                 // print recipe search page
+                break;         
             case 3:
                 printHomePage();
+                break;         
         }
     }
 
@@ -121,13 +144,17 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 4);
         switch (userInput) {
             case 1:
-                // print notification list                         
+                // print notification list  
+                break;                               
             case 2:
                 // add new notification
+                break;         
             case 3:
                 // remove a notification
+                break;         
             case 4:
                 printHomePage();
+                break;         
         }
     }
 
@@ -164,8 +191,10 @@ public class Navigation {
                 } else {
                     Cookbook.removeRecipe(recipe);
                 }
+                break;         
             case 2:
-                printCookbookPage();
+                printCookbookPage();   
+                break;            
         }
     }
 
@@ -199,15 +228,18 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
-                // delete an item                         
+                // edit an item 
+                break;                                 
             case 2:
                 // remove an item
+                break;         
             case 3:
                 if (pantryID < PantryService.getRange()) {
                     printPantryPage();
                 } else {
                     printShoppingCartPage();
                 }
+                break;         
         }
     }
 
@@ -247,13 +279,19 @@ public class Navigation {
         Navigation.clearConsole();
         int listSize = 1;
 
-        if (Kitchen.inventory.isEmpty()) {
+        if (type == PantryType.PANTRY && Controller.numPantries == 0 || type == PantryType.SHOPPING_CART && Controller.numCarts == 0) {
             System.out.println("You do not currently have any " + type.name().replace("_", " ").toLowerCase() + "s. Return to the previous menu to create one!");
         } else {
             System.out.println("Choose a " + type.name().replace("_", " ").toLowerCase() + " to " + context.name().toLowerCase() + ".\n");
             for (int i = 0; i < Kitchen.inventory.size(); i++) {
-                System.out.println(i + 1 + ". " + Kitchen.inventory.get(i).getPantryName());
-                listSize = Kitchen.inventory.size() + 1;
+                if (type == PantryType.PANTRY && Kitchen.inventory.get(i).getPantryID() < PantryService.getRange()) {
+                    System.out.println(listSize + ". " + Kitchen.inventory.get(i).getPantryName());
+                    listSize++;
+                } else if (type == PantryType.SHOPPING_CART && Kitchen.inventory.get(i).getPantryID() >= PantryService.getRange()) {
+                    System.out.println(listSize + ". " + Kitchen.inventory.get(i).getPantryName());
+                    listSize++;
+                }
+                
             }
         }
 
@@ -261,20 +299,24 @@ public class Navigation {
 
         int userInput = Navigation.getUserInputInt(1, listSize);
 
-        if (Kitchen.inventory.isEmpty()) {
+        if (userInput == listSize) {
             switch (type) {
                 case PANTRY:
                     printPantryPage();
+                    break;         
                 case SHOPPING_CART:
                     printShoppingCartPage();
+                    break;         
             }
         } else {
             switch (context) {
                 case DISPLAY:
                     viewItemList(PantryType.PANTRY, Kitchen.inventory.get(userInput - 1).getPantryID());
+                    break;         
                 case REMOVE:
                     Controller.deletePantry(Kitchen.inventory.get(userInput - 1).getPantryID());
-        }
+                    break;         
+            }
         }
     }
 
@@ -288,15 +330,49 @@ public class Navigation {
         if (pantry.items.isEmpty()) {
             System.out.println("This " + type.name().replace("_", " ").toLowerCase() + " is empty!");
         } else {
+            listSize = pantry.items.size() + 1;
             for (int i = 0; i < pantry.items.size(); i++) {
-                System.out.print(i + 1 + ". " + pantry.items.get(i).getName() + "    " + "Quantity: " + pantry.items.get(i).getQuantity() + "    " + "Date Added: " + pantry.items.get(i).getDateAdded().getTime());
+                String itemName = pantry.items.get(i).getName();
+                int itemQuantity = pantry.items.get(i).getQuantity();
+
+                // Calculate the number of spaces needed for alignment
+                int spacesToAdd = 30 - itemName.length() + 4;
+                // Create a string of spaces to align the quantity
+                String spaces = new String(new char[spacesToAdd]).replace('\0', ' ');
+
+                // Print the item details with aligned quantities
+                System.out.print((i + 1) + ". " + itemName + spaces + "Quantity: " + itemQuantity);
                 if (pantry.items.get(i).getExpirationDate() != null) {
-                    System.out.println("    Expires: " + pantry.items.get(i).getExpirationDate().getTime());
+                    // Same space alignment but with expiration date (if applicable)
+                    spacesToAdd = 30 - String.valueOf(itemQuantity).length() + 4;
+                    spaces = new String(new char[spacesToAdd]).replace('\0', ' ');
+                    System.out.println(spaces + "Expires: " + pantry.items.get(i).getExpirationDate().getTime());
+                } else {
+                    System.out.println();
                 }
             }
         }
         
-        System.out.println("\n" + listSize + ". Go Back");
+        int goBackNum = listSize + 1;
+        System.out.println("\n" + listSize + ". Add a New Item" + 
+                            "\n" + goBackNum + ". Go Back");
+
+        int userInput = Navigation.getUserInputInt(1, goBackNum);
+
+        if (userInput == listSize) {
+            Controller.addItem(type, pantryToModify);
+        } else if (userInput == goBackNum) {
+            switch (type) {
+                case PANTRY:
+                    printPantryPage();
+                    break;         
+                case SHOPPING_CART:
+                    printShoppingCartPage();
+                    break;          
+            }
+        } else {
+            printItem(pantryToModify, pantry.items.get(userInput - 1).getItemID());
+        }
     }
 
     // Clears the screen for printing new menus
@@ -338,22 +414,28 @@ public class Navigation {
             validChars += " ";
         }
 
-        System.out.print("Your Input: ");
         String userInput = "";
         boolean isValid;
 
         try {
+            Controller.universalScanner.nextLine();
+            
             do {
+                System.out.print("Your Input: ");
                 userInput = Controller.universalScanner.nextLine();
-
+    
                 isValid = true;
-                for (char c : userInput.toCharArray()) {
-                    if (validChars.indexOf(c) == -1 || userInput.length() > maxLength) {
-                        isValid = false;
-                        break;
+                if (userInput.length() > maxLength || userInput.isEmpty()) {
+                    isValid = false;
+                } else {
+                    for (char c : userInput.toCharArray()) {
+                        if (validChars.indexOf(c) == -1) {
+                            isValid = false;
+                            break;
+                        }
                     }
                 }
-
+    
                 if (!isValid) {
                     System.out.println("Invalid input. Your input may contain only alphanumeric"
                                     + (allowSpaces ? " and space" : "") + " characters. Also accepted: !,.?#(). Input must also be less than " + maxLength + " characters.");
@@ -424,7 +506,6 @@ public class Navigation {
     }
 
     public static void main(String args[]) {
-        //Navigation nv = new Navigation();
         // Search test
         /* 
         ArrayList<Object> items = new ArrayList<Object>();
@@ -447,7 +528,7 @@ public class Navigation {
         String testString = getUserInputString(true, 30);
         System.out.println(testString);
 
-        int testInt = getUserInputInt(12,100);
-        System.out.println(testInt);
+        //int testInt = getUserInputInt(12,100);
+        //System.out.println(testInt);
     }
 }
