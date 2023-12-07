@@ -56,9 +56,9 @@ public class Recipe {
         this.recipeSteps = mealObject.get("strInstructions").toString();
     }
 
-    public Recipe(String name, int recipeID)
+    public Recipe(String recipeName, int recipeID)
     {
-        this.recipeName = name;
+        this.recipeName = recipeName;
         this.recipeID = recipeID;
     }
 
