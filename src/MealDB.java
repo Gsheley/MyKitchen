@@ -118,8 +118,8 @@ public class MealDB extends API{
             
             for (JsonElement mealElement :mealsArray){
                 JsonObject mealObject = mealElement.getAsJsonObject();
-                String mealName = mealObject.get("strMeal").getAsString();
-                Recipe newRecipe = this.queryByName(mealName);
+                int ID = mealObject.get("idMeal").getAsInt();
+                Recipe newRecipe = this.queryByID(ID);
                 if(newRecipe != null){
                     recipes.add(newRecipe);
                 }
@@ -185,6 +185,55 @@ public class MealDB extends API{
             return null;
         }
     }
+    
+    //query by ID
+    public Recipe queryByID(int ID){
+        
+        try{
+            String queryURL = BASE_URL + "lookup.php?i="+ ID;
+            URL url = new URL(queryURL);
+            HttpURLConnection url_connection = (HttpURLConnection) url.openConnection();
+            url_connection.setRequestMethod("GET");
+
+            url_connection.connect();
+
+            int response_code = url_connection.getResponseCode();
+
+            if(response_code != 200)
+            {
+                return null;
+            }
+            else{
+                System.out.println("Connection successful with response code: " + response_code);
+            }
+
+            InputStream in;
+            if (response_code >= 200 && response_code < 300) {
+                in = url_connection.getInputStream();
+             }
+             else {
+                in = url_connection.getErrorStream();
+             }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder content = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line);
+            }
+            // Close connections
+            in.close();
+            url_connection.disconnect();
+
+            // Convert the JSON string into a Recipe object
+            return new Recipe(content.toString());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 
     //Main
     public static void main(String[] args)
@@ -197,8 +246,12 @@ public class MealDB extends API{
         System.out.println("\n\nRecipe by main ingredient 'chicken_breast': ");
         System.out.println(myConnection.queryByIngredient("chicken_breast"));
         
-        //System.out.println("\n\nRecipe by random: \n\n");
-        //Recipe random = myConnection.queryRandom();
-        //random.printRecipe();
+        System.out.println("\n\nRecipe by ID 52772: ");
+        Recipe recipeByID = myConnection.queryByID(52772);
+        recipeByID.printRecipe();
+
+        System.out.println("\n\nRecipe by random: \n\n");
+        Recipe random = myConnection.queryRandom();
+        random.printRecipe();
     }
 }
