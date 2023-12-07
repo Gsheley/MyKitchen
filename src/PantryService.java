@@ -8,7 +8,7 @@ public class PantryService
     {
         Pantry newPantry = null;
 
-        if (PantryType.KITCHEN_INVENTORY == type) { 
+        if (PantryType.PANTRY == type) { 
             if (nextPantrykiID >= range) {
                 System.out.println("Sorry, you have reached the maximum amount of Kitchen Inventories");
             } else {
