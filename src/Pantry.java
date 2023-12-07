@@ -87,4 +87,8 @@ public class Pantry {
     public void setCurrentItemID(int itemID) { 
         currentItemID = itemID;
     }
+
+    public int getCurrentItemID() {
+        return currentItemID;
+    }
 }

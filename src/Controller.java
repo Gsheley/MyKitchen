@@ -7,10 +7,12 @@ public class Controller {
     static int numCarts = 0;
     static Scanner universalScanner = new Scanner(System.in);
     Navigation nv = new Navigation();
+    static SaveAppData saveJson = new JsonData();
     
     public static void main(String[] args) 
     {   
-        Controller.createPantry("My Pantry");
+        saveJson.open();
+        Controller.createPantry("Test Pantry");
         Kitchen.addItem(0,"Apple",Calendar.getInstance(),12,Calendar.getInstance());
         Kitchen.addItem(0,"Banana",Calendar.getInstance(),9,Calendar.getInstance());
         Kitchen.addItem(0,"Pear",Calendar.getInstance(),6,Calendar.getInstance());
@@ -23,14 +25,19 @@ public class Controller {
 
     public static void createPantry(String pantryName) 
     {
-        Kitchen.createPantry(PantryType.PANTRY, pantryName);
+        Pantry newPantry = Kitchen.createPantry(PantryType.PANTRY, pantryName);
         numPantries++;
+        saveJson.create(newPantry);
+        saveJson.save();
     }
 
     public static void deletePantry(int id) 
     {
-        Kitchen.deletePantry(id);
+        Pantry deletedPantry = Kitchen.deletePantry(id);
         numPantries--;
+
+        saveJson.delete(deletedPantry);
+        saveJson.save();
 
         Navigation.clearConsole();
         System.out.println("Pantry removed!\n\n1. Continue");
@@ -40,14 +47,19 @@ public class Controller {
 
     public static void createCart(String cartName) 
     {
-        Kitchen.createPantry(PantryType.SHOPPING_CART, cartName);
+        Pantry newPantry = Kitchen.createPantry(PantryType.SHOPPING_CART, cartName);
         numCarts++;
+        saveJson.create(newPantry);
+        saveJson.save();
     }
 
     public static void deleteCart(int id) 
     {
-        Kitchen.deletePantry(id);
+        Pantry deletedPantry = Kitchen.deletePantry(id);
         numCarts--;
+
+        saveJson.delete(deletedPantry);
+        saveJson.save();
 
         Navigation.clearConsole();
         System.out.println("Shopping Cart removed!\n\n1. Continue");
@@ -59,6 +71,7 @@ public class Controller {
 
     public static void addItem(PantryType type, int pantryID) 
     {   
+        Pantry updatedPantry = null;
         Navigation.clearConsole();
         System.out.println("Please enter the name of the Item");
         String name = Navigation.getUserInputString(true, 30);
@@ -74,15 +87,17 @@ public class Controller {
                     Navigation.clearConsole();
                     System.out.println("Please enter the expiration date of the Item");
                     Calendar expirDate = Navigation.getUserInputDate(false);
-                    Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate);
+                    updatedPantry = Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate);
                     break;
                 case 2:
-                    Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, null);
+                    updatedPantry = Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, null);
                     break;
             }
         } else {
-            Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity);
+            updatedPantry = Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity);
         }
+        saveJson.update(updatedPantry);
+        saveJson.save();
 
         Navigation.clearConsole();
         System.out.println("Item added!\n1. Continue");
@@ -95,16 +110,25 @@ public class Controller {
         System.out.println("What would you like to edit about this item?\n" +
         "Name: " + Kitchen.retrievePantry(pantryID).items);
         // TODO
+
+
+        saveJson.update(Kitchen.retrievePantry(pantryID));
+        saveJson.save();
     }
 
     public static void deleteItem(int idToRemove) {
         // TODO
+
+        saveJson.update(Kitchen.retrievePantry(idToRemove));
+        saveJson.save();
     }
 
     // NOTIFICATIONS //
 
     public static void addNotification(Calendar dateOfNotif, String notifMessage) {
-        ns.addNotification(dateOfNotif, notifMessage);
+        Notification newNotification = ns.addNotification(dateOfNotif, notifMessage);
+        saveJson.create(newNotification);
+        saveJson.save();
     }
 
     public static void editNotification(int idToEdit, String editedMessage, Calendar editedDate) {
@@ -112,7 +136,9 @@ public class Controller {
     }
 
     public static void deleteNotification(int idToDelete) {
-        ns.removeNotification(idToDelete);
+        Notification removedNotification = ns.removeNotification(idToDelete);
+        saveJson.delete(removedNotification);
+        saveJson.save();
     }
 
     // RECIPES //

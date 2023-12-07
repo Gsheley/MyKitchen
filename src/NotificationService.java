@@ -27,29 +27,39 @@ public class NotificationService {
         }
     }
 
-    public void addNotification(Calendar notifDate, String message) { // adding a message is optional if the type is not VIEW
-        notificationList.add(notifFactory.createNotification(currentNotifID, notifDate, NotifType.VIEW, message));
+    public Notification addNotification(Calendar notifDate, String message) { // adding a message is optional if the type is not VIEW
+        Notification newNotification = notifFactory.createNotification(currentNotifID, notifDate, NotifType.VIEW, message);
+        notificationList.add(newNotification);
         currentNotifID++;
+        return newNotification;
     }
 
-    public void modifyNotification(int idToModify, Calendar newDate) {
+    public Notification modifyNotification(int idToModify, Calendar newDate) {
+        Notification output = null;
         Iterator<Notification> iterator = notificationList.iterator();
         while (iterator.hasNext()) {
             Notification notif = iterator.next();
             if (notif.getNotifID() == idToModify) {
                 notif.setNotifDate(newDate);
+                output = notif;
+                break;
             }
         }
+        return output;
     }
 
-    public void removeNotification(int idToRemove) {
+    public Notification removeNotification(int idToRemove) {
+        Notification output = null;
         Iterator<Notification> iterator = notificationList.iterator();
         while (iterator.hasNext()) {
             Notification notif = iterator.next();
             if (notif.getNotifID() == idToRemove) {
+                output = notif;
                 iterator.remove(); // Removes the object that matches the notif ID to remove
+                break;
             }
         }
+        return output;
     }
 
     public void setCurrentNotifID(int newID) {

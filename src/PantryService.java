@@ -34,4 +34,14 @@ public class PantryService
     public static int getRange() {
         return range;
     }
+
+    public static void setNextKitchenInventoryID(int newNum) {
+        nextPantrykiID = newNum;
+    }
+
+    public static void setNextShoppingCartID(int newNum) {
+        nextPantryscID = newNum;
+    }
+
+
 }
