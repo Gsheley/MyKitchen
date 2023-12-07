@@ -5,6 +5,8 @@ public class Search
     public static ArrayList<Object> search(String query, ArrayList<Object> list )
     {
         ArrayList<Object> results = new ArrayList<Object>();
+        query = query.toLowerCase();
+
         if(list.isEmpty() == false)
         {
             
@@ -13,7 +15,7 @@ public class Search
             {
                 for(int i =0; i < list.size(); i++)
                 {
-                    if(((Item)list.get(i)).getName().contains(query))
+                    if(((Item)list.get(i)).getName().toLowerCase().contains(query))
                     {
                         results.add(list.get(i));
                     }
@@ -26,7 +28,7 @@ public class Search
             {
                 for(int i =0; i < list.size(); i++)
                 {
-                    if(((Recipe)list.get(i)).recipeName.contains(query))
+                    if(((Recipe)list.get(i)).recipeName.toLowerCase().contains(query))
                     {
                         results.add(list.get(i));
                     }
