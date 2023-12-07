@@ -22,14 +22,10 @@ public class ViewNotification extends Notification {
     }
 
     public void displayNotification() {
-        System.out.println("Notification #" + this.notifID);
-        System.out.println("Date of Notification: " 
-        + notifDate.get(Calendar.MONTH) + " "
-        + notifDate.get(Calendar.DAY_OF_MONTH) + ", "
-        + notifDate.get(Calendar.YEAR) + " at "
-        + notifDate.get(Calendar.HOUR_OF_DAY) + ":"
-        + notifDate.get(Calendar.MINUTE) + "\n");
+        Navigation.clearConsole();
+        System.out.println("Notification of ID #" + this.notifID);
+        System.out.println("Date of Notification: " + this.notifDate.getTime());
 
-        System.out.println("Notification Message:\n" + this.message);
+        System.out.println("Notification Message: " + this.message);
     }
 }
