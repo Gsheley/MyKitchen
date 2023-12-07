@@ -14,8 +14,6 @@ public class KitchenTest
     {
         myKitchen = new Kitchen();
         tesKitchen = new Kitchen();
-        //tester1 = PantryService.createPantry(PantryType.PANTRY, "tester1");
-
     }
 
 
@@ -58,7 +56,7 @@ public class KitchenTest
     public void editItem()
     {
         tesKitchen.createPantry(PantryType.PANTRY, "tester1");
-        tesKitchen.addItem(0, "apple", null, 1);
+        tesKitchen.addItem(tesKitchen.inventory.get(0).getPantryID(), "apple", null, 1);
         tesKitchen.editItem(0, 0, "bannana", null, 5);
         assertEquals("bannana", tesKitchen.retrievePantry(0).getItem(0).getName());
         assertEquals(5, tesKitchen.retrievePantry(0).getItem(0).getQuantity());
