@@ -1,17 +1,20 @@
 import java.util.ArrayList;
 import java.util.List;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class Recipe {
+    //attributes
     public String recipeName;
     public int recipeID;
     public List<String> recipeIngredients;
     public List<String> recipeMeasurements;
     public String recipeSteps;
 
+    /*
+     * Constructor
+     */
     public Recipe(String jsonString) {
         //Json setup for each object
         JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
@@ -56,13 +59,19 @@ public class Recipe {
         this.recipeSteps = mealObject.get("strInstructions").toString();
     }
 
+    //Constructor for testing
     public Recipe(String recipeName, int recipeID)
     {
         this.recipeName = recipeName;
         this.recipeID = recipeID;
     }
 
-    public void printRecipe(int id) 
+    /*
+     * Print recipe method
+     * takes in the meal ID as an integer
+     * void return
+     */
+    private void printRecipe(int id) 
     {
         id = this.recipeID;
         System.out.println("Recipe Name: " + recipeName);
@@ -77,19 +86,30 @@ public class Recipe {
         System.out.println("\nInstructions:\n\n"+recipeSteps);
         
     }
-    
+
+    /*
+     * Print recipe method
+     * takes in no arguments
+     * void return
+     */
     public void printRecipe()
     {
         this.printRecipe(this.getID());
     }
 
-    //ID getter
+    /*
+     * getter for the meal ID
+     * returns ID as integer
+     */
     public int getID()
     {
         return this.recipeID;
     }
 
-    //Meal name getter
+    /*
+     * getter for meal name
+     * returns name as string
+     */
     public String getName()
     {
         return this.recipeName;
