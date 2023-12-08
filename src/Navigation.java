@@ -428,7 +428,7 @@ public class Navigation {
                 objectList.add(item); // Adding each Item object to the Object list
             }
 
-            printSearchResults(query, objectList, pantryToModify, type);
+            printSearchResults(query.toLowerCase(), objectList, pantryToModify, type);
         } else if (userInput == listSize + 2) {
             int totalOptions = 3;
             Navigation.clearConsole();
