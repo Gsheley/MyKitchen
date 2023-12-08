@@ -12,18 +12,6 @@ public class Controller {
     public static void main(String[] args) 
     {   
         saveJson.open();
-        MealDB meal = new MealDB();
-        /*Controller.createPantry("New Test Pantry");
-        Kitchen.addItem(0,"Apple",Calendar.getInstance(),12,Calendar.getInstance());
-        Kitchen.addItem(0,"Banana",Calendar.getInstance(),9,Calendar.getInstance());
-        Kitchen.addItem(0,"Pear",Calendar.getInstance(),6,Calendar.getInstance());
-        Kitchen.addItem(0,"Lettuce",Calendar.getInstance(),4,Calendar.getInstance());
-        Kitchen.addItem(0,"Chips",Calendar.getInstance(),2212,Calendar.getInstance());
-
-        for (int i = 0; i < 5; i++) {
-            Cookbook.recipes.add(meal.queryRandom());
-        }*/
-
         Navigation.printHomePage();
     }
 

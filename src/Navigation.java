@@ -248,11 +248,8 @@ public class Navigation {
                 viewItemList(type, pantryID);
                 break;         
             case 3:
-                if (pantryID < PantryService.getRange()) {
-                    printPantryPage();
-                } else {
-                    printShoppingCartPage();
-                }
+                viewItemList(type, pantryID);
+                printShoppingCartPage();
                 break;         
         }
     }
@@ -286,7 +283,7 @@ public class Navigation {
                 System.out.println(i + 1 + ". " + pantryResults.get(i).getName());
             }
 
-            System.out.println("\n" + pantryResults.size() +". Continue");
+            System.out.println("\n" + listSize +". Continue");
         } else if (list.get(0) instanceof Recipe) {
 
             for (Object obj : searchResults) {
@@ -299,7 +296,7 @@ public class Navigation {
                 System.out.println(i + 1 + ". " + cookbookResults.get(i).getName());
             }
 
-            System.out.println("\n" + cookbookResults.size() +". Continue");
+            System.out.println("\n" + listSize +". Continue");
         }
 
         int userInput = Navigation.getUserInputInt(1, listSize);
@@ -447,17 +444,21 @@ public class Navigation {
 
             switch (userInt) {
                 case 1:
-                    Sort sortByName = new SortByName();
+                    SortByName sortByName = new SortByName();
                     Kitchen.retrievePantry(pantryToModify).items = sortByName.sort(Kitchen.retrievePantry(pantryToModify).items);
+                    break;
                 case 2:
-                    Sort sortByQuantity = new SortByQuantity();
+                    SortByQuantity sortByQuantity = new SortByQuantity();
                     Kitchen.retrievePantry(pantryToModify).items = sortByQuantity.sort(Kitchen.retrievePantry(pantryToModify).items);
+                    break;
                 case 3:
-                    Sort sortByCreationDate = new SortByCreationDate();
+                    SortByCreationDate sortByCreationDate = new SortByCreationDate();
                     Kitchen.retrievePantry(pantryToModify).items = sortByCreationDate.sort(Kitchen.retrievePantry(pantryToModify).items);
+                    break;
                 case 4:
-                    Sort sortByExpirationDate = new SortByExpirationDate();
+                    SortByExpirationDate sortByExpirationDate = new SortByExpirationDate();
                     Kitchen.retrievePantry(pantryToModify).items = sortByExpirationDate.sort(Kitchen.retrievePantry(pantryToModify).items);
+                    break;
             }
 
             Navigation.clearConsole();
@@ -811,32 +812,5 @@ public class Navigation {
         // Get the maximum number of days for the given month
         YearMonth yearMonth = YearMonth.of(YearMonth.now().getYear(), month);
         return yearMonth.lengthOfMonth();
-    }
-
-    public static void main(String args[]) {
-        // Search test
-        /* 
-        ArrayList<Object> items = new ArrayList<Object>();
-        Item testItem1 = new Item(1,"test", Calendar.getInstance(),12);
-        Item testItem2 = new Item(2,"apple", Calendar.getInstance(),12);
-        Item testItem3 = new Item(3,"apple guy", Calendar.getInstance(),12);
-        Item testItem4 = new Item(4,"pear", Calendar.getInstance(),12);
-        items.add(testItem1);
-        items.add(testItem2);
-        items.add(testItem3);
-        items.add(testItem4);
-
-        nv.printSearchResults("ple", items);
-        */
-
-        // Input test
-        //Calendar testCal = getUserInputDate(true);
-        //System.out.println(testCal.getTime());
-
-        String testString = getUserInputString(true, 30);
-        System.out.println(testString);
-
-        //int testInt = getUserInputInt(12,100);
-        //System.out.println(testInt);
     }
 }
