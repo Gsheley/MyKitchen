@@ -53,13 +53,13 @@ public class Pantry {
     }
 
     //To edit Items without expiration dates
-    public void editItem(int itemID, String name, Calendar dateAdded, int quantity)
+    public void editItem(int itemID, String name, Calendar expirationDate, int quantity)
     {
         for(int i = 0; i < items.size(); i++) {
             int curItemID = (items.get(i)).itemID;
             if(curItemID == (itemID)){        
                 (items.get(i)).setName(name);
-                (items.get(i)).setDateAdded(dateAdded);
+                (items.get(i)).setExpirationDate(expirationDate);
                 (items.get(i)).setQuantity(quantity);
             }
 
