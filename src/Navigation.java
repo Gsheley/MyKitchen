@@ -510,7 +510,7 @@ public class Navigation {
                 Iterator<Notification> iterator = list.iterator();
                 ArrayList<Notification> triggeredNotifs = new ArrayList<Notification>();
                 if (list.isEmpty()) {
-                    System.out.println("You do not have any triggered notifications.");
+                    System.out.println("You do not have any triggered notifications.\n");
                 } else {
                     Calendar currentDate = Calendar.getInstance();
                     while (iterator.hasNext()) {
@@ -525,8 +525,13 @@ public class Navigation {
                             listSize++;
                         }
                     }
-                    System.out.println("\n" + listSize + ". Clear all triggered notifications");
-                    listSize++;
+
+                    if (triggeredNotifs.isEmpty()) {
+                        System.out.println("You do not have any triggered notifications.\n");
+                    } else {
+                        System.out.println("\n" + listSize + ". Clear all triggered notifications");
+                        listSize++;
+                    }
                 }
 
                 System.out.println(listSize + ". Go Back");
