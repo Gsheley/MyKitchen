@@ -625,19 +625,54 @@ public class Navigation {
     }
 
     public static void printRecipeQueryOptions() {
-        Navigation.clearConsole();
         MealDB mealDB = new MealDB();
-        System.out.println("\nChoose an option to find new recipes.\n" +
-        "1. Query by name\n" +
-        "2. Query by main ingredient\n" +
-        "3. Query random recipe\n" +
+        System.out.println("\nSelect a recipe option below.\n" +
+        "1. Find recipes by name\n" +
+        "2. Find recipes by main ingredient\n" +
+        "3. Find random recipes\n" +
         "\n" +
         "4. Go Back\n");
-        int userInput = getUserInputInt(1,4);
+        int userInput = getUserInputInt(1, 4);
+        Navigation.clearConsole();
         switch (userInput){
-            case 1: 
-                //String mealName = Si.mets
-                //mealDB.queryByName()
+            case 1:
+                System.out.println("\nEnter a meal name.");
+                String mealName = Navigation.getUserInputString(true, 30);
+                Recipe newRecipe = mealDB.queryByName(mealName);
+                if (newRecipe == null){
+                    System.out.println("\nSorry, it doesn't look like our database has a recipe for that meal!\n");
+                }
+                else {
+                    newRecipe.printRecipe();
+                    printRecipe(newRecipe, true);
+                }
+                Navigation.printRecipeQueryOptions();
+                break;
+            case 2:
+                System.out.println("\nEnter a main ingredient.");
+                String mainIngredient = Navigation.getUserInputString(true, 40);
+                ArrayList <Recipe> returnedRecipes = mealDB.queryByIngredient(mainIngredient);
+                if(returnedRecipes != null){
+                    for(int i = 0; i < returnedRecipes.size(); i++){
+                        System.out.println(returnedRecipes.get(i).getName());
+                    }
+                }
+                else{
+                    System.out.println("\nSorry, it doesn't look like there are any recipes with that main ingredient in the database!\n");
+                }
+                Navigation.printRecipeQueryOptions();
+                break;
+            case 3: 
+                Recipe randomRecipe = mealDB.queryRandom();
+                if(randomRecipe != null)
+                {
+                    randomRecipe.printRecipe();
+                    printRecipe(randomRecipe, true);
+                }
+                Navigation.printRecipeQueryOptions();
+                break;
+            case 4:
+                Navigation.printCookbookPage();
         }
         
     }
