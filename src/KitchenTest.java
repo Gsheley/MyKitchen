@@ -14,6 +14,7 @@ public class KitchenTest
     {
         myKitchen = new Kitchen();
         tesKitchen = new Kitchen();
+        //tesKitchen.inventory.clear();
     }
 
 
@@ -36,6 +37,7 @@ public class KitchenTest
     @Test
     public void deletePantryTest()
     {
+        tesKitchen.inventory.clear();
         tesKitchen.createPantry(PantryType.PANTRY, "tester1");
         tesKitchen.deletePantry(tesKitchen.inventory.get(0).getPantryID());
         assertEquals(true, tesKitchen.inventory.isEmpty());
@@ -44,6 +46,7 @@ public class KitchenTest
     @Test
     public void addItem()
     {
+        tesKitchen.inventory.clear();
         tesKitchen.createPantry(PantryType.PANTRY, "tester1");
         tesKitchen.addItem(0, "apple", null, 1);
         assertEquals("apple", tesKitchen.retrievePantry(0).getItem(0).getName());
@@ -55,6 +58,7 @@ public class KitchenTest
     @Test
     public void editItem()
     {
+        tesKitchen.inventory.clear();
         tesKitchen.createPantry(PantryType.PANTRY, "tester1");
         tesKitchen.addItem(tesKitchen.inventory.get(0).getPantryID(), "apple", null, 1);
         tesKitchen.editItem(0, 0, "bannana", null, 5);

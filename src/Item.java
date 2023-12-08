@@ -19,6 +19,7 @@ public class Item {
         this.name = name;
         this.dateAdded = dateAdded;
         this.quantity = quantity;
+        this.expirationDate = null;
     }
 
     public int getItemID() {
