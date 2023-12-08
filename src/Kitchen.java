@@ -11,13 +11,13 @@ public class Kitchen
 {
     public static ArrayList<Pantry> inventory = new ArrayList<Pantry>();
 
-    public static Pantry createPantry(PantryType type, String name){
+    public Pantry createPantry(PantryType type, String name){
         Pantry newPantry = PantryService.createPantry(type, name);
         inventory.add(newPantry);
         return newPantry;
     }
 
-    public static Pantry retrievePantry(int pantryID){
+    public Pantry retrievePantry(int pantryID){
         //checks each item in the items array list
         int index = getPantryIndex(pantryID);
         if (index == -1) {
@@ -27,7 +27,7 @@ public class Kitchen
         }
     }
 
-    public static Pantry deletePantry(int pantryID) {
+    public Pantry deletePantry(int pantryID) {
         Pantry deletedPantry = null;
         Iterator<Pantry> iterator = inventory.iterator();
         while (iterator.hasNext()) {
@@ -40,7 +40,7 @@ public class Kitchen
         return deletedPantry;
     }
 
-    public static Pantry addItem(int pantryID, String name, Calendar dateAdded, int quantity){
+    public Pantry addItem(int pantryID, String name, Calendar dateAdded, int quantity){
         int index = getPantryIndex(pantryID);
         if (index != -1) {
             inventory.get(index).addItem(name, dateAdded, quantity);
@@ -48,7 +48,7 @@ public class Kitchen
         return inventory.get(index);
     }
 
-    public static Pantry addItem(int pantryID, String name, Calendar dateAdded, int quantity, Calendar expirDate){
+    public Pantry addItem(int pantryID, String name, Calendar dateAdded, int quantity, Calendar expirDate){
         int index = getPantryIndex(pantryID);
         if (index != -1) {
             inventory.get(index).addItem(name, dateAdded, quantity, expirDate);
@@ -56,7 +56,7 @@ public class Kitchen
         return inventory.get(index);
     }
 
-    public static Pantry editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity, Calendar expirDate){
+    public Pantry editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity, Calendar expirDate){
         int index = getPantryIndex(pantryID);
         if (index != -1) {
             inventory.get(index).editItem(itemID, name, dateAdded, quantity, expirDate);
@@ -64,7 +64,7 @@ public class Kitchen
         return inventory.get(index);
     }
 
-    public static Pantry editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity){
+    public Pantry editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity){
         int index = getPantryIndex(pantryID);
         if (index != -1) {
             inventory.get(index).editItem(itemID, name, dateAdded, quantity);
@@ -72,11 +72,11 @@ public class Kitchen
         return inventory.get(index);
     }
 
-    public static void saveRecipe(Recipe recipe){
+    public void saveRecipe(Recipe recipe){
         CookbookService.saveRecipe(recipe);
     }
 
-    private static int getPantryIndex(int pantryID) {
+    private int getPantryIndex(int pantryID) {
         Iterator<Pantry> iterator = inventory.iterator();
         Pantry foundPantry = null;
         int count = 0;
@@ -94,15 +94,5 @@ public class Kitchen
         } else {
             return count;
         }
-    }
-
-    public static void main(String[] args) {
-        createPantry(PantryType.PANTRY, "test1");
-        Calendar testDate = Calendar.getInstance();
-        addItem(0, "Milk", testDate, 2, testDate);
-        System.out.println(inventory.get(0).getPantryName());
-        System.out.println(inventory.get(0).getItem(0).getName());
-        deletePantry(0);
-        System.out.println("Pantry has been deleted");
     }
 }

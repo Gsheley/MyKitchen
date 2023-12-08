@@ -99,10 +99,10 @@ public class JsonData extends SaveAppData {
         conn.inventory.add(newPantry);
         // Updating the records of the pantries and shopping carts accordingly
         if (obj.getPantryID() < PantryService.getRange()) {
-            conn.numKitchens = Controller.getNumPantries();
+            conn.numKitchens = Navigation.contr.getNumPantries();
             conn.nextKitchenInventoryID = PantryService.getNextKitchenInventoryID();
         } else {
-            conn.numShoppingCarts = Controller.getNumCarts();
+            conn.numShoppingCarts = Navigation.contr.getNumCarts();
             conn.nextShoppingCartID = PantryService.getNextShoppingCartID();
         }
         save();

@@ -2,31 +2,32 @@ import java.util.Calendar;
 import java.util.Scanner;
 
 public class Controller {
-    static NotificationService ns = new NotificationService();
-    static int numPantries = 0;
-    static int numCarts = 0;
+    NotificationService ns = new NotificationService();
+    private int numPantries = 0;
+    private int numCarts = 0;
     static Scanner universalScanner = new Scanner(System.in);
-    Navigation nv = new Navigation();
+    static Navigation nv = new Navigation();
     static SaveAppData saveJson = new JsonData();
+    Kitchen kitchen = new Kitchen();
     
     public static void main(String[] args) 
     {   
         saveJson.open();
-        Navigation.printHomePage();
+        nv.printHomePage();
     }
 
     // PANTRIES & SHOPPING CARTS //
 
-    public static void createPantry(String pantryName) 
+    public void createPantry(String pantryName) 
     {
-        Pantry newPantry = Kitchen.createPantry(PantryType.PANTRY, pantryName);
+        Pantry newPantry = kitchen.createPantry(PantryType.PANTRY, pantryName);
         numPantries++;
         saveJson.create(newPantry);
     }
 
-    public static void deletePantry(int id) 
+    public void deletePantry(int id) 
     {
-        Pantry deletedPantry = Kitchen.deletePantry(id);
+        Pantry deletedPantry = kitchen.deletePantry(id);
         numPantries--;
 
         saveJson.delete(deletedPantry);
@@ -34,19 +35,19 @@ public class Controller {
         Navigation.clearConsole();
         System.out.println("Pantry removed!\n");
         Navigation.bufferContinue();
-        Navigation.printPantryPage();
+        nv.printPantryPage();
     }
 
-    public static void createCart(String cartName) 
+    public void createCart(String cartName) 
     {
-        Pantry newPantry = Kitchen.createPantry(PantryType.SHOPPING_CART, cartName);
+        Pantry newPantry = kitchen.createPantry(PantryType.SHOPPING_CART, cartName);
         numCarts++;
         saveJson.create(newPantry);
     }
 
-    public static void deleteCart(int id) 
+    public void deleteCart(int id) 
     {
-        Pantry deletedPantry = Kitchen.deletePantry(id);
+        Pantry deletedPantry = kitchen.deletePantry(id);
         numCarts--;
 
         saveJson.delete(deletedPantry);
@@ -54,12 +55,12 @@ public class Controller {
         Navigation.clearConsole();
         System.out.println("Shopping Cart removed!\n");
         Navigation.bufferContinue();
-        Navigation.printShoppingCartPage();
+        nv.printShoppingCartPage();
     }
 
     // ITEMS //
 
-    public static void addItem(PantryType type, int pantryID) 
+    public void addItem(PantryType type, int pantryID) 
     {   
         Pantry updatedPantry = null;
         Navigation.clearConsole();
@@ -77,27 +78,27 @@ public class Controller {
                     Navigation.clearConsole();
                     System.out.println("Please enter the expiration date of the Item");
                     Calendar expirDate = Navigation.getUserInputDate(false);
-                    updatedPantry = Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate);
+                    updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate);
                     break;
                 case 2:
-                    updatedPantry = Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, null);
+                    updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, null);
                     break;
             }
         } else {
-            updatedPantry = Kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity);
+            updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity);
         }
         saveJson.update(updatedPantry);
 
         Navigation.clearConsole();
         System.out.println("Item added!\n");
         Navigation.bufferContinue();
-        Navigation.viewItemList(type,pantryID);
+        nv.viewItemList(type,pantryID);
     }
 
-    public static void editItem(int pantryID, int idToEdit, PantryType type) {
+    public void editItem(int pantryID, int idToEdit, PantryType type) {
         Navigation.clearConsole();
         int nextOptionValue = 3;
-        Item item = Kitchen.retrievePantry(pantryID).getItem(idToEdit);
+        Item item = kitchen.retrievePantry(pantryID).getItem(idToEdit);
         System.out.println("What would you like to edit about this item?\n" +
         "1. Name: " + item.getName() +
         "\n2. Quantity: " + item.getQuantity());
@@ -136,25 +137,24 @@ public class Controller {
                             Navigation.clearConsole();
                             System.out.println("Expiration Date updated!\n");
                         } else {
-                            Navigation.viewItemList(type, pantryID);
+                            nv.viewItemList(type, pantryID);
                         }
                         break;
                 }
 
-                Kitchen.retrievePantry(pantryID).editItem(item.getItemID(), newName, newExpirationDate, newQuantity);
+                kitchen.retrievePantry(pantryID).editItem(item.getItemID(), newName, newExpirationDate, newQuantity);
                 
                 Navigation.bufferContinue();
             case 4:
-                Navigation.viewItemList(type, pantryID);
+                nv.viewItemList(type, pantryID);
                 break;
         }
 
-        saveJson.update(Kitchen.retrievePantry(pantryID));
+        saveJson.update(kitchen.retrievePantry(pantryID));
     }
 
-    public static void deleteItem(int pantryID, int idToRemove) {
-        // TODO
-        Pantry pantry = Kitchen.retrievePantry(pantryID);
+    public void deleteItem(int pantryID, int idToRemove) {
+        Pantry pantry = kitchen.retrievePantry(pantryID);
         pantry.deleteItem(idToRemove);
 
         Navigation.clearConsole();
@@ -166,59 +166,58 @@ public class Controller {
 
     // NOTIFICATIONS //
 
-    public static void addNotification(Calendar dateOfNotif, String notifMessage) {
+    public void addNotification(Calendar dateOfNotif, String notifMessage) {
         Notification newNotification = ns.addNotification(dateOfNotif, notifMessage);
         saveJson.create(newNotification);
     }
 
-    public static void editNotification(int idToEdit, String editedMessage, Calendar editedDate) {
-        // TODO 
+    public void editNotification(int idToEdit, String editedMessage, Calendar editedDate) {
         Notification editedNotification = ns.modifyNotification(idToEdit, editedMessage, editedDate);
         saveJson.update(editedNotification);
         
         Navigation.clearConsole();
         System.out.println("Notification Edited!");
         Navigation.bufferContinue();
-        Navigation.printNotificationList(AccessContext.DISPLAY);
+        nv.printNotificationList(AccessContext.DISPLAY);
     }
 
-    public static void deleteNotification(int idToDelete) {
+    public void deleteNotification(int idToDelete) {
         Notification removedNotification = ns.removeNotification(idToDelete);
         saveJson.delete(removedNotification);
 
         Navigation.clearConsole();
         System.out.println("Notification Removed!");
         Navigation.bufferContinue();
-        Navigation.printNotificationList(AccessContext.DISPLAY);
+        nv.printNotificationList(AccessContext.DISPLAY);
     }
 
     // RECIPES //
 
-    // not sure if anything needs to go here yet
+    // nothing actually needs to go here
 
     // SETTERS & GETTERS //
 
-    public static int getNumPantries() {
-        return numPantries;
+    public int getNumPantries() {
+        return this.numPantries;
     }
 
-    public static int getNumCarts() {
-        return numCarts;
+    public int getNumCarts() {
+        return this.numCarts;
     }
 
-    public static void setNumPantries(int num) {
-        numPantries = num;
+    public void setNumPantries(int num) {
+        this.numPantries = num;
     }
 
-    public static void setNumCarts(int num) {
-        numCarts = num;
+    public void setNumCarts(int num) {
+        this.numCarts = num;
     }
 
-    public static NotificationService getNotificationService() {
-        return ns;
+    public NotificationService getNotificationService() {
+        return this.ns;
     }
 
-    public static void setNotificationService(NotificationService obj) {
-        ns = obj;
+    public void setNotificationService(NotificationService obj) {
+        this.ns = obj;
     }
 }
