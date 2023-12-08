@@ -175,19 +175,12 @@ public class Navigation {
         }
     }
 
-    public static void printRecipe(int recipeID, boolean fromSearch) {
-        Navigation.clearConsole();
+    public static void printRecipe(Recipe recipe, boolean fromSearch) {
+        if (!fromSearch) {
+            Navigation.clearConsole();
+        }
         ArrayList<Recipe> recipeList = Cookbook.recipes;
         Iterator<Recipe> iterator = recipeList.iterator();
-        Recipe recipe = null;
-        
-        while (iterator.hasNext()) {
-            Recipe r = iterator.next();
-            if (r.getID() == recipeID) {
-                recipe = r;
-                r.printRecipe();
-            }
-        }
 
         System.out.println("\nSelect a navigation option below.");
         if (fromSearch) {
@@ -316,7 +309,7 @@ public class Navigation {
             if (isPantry) {
                 printItem(pantryID, pantryResults.get(userInput - 1).getItemID(), type);
             } else {
-                printRecipe(cookbookResults.get(userInput - 1).getID(), true);
+                printRecipe(cookbookResults.get(userInput - 1), true);
             }
         }
     }
@@ -402,11 +395,11 @@ public class Navigation {
                 System.out.print((i + 1) + ". " + itemName + spaces + "Quantity: " + itemQuantity);
                 if (pantry.items.get(i).getExpirationDate() != null) {
                     // Same space alignment but with expiration date (if applicable)
-                    spacesToAdd = 30 - String.valueOf(itemQuantity).length() + 4;
+                    spacesToAdd = 10 - String.valueOf(itemQuantity).length() + 4;
                     spaces = new String(new char[spacesToAdd]).replace('\0', ' ');
                     System.out.print(spaces + "Expires: " + pantry.items.get(i).getExpirationDate().getTime());
                     if(pantry.items.get(i).getExpirationDate().before(Calendar.getInstance())){
-                        System.out.print("-- EXPIRED --");
+                        System.out.println(" -- (EXPIRED)");
                     }
                 } else {
                     System.out.println();
@@ -414,9 +407,10 @@ public class Navigation {
             }
         }
         // TODO add option to sort list
-        int goBackNum = listSize + 2;
+        int goBackNum = listSize + 3;
         System.out.println("\n" + listSize + ". Add a New Item" + 
                             "\n" + (listSize + 1) + ". Search this " + type.name().replace("_"," ").toLowerCase() +
+                            "\n" + (listSize + 2) + ". Sort this " + type.name().replace("_"," ").toLowerCase() +
                             "\n" + goBackNum + ". Go Back");
 
         int userInput = Navigation.getUserInputInt(1, goBackNum);
@@ -433,6 +427,36 @@ public class Navigation {
             }
 
             printSearchResults(query, objectList, pantryToModify, type);
+        } else if (userInput == listSize + 2) {
+            int totalOptions = 3;
+            System.out.println("\nHow would you like to sort?" +
+            "\n1. By Name" +
+            "\n2. By Quantity" +
+            "\n3. By Creation Date");
+            if (type == PantryType.PANTRY) {
+                System.out.println("4. By Expiration Date");
+                totalOptions++;
+            }
+            int userInt = getUserInputInt(1,totalOptions);
+
+            switch (userInput) {
+                case 1:
+                    Sort sortByName = new SortByName();
+                    sortByName.sort(pantry.items);
+                case 2:
+                    Sort sortByQuantity = new SortByQuantity();
+                    sortByQuantity.sort(pantry.items);
+                case 3:
+                    Sort sortByCreationDate = new SortByCreationDate();
+                    sortByCreationDate.sort(pantry.items);
+                case 4:
+                    Sort sortByExpirationDate = new SortByExpirationDate();
+                    sortByExpirationDate.sort(pantry.items);
+            }
+
+            System.out.println("List sorted!");
+            Navigation.bufferContinue();
+            viewItemList(type, pantryToModify);
         } else if (userInput == goBackNum) {
             printPantryList(type, AccessContext.DISPLAY);        
         } else {
@@ -571,14 +595,26 @@ public class Navigation {
         if (userInput == listSize) {
             printCookbookPage();
         } else {
-            printRecipe(Cookbook.recipes.get(userInput - 1).getID(), false);
+            printRecipe(Cookbook.recipes.get(userInput - 1), false);
         }
     }
 
     public static void printRecipeQueryOptions() {
         Navigation.clearConsole();
-        System.out.println("Choose an option to find new recipes");
-        // TODO
+        MealDB mealDB = new MealDB();
+        System.out.println("\nChoose an option to find new recipes.\n" +
+        "1. Query by name\n" +
+        "2. Query by main ingredient\n" +
+        "3. Query random recipe\n" +
+        "\n" +
+        "4. Go Back\n");
+        int userInput = getUserInputInt(1,4);
+        switch (userInput){
+            case 1: 
+                //String mealName = Si.mets
+                //mealDB.queryByName()
+        }
+        
     }
 
     // Clears the screen for printing new menus
