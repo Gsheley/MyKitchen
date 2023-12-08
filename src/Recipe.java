@@ -57,6 +57,8 @@ public class Recipe {
 
         //enter recipe instructions
         this.recipeSteps = mealObject.get("strInstructions").toString();
+        // change newline characters from JSON to Java formatting
+        this.recipeSteps = this.recipeSteps.replace("\\n", "\n").replace("\\r", "\r"); 
     }
 
     //Constructor for testing
@@ -83,7 +85,7 @@ public class Recipe {
             System.out.println(recipeMeasurements.get(i)+ " : "+recipeIngredients.get(i));
         }
         
-        System.out.println("\nInstructions:\n\n"+recipeSteps);
+        System.out.println("\nInstructions:\n\n" + recipeSteps);
         
     }
 

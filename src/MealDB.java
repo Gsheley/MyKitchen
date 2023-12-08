@@ -46,7 +46,7 @@ public class MealDB extends API{
 
             //read in from the url connection
             InputStream in = url_connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             StringBuilder content = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -100,7 +100,7 @@ public class MealDB extends API{
 
             //read in from url connection
             InputStream in = url_connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             StringBuilder content = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -157,7 +157,7 @@ public class MealDB extends API{
 
             //read in from url_connection
             InputStream in = url_connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             StringBuilder content = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -201,7 +201,7 @@ public class MealDB extends API{
 
             //read input from url
             InputStream in = url_connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             StringBuilder content = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
