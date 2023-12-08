@@ -42,9 +42,9 @@ public class JsonConnection extends Connection {
         jsonObject = JsonParser.parseReader(inputFile).getAsJsonObject();
         // Retreiving the number of kitchens and shopping carts
         numKitchens = jsonObject.get("numKitchens").getAsInt();
-        Controller.setNumPantries(numKitchens);
+        Navigation.contr.setNumPantries(numKitchens);
         numShoppingCarts = jsonObject.get("numShoppingCarts").getAsInt();
-        Controller.setNumCarts(numShoppingCarts);
+        Navigation.contr.setNumCarts(numShoppingCarts);
         // Retrieving the next IDs for Shopping Carts and KitchenInventories
         nextShoppingCartID = jsonObject.get("nextSCID").getAsInt();
         PantryService.setNextShoppingCartID(nextShoppingCartID);
@@ -162,7 +162,7 @@ public class JsonConnection extends Connection {
                     newService.setNotificationList(newNotificationList);
                 }
             }
-            Controller.setNotificationService(newService);
+            Navigation.contr.setNotificationService(newService);
         }
     }
 

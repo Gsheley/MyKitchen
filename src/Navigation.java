@@ -10,10 +10,12 @@ enum AccessContext { // the context in which a list is accessed. Different print
 }
 
 public class Navigation {
-    public static void printHomePage() {
+    static Controller contr = new Controller();
+
+    public void printHomePage() {
         Navigation.clearConsole();
         System.out.println("Welcome to MyKitchen!\n");
-        if (Controller.ns.checkForNotifications()) {
+        if (contr.ns.checkForNotifications()) {
             System.out.println("You have new notification(s)! View them in the notifications menu.");
         } else {
             System.out.println("You have no new notifications.");
@@ -45,7 +47,7 @@ public class Navigation {
         }
     }
 
-    public static void printPantryPage() {
+    public void printPantryPage() {
         Navigation.clearConsole();
         System.out.println("Pantry Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
@@ -64,7 +66,7 @@ public class Navigation {
                 Navigation.clearConsole();
                 System.out.println("Please enter the name of the new Pantry: ");
                 String pantryName = Navigation.getUserInputString(true, 30);
-                Controller.createPantry(pantryName); // add a new pantry
+                contr.createPantry(pantryName); // add a new pantry
                 Navigation.clearConsole();
                 System.out.println("Pantry created!\n\n1. Continue");
                 Navigation.getUserInputInt(1, 1);
@@ -79,7 +81,7 @@ public class Navigation {
         }
     }
 
-    public static void printShoppingCartPage() {
+    public void printShoppingCartPage() {
         Navigation.clearConsole();
         System.out.println("Shopping Cart Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
@@ -98,7 +100,7 @@ public class Navigation {
                 Navigation.clearConsole();
                 System.out.println("Please enter the name of the new Shopping Cart: ");
                 String cartName = Navigation.getUserInputString(true, 30);
-                Controller.createCart(cartName); // add new shopping cart
+                contr.createCart(cartName); // add new shopping cart
                 Navigation.clearConsole();
                 System.out.println("Shopping Cart created!\n\n1. Continue");
                 Navigation.getUserInputInt(1, 1);
@@ -113,7 +115,7 @@ public class Navigation {
         }
     }
 
-    public static void printCookbookPage() {
+    public void printCookbookPage() {
         Navigation.clearConsole();
         System.out.println("Cookbook Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
@@ -137,7 +139,7 @@ public class Navigation {
         }
     }
 
-    public static void printNotificationPage() {
+    public void printNotificationPage() {
         Navigation.clearConsole();
         System.out.println("Notificiation Menu\n");
         System.out.println("\nSelect a navigation option below.\n" +
@@ -160,7 +162,7 @@ public class Navigation {
 
                 System.out.println("When should the notification trigger?");
                 Calendar date = getUserInputDate(true);
-                Controller.ns.addNotification(date, message);
+                contr.ns.addNotification(date, message);
                 Navigation.clearConsole();
 
                 System.out.println("\nNotification Created!\n\"" + message + "\" will trigger on " + date.getTime() + "\n1. Continue");
@@ -176,7 +178,7 @@ public class Navigation {
         }
     }
 
-    public static void printRecipe(Recipe recipe, boolean fromSearch) {
+    public void printRecipe(Recipe recipe, boolean fromSearch) {
         if (!fromSearch) {
             Navigation.clearConsole();
         }
@@ -213,9 +215,9 @@ public class Navigation {
         }
     }
 
-    public static void printItem(int pantryID, int itemID, PantryType type) {
+    public void printItem(int pantryID, int itemID, PantryType type) {
         Navigation.clearConsole();
-        Pantry pantry = Kitchen.retrievePantry(pantryID);
+        Pantry pantry = contr.kitchen.retrievePantry(pantryID);
         Iterator<Item> iterator = pantry.items.iterator();
 
         while (iterator.hasNext()) {
@@ -241,10 +243,10 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
-                Controller.editItem(pantryID, itemID, type); 
+                contr.editItem(pantryID, itemID, type); 
                 break;                                 
             case 2:
-                Controller.deleteItem(pantryID, itemID);
+                contr.deleteItem(pantryID, itemID);
                 viewItemList(type, pantryID);
                 break;         
             case 3:
@@ -254,7 +256,7 @@ public class Navigation {
         }
     }
 
-    public static void printSearchResults(String query, ArrayList<Object> list, int pantryID, PantryType type) { // last three arguments can be null if searching from cookbook
+    public void printSearchResults(String query, ArrayList<Object> list, int pantryID, PantryType type) { // last three arguments can be null if searching from cookbook
         Navigation.clearConsole();
         System.out.println("Search Results from query: " + query + "\n");
         ArrayList<Object> searchResults = Search.search(query, list);
@@ -316,12 +318,12 @@ public class Navigation {
         }
     }
 
-    public static void printPantryList(PantryType type, AccessContext context) {
+    public void printPantryList(PantryType type, AccessContext context) {
         Navigation.clearConsole();
         int listSize = 1;
         ArrayList<Pantry> listToPrint = new ArrayList<Pantry>();
 
-        if (type == PantryType.PANTRY && Controller.numPantries == 0 || type == PantryType.SHOPPING_CART && Controller.numCarts == 0) {
+        if (type == PantryType.PANTRY && contr.getNumPantries() == 0 || type == PantryType.SHOPPING_CART && contr.getNumCarts() == 0) {
             System.out.println("You do not currently have any " + type.name().replace("_", " ").toLowerCase() + "s. Return to the previous menu to create one!");
         } else {
             System.out.println("Choose a " + type.name().replace("_", " ").toLowerCase() + " to " + context.name().toLowerCase() + ".\n");
@@ -364,19 +366,19 @@ public class Navigation {
                 case REMOVE:
                     switch (type) {
                         case PANTRY:
-                            Controller.deletePantry(Kitchen.inventory.get(userInput - 1).getPantryID());
+                            contr.deletePantry(Kitchen.inventory.get(userInput - 1).getPantryID());
                         case SHOPPING_CART:
-                            Controller.deleteCart(Kitchen.inventory.get(userInput - 1).getPantryID());
+                            contr.deleteCart(Kitchen.inventory.get(userInput - 1).getPantryID());
                     }
                     break;         
             }
         }
     }
 
-    public static void viewItemList(PantryType type, int pantryToModify) {
+    public void viewItemList(PantryType type, int pantryToModify) {
         Navigation.clearConsole();
         int listSize = 1;
-        Pantry pantry = Kitchen.retrievePantry(pantryToModify);
+        Pantry pantry = contr.kitchen.retrievePantry(pantryToModify);
         System.out.println("Items in " + type.name().replace("_", " ").toLowerCase() + " named " + pantry.getPantryName() + 
         "\nChoose an item to view/edit its contents.\n");
 
@@ -418,7 +420,7 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, goBackNum);
 
         if (userInput == listSize) {
-            Controller.addItem(type, pantryToModify);
+            contr.addItem(type, pantryToModify);
         } else if (userInput == listSize + 1) {
             System.out.println("Enter search query.");
             String query = getUserInputString(true, 30);
@@ -445,19 +447,19 @@ public class Navigation {
             switch (userInt) {
                 case 1:
                     SortByName sortByName = new SortByName();
-                    Kitchen.retrievePantry(pantryToModify).items = sortByName.sort(Kitchen.retrievePantry(pantryToModify).items);
+                    contr.kitchen.retrievePantry(pantryToModify).items = sortByName.sort(contr.kitchen.retrievePantry(pantryToModify).items);
                     break;
                 case 2:
                     SortByQuantity sortByQuantity = new SortByQuantity();
-                    Kitchen.retrievePantry(pantryToModify).items = sortByQuantity.sort(Kitchen.retrievePantry(pantryToModify).items);
+                    contr.kitchen.retrievePantry(pantryToModify).items = sortByQuantity.sort(contr.kitchen.retrievePantry(pantryToModify).items);
                     break;
                 case 3:
                     SortByCreationDate sortByCreationDate = new SortByCreationDate();
-                    Kitchen.retrievePantry(pantryToModify).items = sortByCreationDate.sort(Kitchen.retrievePantry(pantryToModify).items);
+                    contr.kitchen.retrievePantry(pantryToModify).items = sortByCreationDate.sort(contr.kitchen.retrievePantry(pantryToModify).items);
                     break;
                 case 4:
                     SortByExpirationDate sortByExpirationDate = new SortByExpirationDate();
-                    Kitchen.retrievePantry(pantryToModify).items = sortByExpirationDate.sort(Kitchen.retrievePantry(pantryToModify).items);
+                    contr.kitchen.retrievePantry(pantryToModify).items = sortByExpirationDate.sort(contr.kitchen.retrievePantry(pantryToModify).items);
                     break;
             }
 
@@ -472,9 +474,9 @@ public class Navigation {
         }
     }
 
-    public static void printNotificationList(AccessContext context) {
+    public void printNotificationList(AccessContext context) {
         Navigation.clearConsole();
-        ArrayList<Notification> list = Controller.ns.getNotificationList();
+        ArrayList<Notification> list = contr.ns.getNotificationList();
         int listSize = 1;
 
         switch (context) {
@@ -494,7 +496,7 @@ public class Navigation {
                     }
                 }
 
-                System.out.println(listSize + ". Go Back");
+                System.out.println("\n" + listSize + ". Go Back");
 
                 int userInput = getUserInputInt(1, listSize);
 
@@ -534,8 +536,12 @@ public class Navigation {
                 if (userInputAlt == listSize - 1) {
                     for (int i = 0; i < triggeredNotifs.size(); i++) {
                         int notifID = triggeredNotifs.get(i).getNotifID();
-                        Controller.ns.removeNotification(notifID);
+                        contr.ns.removeNotification(notifID);
                     }
+                    Navigation.clearConsole();
+                    System.out.println("Notifications cleared!");
+                    bufferContinue();
+                    printNotificationPage();
                 } else if (userInputAlt == listSize) {
                     printNotificationPage();
                 } else {
@@ -546,8 +552,8 @@ public class Navigation {
         }
     }
 
-    public static void printNotification(int notifID, AccessContext context) {
-        ArrayList<Notification> list = Controller.ns.getNotificationList(); 
+    public void printNotification(int notifID, AccessContext context) {
+        ArrayList<Notification> list = contr.ns.getNotificationList(); 
         Notification notif = null;
 
         for (int i = 0; i < list.size(); i++) {
@@ -559,14 +565,14 @@ public class Navigation {
 
         System.out.println("\n1. Remove this Notification" +
                             "\n2. Edit this Notification" +
-                            "\n3. Go Back");
+                            "\n\n3. Go Back");
 
         int userInput = getUserInputInt(1, 3);
 
         switch (userInput) {
             case 1:
                 // remove the notification
-                Controller.deleteNotification(notifID);
+                contr.deleteNotification(notifID);
                 break;
             case 2:
                 // edit the notification
@@ -592,7 +598,7 @@ public class Navigation {
                         printNotificationList(AccessContext.DISPLAY);
                 }
 
-                Controller.editNotification(notif.getNotifID(), newMessage, newDate);
+                contr.editNotification(notif.getNotifID(), newMessage, newDate);
                 break;
             case 3:
                 printNotificationList(context);
@@ -600,7 +606,7 @@ public class Navigation {
         }
     }
 
-    public static void printRecipeList() {
+    public void printRecipeList() {
         Navigation.clearConsole();
         int listSize = 1;
 
@@ -625,7 +631,7 @@ public class Navigation {
         }
     }
 
-    public static void printRecipeQueryOptions() {
+    public void printRecipeQueryOptions() {
         MealDB mealDB = new MealDB();
         System.out.println("\nSelect a recipe option below.\n" +
         "1. Find recipes by name\n" +
@@ -647,7 +653,7 @@ public class Navigation {
                     newRecipe.printRecipe();
                     printRecipe(newRecipe, true);
                 }
-                Navigation.printRecipeQueryOptions();
+                printRecipeQueryOptions();
                 break;
             case 2:
                 System.out.println("\nEnter a main ingredient.");
@@ -661,7 +667,7 @@ public class Navigation {
                 else{
                     System.out.println("\nSorry, it doesn't look like there are any recipes with that main ingredient in the database!\n");
                 }
-                Navigation.printRecipeQueryOptions();
+                printRecipeQueryOptions();
                 break;
             case 3: 
                 Recipe randomRecipe = mealDB.queryRandom();
@@ -670,10 +676,10 @@ public class Navigation {
                     randomRecipe.printRecipe();
                     printRecipe(randomRecipe, true);
                 }
-                Navigation.printRecipeQueryOptions();
+                printRecipeQueryOptions();
                 break;
             case 4:
-                Navigation.printCookbookPage();
+                printCookbookPage();
         }
         
     }
@@ -688,7 +694,7 @@ public class Navigation {
     // Prevents further printing until user inputs 1 to continue
     public static void bufferContinue() {
         System.out.println("1. Continue");
-        Navigation.getUserInputInt(1, 1);
+        getUserInputInt(1, 1);
     }
 
     public static int getUserInputInt(int min, int max) {
