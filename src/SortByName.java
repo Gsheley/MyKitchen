@@ -7,9 +7,9 @@ public class SortByName implements Sort
         for (int i = 1; i < list.size(); ++i)
          {
             Item curr = list.get(i);
-            String key = list.get(i).getName();
+            String key = list.get(i).getName().toLowerCase();
             int j = i - 1;
-            while (j >= 0 && key.compareTo(list.get(j).getName()) < 0) 
+            while (j >= 0 && key.compareTo(list.get(j).getName().toLowerCase()) < 0) 
             {
                 list.set(j+1, list.get(j));
                 j--;
