@@ -22,6 +22,7 @@ public class Cookbook {
     //stores the new recipe object in cookbooks recipes
     public static Recipe saveRecipe(Recipe newRecipe) {
         recipes.add(newRecipe);
+        Controller.saveJson.update(newRecipe);
         return newRecipe;
     }
 
@@ -32,6 +33,7 @@ public class Cookbook {
                 recipes.remove(i);
             }
         }
+        Controller.saveJson.delete(recipe);
     }
     //function to set the cookbook name
     public static void setName(String newName){

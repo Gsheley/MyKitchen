@@ -128,6 +128,7 @@ public class Navigation {
                 printRecipeList(); 
                 break;                              
             case 2:
+                Navigation.clearConsole();
                 printRecipeQueryOptions();
                 break;         
             case 3:
@@ -180,7 +181,7 @@ public class Navigation {
             Navigation.clearConsole();
         }
         ArrayList<Recipe> recipeList = Cookbook.recipes;
-        Iterator<Recipe> iterator = recipeList.iterator();
+        recipe.printRecipe();
 
         System.out.println("\nSelect a navigation option below.");
         if (fromSearch) {
@@ -198,9 +199,13 @@ public class Navigation {
             case 1:
                 if (fromSearch) {
                     Cookbook.saveRecipe(recipe);
+                    System.out.println("Recipe saved to cookbook!");
                 } else {
                     Cookbook.removeRecipe(recipe);
+                    System.out.println("Recipe removed from cookbook!");
                 }
+                Navigation.bufferContinue();
+                printRecipeList();
                 break;         
             case 2:
                 printCookbookPage();   
@@ -429,6 +434,7 @@ public class Navigation {
             printSearchResults(query, objectList, pantryToModify, type);
         } else if (userInput == listSize + 2) {
             int totalOptions = 3;
+            Navigation.clearConsole();
             System.out.println("\nHow would you like to sort?" +
             "\n1. By Name" +
             "\n2. By Quantity" +
@@ -439,21 +445,22 @@ public class Navigation {
             }
             int userInt = getUserInputInt(1,totalOptions);
 
-            switch (userInput) {
+            switch (userInt) {
                 case 1:
                     Sort sortByName = new SortByName();
-                    sortByName.sort(pantry.items);
+                    Kitchen.retrievePantry(pantryToModify).items = sortByName.sort(Kitchen.retrievePantry(pantryToModify).items);
                 case 2:
                     Sort sortByQuantity = new SortByQuantity();
-                    sortByQuantity.sort(pantry.items);
+                    Kitchen.retrievePantry(pantryToModify).items = sortByQuantity.sort(Kitchen.retrievePantry(pantryToModify).items);
                 case 3:
                     Sort sortByCreationDate = new SortByCreationDate();
-                    sortByCreationDate.sort(pantry.items);
+                    Kitchen.retrievePantry(pantryToModify).items = sortByCreationDate.sort(Kitchen.retrievePantry(pantryToModify).items);
                 case 4:
                     Sort sortByExpirationDate = new SortByExpirationDate();
-                    sortByExpirationDate.sort(pantry.items);
+                    Kitchen.retrievePantry(pantryToModify).items = sortByExpirationDate.sort(Kitchen.retrievePantry(pantryToModify).items);
             }
 
+            Navigation.clearConsole();
             System.out.println("List sorted!");
             Navigation.bufferContinue();
             viewItemList(type, pantryToModify);
@@ -485,9 +492,20 @@ public class Navigation {
                         listSize++;
                     }
                 }
+
+                System.out.println(listSize + ". Go Back");
+
+                int userInput = getUserInputInt(1, listSize);
+
+                if (userInput == listSize) {
+                    printNotificationPage();
+                } else {
+                    printNotification(list.get(userInput - 1).getNotifID(), context);
+                }
                 break;
             case REMOVE: // REMOVE is misnomer, means viewing triggered notifications in this context
                 Iterator<Notification> iterator = list.iterator();
+                ArrayList<Notification> triggeredNotifs = new ArrayList<Notification>();
                 if (list.isEmpty()) {
                     System.out.println("You do not have any triggered notifications.");
                 } else {
@@ -495,6 +513,7 @@ public class Navigation {
                     while (iterator.hasNext()) {
                         Notification notif = iterator.next();
                         if (notif.getNotifDate().before(currentDate)) { // If any notifications have triggered before the current date/time
+                            triggeredNotifs.add(notif);
                             // Calculate the number of spaces needed for alignment
                             int spacesToAdd = 50 - notif.getMessage().length() + 4;
                             // Create a string of spaces to align the quantity
@@ -506,17 +525,23 @@ public class Navigation {
                     System.out.println("\n" + listSize + ". Clear all triggered notifications");
                     listSize++;
                 }
+
+                System.out.println(listSize + ". Go Back");
+
+                int userInputAlt = getUserInputInt(1, listSize);
+
+                if (userInputAlt == listSize - 1) {
+                    for (int i = 0; i < triggeredNotifs.size(); i++) {
+                        int notifID = triggeredNotifs.get(i).getNotifID();
+                        Controller.ns.removeNotification(notifID);
+                    }
+                } else if (userInputAlt == listSize) {
+                    printNotificationPage();
+                } else {
+                    printNotification(triggeredNotifs.get(userInputAlt - 1).getNotifID(), context);
+                }
+
                 break;
-        }
-        
-        System.out.println(listSize + ". Go Back");
-
-        int userInput = getUserInputInt(1, listSize);
-
-        if (userInput == listSize) {
-            printNotificationPage();
-        } else {
-            printNotification(list.get(userInput - 1).getNotifID(), context);
         }
     }
 
