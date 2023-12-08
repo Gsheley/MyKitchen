@@ -404,7 +404,10 @@ public class Navigation {
                     // Same space alignment but with expiration date (if applicable)
                     spacesToAdd = 30 - String.valueOf(itemQuantity).length() + 4;
                     spaces = new String(new char[spacesToAdd]).replace('\0', ' ');
-                    System.out.println(spaces + "Expires: " + pantry.items.get(i).getExpirationDate().getTime());
+                    System.out.print(spaces + "Expires: " + pantry.items.get(i).getExpirationDate().getTime());
+                    if(pantry.items.get(i).getExpirationDate().before(Calendar.getInstance())){
+                        System.out.print("-- EXPIRED --");
+                    }
                 } else {
                     System.out.println();
                 }
