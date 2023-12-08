@@ -576,6 +576,8 @@ public class Navigation {
     }
 
     public static void printRecipeQueryOptions() {
+        Navigation.clearConsole();
+        System.out.println("Choose an option to find new recipes");
         // TODO
     }
 
