@@ -78,8 +78,24 @@ public class Controller {
                     Navigation.clearConsole();
                     System.out.println("Please enter the expiration date of the Item");
                     Calendar expirDate = Navigation.getUserInputDate(false);
-                    updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate);
-                    break;
+                    System.out.println("Would you like to add a Threshold for this item?\n" +
+                    "1. Yes\n" +
+                    "2. No");
+                    int userInput2 = Navigation.getUserInputInt(1, 2);
+                    
+                    switch(userInput2) {
+                    case 1: 
+                        Navigation.clearConsole();
+                        System.out.println("Please enter the desired threshold:\n");
+                        int threshold = Navigation.getUserInputInt(1, 1000);
+                        //In Json file add threshold to item 
+
+                        updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate);
+                        break;
+                    case 2:
+                        updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate);
+                        break;
+                    }
                 case 2:
                     updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, null);
                     break;
@@ -87,6 +103,7 @@ public class Controller {
         } else {
             updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity);
         }
+
         saveJson.update(updatedPantry);
 
         Navigation.clearConsole();
