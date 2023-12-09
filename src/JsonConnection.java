@@ -206,7 +206,7 @@ public class JsonConnection extends Connection {
         int minute = obj.get("minute").getAsInt();
         // Setting the time measurement into the Calendar
         newDate.set(Calendar.YEAR, year);
-        newDate.set(Calendar.MONTH, month - 1);
+        newDate.set(Calendar.MONTH, month);
         newDate.set(Calendar.DAY_OF_MONTH, day);
         newDate.set(Calendar.HOUR_OF_DAY, hour);
         newDate.set(Calendar.MINUTE, minute);
