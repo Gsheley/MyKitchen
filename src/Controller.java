@@ -63,12 +63,18 @@ public class Controller {
     public void addItem(PantryType type, int pantryID) 
     {   
         Pantry updatedPantry = null;
+        int quantity = 1;
+        Calendar expirDate = null;
+        String name = "DefaultName";
+        int lowQuantityNotifThreshold = -1;
+
         Navigation.clearConsole();
         System.out.println("Please enter the name of the Item");
-        String name = Navigation.getUserInputString(true, 30);
+        name = Navigation.getUserInputString(true, 30);
         System.out.println("Please enter the quantity of the Item");
-        int quantity = Navigation.getUserInputInt(1, Integer.MAX_VALUE);
-        if (pantryID < PantryService.getRange()) {
+        quantity = Navigation.getUserInputInt(1, Integer.MAX_VALUE);
+
+        if (pantryID < PantryService.getRange()) { // if is of type PANTRY
             System.out.println("Would you like to add an expiration date to your Item?\n" + 
             "1. Yes\n" +
             "2. No");
@@ -77,33 +83,28 @@ public class Controller {
                 case 1:
                     Navigation.clearConsole();
                     System.out.println("Please enter the expiration date of the Item");
-                    Calendar expirDate = Navigation.getUserInputDate(false);
-                    System.out.println("Would you like to add a Threshold for this item?\n" +
-                    "1. Yes\n" +
-                    "2. No");
-                    int userInput2 = Navigation.getUserInputInt(1, 2);
-                    
-                    switch(userInput2) {
-                    case 1: 
-                        Navigation.clearConsole();
-                        System.out.println("Please enter the desired threshold:\n");
-                        int threshold = Navigation.getUserInputInt(1, 1000);
-                        //In Json file add threshold to item 
-
-                        updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate);
-                        break;
-                    case 2:
-                        updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate);
-                        break;
-                    }
+                    expirDate = Navigation.getUserInputDate(false);
                 case 2:
-                    updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, null);
                     break;
             }
-        } else {
-            updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity);
+            System.out.println("Would you like to be notified when you are running low on this item?\n" +
+            "1. Yes\n" +
+            "2. No");
+            int userInput2 = Navigation.getUserInputInt(1, 2);
+            
+            switch(userInput2) {
+            case 1: 
+                Navigation.clearConsole();
+                System.out.println("At what quantity would you like to be notified?\n");
+                lowQuantityNotifThreshold = Navigation.getUserInputInt(1, Integer.MAX_VALUE);
+                //In Json file add threshold to item 
+                break;
+            case 2:
+                break;
+            }
         }
-
+        
+        updatedPantry = kitchen.addItem(pantryID, name, Calendar.getInstance(), quantity, expirDate, lowQuantityNotifThreshold);
         saveJson.update(updatedPantry);
 
         Navigation.clearConsole();
@@ -119,8 +120,12 @@ public class Controller {
         System.out.println("What would you like to edit about this item?\n" +
         "1. Name: " + item.getName() +
         "\n2. Quantity: " + item.getQuantity());
-        if (item.expirationDate != null) {
+        if (item.getExpirationDate() != null) {
             System.out.println(nextOptionValue + ". Expiration Date: " + item.getExpirationDate().getTime());
+            nextOptionValue++;
+        }
+        if (item.getLowQuantityNotifThreshold() != -1) {
+            System.out.println(nextOptionValue + ". Low Quantity Notification Threshold: " + item.getLowQuantityNotifThreshold());
             nextOptionValue++;
         }
         System.out.println("\n" + nextOptionValue + ". Cancel edit");
@@ -129,11 +134,13 @@ public class Controller {
         String newName = item.getName();
         int newQuantity = item.getQuantity();
         Calendar newExpirationDate = item.getExpirationDate();
+        int newLowQuantityNotifThreshold = item.getLowQuantityNotifThreshold();
 
         switch (userInput) {
             case 1:
             case 2:
             case 3:
+            case 4:
                 switch (userInput) {
                     case 1:
                         System.out.println("Enter new name");
@@ -148,7 +155,17 @@ public class Controller {
                         System.out.println("Quantity updated!\n");
                         break;
                     case 3:
-                        if (newExpirationDate != null) {
+                        if (newExpirationDate != null && newLowQuantityNotifThreshold != -1) { // both expiration date and threshold exist
+                            System.out.println("Enter new date");
+                            newExpirationDate = Navigation.getUserInputDate(false);
+                            Navigation.clearConsole();
+                            System.out.println("Expiration Date updated!\n");
+                        } else if (newLowQuantityNotifThreshold != -1 && newExpirationDate == null) { // only threshold exists
+                            System.out.println("Enter new low quantity notification threshold");
+                            newLowQuantityNotifThreshold = Navigation.getUserInputInt(1,Integer.MAX_VALUE);
+                            Navigation.clearConsole();
+                            System.out.println("Low Quantity Notification Threshold updated!\n");
+                        } else if (newLowQuantityNotifThreshold == -1 && newExpirationDate != null) { // only expiration date exists
                             System.out.println("Enter new date");
                             newExpirationDate = Navigation.getUserInputDate(false);
                             Navigation.clearConsole();
@@ -157,12 +174,22 @@ public class Controller {
                             nv.viewItemList(type, pantryID);
                         }
                         break;
+                    case 4:
+                        if (newLowQuantityNotifThreshold != -1) {
+                            System.out.println("Enter new low quantity notification threshold");
+                            newLowQuantityNotifThreshold = Navigation.getUserInputInt(1,Integer.MAX_VALUE);
+                            Navigation.clearConsole();
+                            System.out.println("Low Quantity Notification Threshold updated!\n");
+                        } else {
+                            nv.viewItemList(type, pantryID);
+                        }
+                        break; 
                 }
 
                 kitchen.retrievePantry(pantryID).editItem(item.getItemID(), newName, newExpirationDate, newQuantity);
                 
                 Navigation.bufferContinue();
-            case 4:
+            case 5:
                 nv.viewItemList(type, pantryID);
                 break;
         }

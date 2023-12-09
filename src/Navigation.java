@@ -404,19 +404,25 @@ public class Navigation {
                 String spaces = new String(new char[spacesToAdd]).replace('\0', ' ');
 
                 // Print the item details with aligned quantities
-                System.out.print((i + 1) + ". " + itemName + spaces + "Quantity: " + itemQuantity);
+                System.out.print("\n" + (i + 1) + ". " + itemName + spaces + "Quantity: " + itemQuantity);
+                if (itemQuantity <= pantry.items.get(i).getLowQuantityNotifThreshold()) {
+                    System.out.println(" (Running Low!)");
+                }
                 if (pantry.items.get(i).getExpirationDate() != null) {
                     // Same space alignment but with expiration date (if applicable)
-                    spacesToAdd = 10 - String.valueOf(itemQuantity).length() + 4;
+                    if (itemQuantity <= pantry.items.get(i).getLowQuantityNotifThreshold()) {
+                        spacesToAdd = 10 - String.valueOf(itemQuantity).length() + 4 - 13; // "(Running Low!)"" takes up 13 spaces
+                    } else {
+                        spacesToAdd = 10 - String.valueOf(itemQuantity).length() + 4;
+                    }
                     spaces = new String(new char[spacesToAdd]).replace('\0', ' ');
                     System.out.print(spaces + "Expires: " + pantry.items.get(i).getExpirationDate().getTime());
                     if(pantry.items.get(i).getExpirationDate().before(Calendar.getInstance())){
-                        System.out.println(" -- (EXPIRED)");
+                        System.out.print(" -- (EXPIRED)");
                     }
-                } else {
-                    System.out.println();
                 }
             }
+            System.out.println();
         }
         // TODO add option to sort list
         int goBackNum = listSize + 3;
