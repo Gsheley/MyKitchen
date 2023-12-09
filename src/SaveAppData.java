@@ -1,9 +1,12 @@
+import java.util.ArrayList;
+
 public abstract class SaveAppData {
     public static Connection conn;
 
     // Functionalities for Recipe
     public abstract void create(Recipe obj);
     public abstract void update(Recipe obj);
+    public abstract void update(ArrayList<Recipe> list);
     public abstract void delete(Recipe obj);
 
     // Functionalities for Pantry

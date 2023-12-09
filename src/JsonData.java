@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.google.gson.JsonArray;
@@ -64,6 +65,31 @@ public class JsonData extends SaveAppData {
             replacementArray.add(jsonRecipe);
             conn.recipes.set(index, replacementArray);
         }
+        save();
+    }
+
+    public void update(ArrayList<Recipe> list) {
+        JsonArray newList = new JsonArray();
+        for (Recipe elem : list) {
+            JsonArray mealsArray = new JsonArray(1);
+            JsonObject newRecipe = new JsonObject();
+            newRecipe.addProperty("strMeal", elem.getName());
+            newRecipe.addProperty("idMeal", elem.getID());
+            for (int index = 0; index < elem.recipeIngredients.size(); index++) {
+                newRecipe.addProperty("strIngredient"+(index + 1), elem.recipeIngredients.get(index));
+            }
+            for (int index = 0; index < elem.recipeMeasurements.size(); index++) {
+                newRecipe.addProperty("strMeasure"+(index + 1), elem.recipeMeasurements.get(index));
+            }
+            newRecipe.addProperty("strInstructions", elem.recipeSteps);
+            mealsArray.add(newRecipe);
+            JsonObject aggregate = new JsonObject();
+            // To keep the same formatting with the Recipe class and with the API
+            // we connect with, it is necessary to give each Recipe its own single array
+            aggregate.add("meals", mealsArray);
+            newList.add(aggregate);
+        }
+        conn.recipes = newList;
         save();
     }
 

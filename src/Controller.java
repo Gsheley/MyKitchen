@@ -237,4 +237,8 @@ public class Controller {
     public void setNotificationService(NotificationService obj) {
         this.ns = obj;
     }
+
+    public void sortRecipeNames() {
+        saveJson.update(kitchen.sortRecipeNames());
+    }
 }
