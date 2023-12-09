@@ -84,6 +84,9 @@ public class JsonData extends SaveAppData {
     }
 
     public void create(Pantry obj) {
+        // Update the number of shopping carts and pantries
+        conn.numKitchens = Navigation.contr.getNumPantries();
+        conn.numShoppingCarts = Navigation.contr.getNumPantries();
         // Creating a new JsonObject for the new pantry
         JsonObject newPantry = new JsonObject();
         // Creating new properties for each of the pantry's attributes
@@ -138,6 +141,10 @@ public class JsonData extends SaveAppData {
     }
 
     public void delete(Pantry obj) {
+        // Update the number of shopping carts and pantries
+        conn.numKitchens = Navigation.contr.getNumPantries();
+        conn.numShoppingCarts = Navigation.contr.getNumPantries();
+        // Remove the input pantry
         JsonObject jsonPantry = null;
         int index = 0;
         for (; index < conn.inventory.size(); index++) {

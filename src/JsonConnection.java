@@ -22,10 +22,10 @@ public class JsonConnection extends Connection {
     public JsonArray recipes = new JsonArray();
     public JsonObject notifications = new JsonObject();
     public JsonArray listNotifications = new JsonArray();
-    public int numKitchens;
-    public int numShoppingCarts;
-    public int nextShoppingCartID;
-    public int nextKitchenInventoryID;
+    public int numKitchens = 0;
+    public int numShoppingCarts = 0;
+    public int nextShoppingCartID = 0;
+    public int nextKitchenInventoryID = PantryService.getRange();
     // A constant for the file name
     private final String FILE_NAME = "MyKitchenData.json";
     

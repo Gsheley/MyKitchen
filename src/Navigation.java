@@ -162,7 +162,7 @@ public class Navigation {
 
                 System.out.println("When should the notification trigger?");
                 Calendar date = getUserInputDate(true);
-                contr.ns.addNotification(date, message);
+                contr.addNotification(date, message);
                 Navigation.clearConsole();
 
                 System.out.println("\nNotification Created!\n\"" + message + "\" will trigger on " + date.getTime() + "\n1. Continue");
@@ -596,11 +596,14 @@ public class Navigation {
                     case 1: 
                         System.out.println("Enter new message");
                         newMessage = Navigation.getUserInputString(true, 50);
+                        break;
                     case 2:
                         System.out.println("Enter new date");
                         newDate = Navigation.getUserInputDate(true);
+                        break;
                     case 3:
                         printNotificationList(AccessContext.DISPLAY);
+                        break;
                 }
 
                 contr.editNotification(notif.getNotifID(), newMessage, newDate);
