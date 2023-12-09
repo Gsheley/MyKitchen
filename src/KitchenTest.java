@@ -1,4 +1,6 @@
 import static org.junit.Assert.assertEquals;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,9 +14,7 @@ public class KitchenTest
     @Before
     public void setUp()
     {
-        myKitchen = new Kitchen();
         tesKitchen = new Kitchen();
-        //tesKitchen.inventory.clear();
     }
 
 
@@ -37,6 +37,7 @@ public class KitchenTest
     @Test
     public void deletePantryTest()
     {
+        
         tesKitchen.inventory.clear();
         tesKitchen.createPantry(PantryType.PANTRY, "tester1");
         tesKitchen.deletePantry(tesKitchen.inventory.get(0).getPantryID());
@@ -44,34 +45,42 @@ public class KitchenTest
     }
 
     @Test
-    public void addItem()
+    public void addItemTest()
     {
-        tesKitchen.inventory.clear();
         tesKitchen.createPantry(PantryType.PANTRY, "tester1");
-        tesKitchen.addItem(0, "apple", null, 1);
-        assertEquals("apple", tesKitchen.retrievePantry(0).getItem(0).getName());
-        assertEquals(1, tesKitchen.retrievePantry(0).getItem(0).getQuantity());
-        assertEquals(0, tesKitchen.retrievePantry(0).getItem(0).getItemID());
+        tesKitchen.addItem(tesKitchen.inventory.get(0).getPantryID(), "apple", null, 1);
+        assertEquals("apple", tesKitchen.retrievePantry(tesKitchen.inventory.get(0).getPantryID()).getItem(0).getName());
+        assertEquals(1, tesKitchen.retrievePantry(tesKitchen.inventory.get(0).getPantryID()).getItem(0).getQuantity());
+        assertEquals(0, tesKitchen.retrievePantry(tesKitchen.inventory.get(0).getPantryID()).getItem(0).getItemID());
         
     }
 
     @Test
-    public void editItem()
+    public void editItemTest()
     {
-        tesKitchen.inventory.clear();
         tesKitchen.createPantry(PantryType.PANTRY, "tester1");
         tesKitchen.addItem(tesKitchen.inventory.get(0).getPantryID(), "apple", null, 1);
-        tesKitchen.editItem(0, 0, "bannana", null, 5);
-        assertEquals("bannana", tesKitchen.retrievePantry(0).getItem(0).getName());
-        assertEquals(5, tesKitchen.retrievePantry(0).getItem(0).getQuantity());
-        assertEquals(0, tesKitchen.retrievePantry(0).getItem(0).getItemID());
+        tesKitchen.editItem(tesKitchen.inventory.get(0).getPantryID(), 0, "bannana", null, 5);
+        assertEquals("bannana", tesKitchen.retrievePantry(tesKitchen.inventory.get(0).getPantryID()).getItem(0).getName());
+        assertEquals(5, tesKitchen.retrievePantry(tesKitchen.inventory.get(0).getPantryID()).getItem(0).getQuantity());
+        assertEquals(0, tesKitchen.retrievePantry(tesKitchen.inventory.get(0).getPantryID()).getItem(0).getItemID());
         
        
     }
 
-    public void saveRecipe()
+    @Test
+    public void saveRecipeTest()
     {
+        MealDB db = new MealDB();
+        Recipe test = db.queryRandom();
+        tesKitchen.saveRecipe(test);
+    }
 
+
+    @After
+    public void cleanUp()
+    {
+        tesKitchen.inventory.clear();
     }
 
 
