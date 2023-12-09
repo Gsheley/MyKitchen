@@ -463,6 +463,7 @@ public class Navigation {
                     break;
             }
 
+            Controller.saveJson.update(contr.kitchen.retrievePantry(pantryToModify));
             Navigation.clearConsole();
             System.out.println("List sorted!");
             Navigation.bufferContinue();
