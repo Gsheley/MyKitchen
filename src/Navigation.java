@@ -121,10 +121,11 @@ public class Navigation {
         System.out.println("\nSelect a navigation option below.\n" +
         "1. View/Remove Recipes in Cookbook\n" +
         "2. Find New Recipes\n" +
+        "3. Sort Recipes by Name\n" +
         "\n" +
-        "3. Go Back\n");
+        "4. Go Back\n");
 
-        int userInput = Navigation.getUserInputInt(1, 3);
+        int userInput = Navigation.getUserInputInt(1, 4);
         switch (userInput) {
             case 1:
                 printRecipeList(); 
@@ -132,8 +133,15 @@ public class Navigation {
             case 2:
                 Navigation.clearConsole();
                 printRecipeQueryOptions();
-                break;         
+                break;
             case 3:
+                contr.sortRecipeNames();      
+                
+                Navigation.clearConsole();
+                System.out.println("Recipes sorted!");
+                Navigation.bufferContinue();
+                printCookbookPage();
+            case 4:
                 printHomePage();
                 break;         
         }

@@ -95,4 +95,8 @@ public class Kitchen
             return count;
         }
     }
+
+    public ArrayList<Recipe> sortRecipeNames() {
+        return CookbookService.sortRecipeNames();
+    }
 }
