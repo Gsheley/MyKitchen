@@ -22,7 +22,7 @@ public class Cookbook {
     //stores the new recipe object in cookbooks recipes
     public static Recipe saveRecipe(Recipe newRecipe) {
         recipes.add(newRecipe);
-        Controller.saveJson.update(newRecipe);
+        Controller.saveJson.create(newRecipe);
         return newRecipe;
     }
 

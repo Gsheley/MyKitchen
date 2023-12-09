@@ -12,8 +12,8 @@ import com.google.gson.JsonParser;
 import java.util.ArrayList;
 
 public class JsonConnection extends Connection {
-    // Creating an object to get input from the json file
-    FileReader inputFile;
+    // Object for the file
+    File jsonFile;
     // An overall Json Object for the file
     private JsonObject jsonObject;
     // Json Objects for saving and retrieving different kinds of data
@@ -31,9 +31,11 @@ public class JsonConnection extends Connection {
     
     public void open() {
         // Trying to retrieve the file
+        FileReader inputFile;
         try {
             // If it is present, get the contents of the file into a String
-            inputFile = new FileReader(FILE_NAME);
+            jsonFile = new File(FILE_NAME);
+            inputFile = new FileReader(jsonFile);
         // If the file is not present, simply print it out and exit the method
         } catch (FileNotFoundException e) {
             return;
@@ -192,17 +194,6 @@ public class JsonConnection extends Connection {
         } catch (IOException e) {
             System.out.println("An Error occured when trying to save to the file");
         } 
-    }
-
-    public void close() {
-        // Trying to close the json file
-        try {
-            // If it is present, then we need to close it
-            inputFile.close();
-        // If the file is not present, simply print out the error and exit the method
-        } catch (IOException e) {
-            System.out.println("Data file could not be found");
-        }
     }
 
     // Private helper method for the conversion of json objects to Calendar objects

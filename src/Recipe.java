@@ -32,26 +32,30 @@ public class Recipe {
         //populate the ingredients list 
         this.recipeIngredients = new ArrayList<>();
         for (int i = 1; i <= 20; i++){
-            if(!mealObject.get("strIngredient"+i).isJsonNull())
+            if(mealObject.has("strIngredient"+i))
             {
                 String ingredient = mealObject.get(("strIngredient"+i).toString()).getAsString();
                 if (ingredient != null && !ingredient.isEmpty())
                 {
                     this.recipeIngredients.add(ingredient);
                 }
+            } else {
+                break;
             }
         }
 
         //populate measurements list
         this.recipeMeasurements = new ArrayList<>();
         for (int i = 1; i <= 20; i++){
-            if(!mealObject.get("strMeasure"+i).isJsonNull())
+            if(mealObject.has("strMeasure"+i))
             {
                 String measurement = mealObject.get(("strMeasure"+i).toString()).getAsString();
                 if (measurement != null && !measurement.isEmpty())
                 {
                     this.recipeMeasurements.add(measurement);
                 }
+            } else {
+                break;
             }
         }
 

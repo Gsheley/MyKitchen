@@ -70,12 +70,12 @@ public class JsonData extends SaveAppData {
     public void delete(Recipe obj) {
         conn.cookbook.remove("cookbookName");
         conn.cookbook.addProperty("cookbookName", Cookbook.cookbookName);
-        JsonArray jsonRecipeArray;
-        JsonObject jsonRecipe = null;
         for (int index = 0; index < conn.recipes.size(); index++) {
-            jsonRecipeArray = conn.recipes.get(index).getAsJsonArray();
-            jsonRecipe = jsonRecipeArray.get(0).getAsJsonObject();
-            if (obj.getID() == jsonRecipe.get("idMeal").getAsInt()) {
+            JsonObject jsonRecipeArray = conn.recipes.get(index).getAsJsonObject();
+            JsonArray mealsArray = jsonRecipeArray.getAsJsonArray("meals");
+            JsonObject mealObject = mealsArray.get(0).getAsJsonObject();
+
+            if (obj.getID() == mealObject.get("idMeal").getAsInt()) {
                 conn.recipes.remove(index);
                 break;
             }
@@ -241,10 +241,6 @@ public class JsonData extends SaveAppData {
 
     public void save() {
         conn.save();
-    }
-
-    public void close() {
-        conn.close();
     }
     
 }

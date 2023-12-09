@@ -21,6 +21,4 @@ public abstract class SaveAppData {
 
     public abstract void save();
 
-    public abstract void close();
-
 }
