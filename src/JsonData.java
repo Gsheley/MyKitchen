@@ -250,8 +250,12 @@ public class JsonData extends SaveAppData {
         output.addProperty("quantity", obj.getQuantity());
         // If this is a Kitchen Inventory (ID is less than the range), then 
         // we also need to record the expiration date
-        if (pantryID < PantryService.getRange() && obj.getExpirationDate() != null) {
-            output.add("expirationDate", calendarToJson(obj.getExpirationDate()));
+        if (pantryID < PantryService.getRange()) {
+            if (obj.getExpirationDate() != null) {
+                output.add("expirationDate", calendarToJson(obj.getExpirationDate()));
+            }
+        } else {
+            output.addProperty("quantityThreshold", obj.getLowQuantityThreshold());
         }
         return output;
     }

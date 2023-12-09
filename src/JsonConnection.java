@@ -90,18 +90,20 @@ public class JsonConnection extends Connection {
                             dateAdded = jsonToCalendar(itemAddedEntry);
                         }
                         int itemQuantity = currentItem.get("quantity").getAsInt();
-                        if (currentItem.has("expirationDate")) {
-                            JsonObject expirationEntry = currentItem.get("expirationDate").getAsJsonObject();
+                        Item newItem;
+                        if (currentItem.has("quantityThreshold")){
+                            int lowQuantityNotifThreshold = currentItem.get("quantityThreshold").getAsInt();
+                            newItem = new Item(itemID, itemName, dateAdded, itemQuantity, lowQuantityNotifThreshold);
+                            newPantry.items.add(newItem);
+                        } else { 
                             Calendar expirationDate = null;
-                            if (expirationEntry != null) { 
+                            if (currentItem.has("expirationDate")) {
+                                JsonObject expirationEntry = currentItem.get("expirationDate").getAsJsonObject();
                                 expirationDate = jsonToCalendar(expirationEntry);
                             }
-                            Item newItem = new Item(itemID, itemName, dateAdded, itemQuantity, expirationDate);
-                            newPantry.items.add(newItem);
-                        } else {
-                            Item newItem = new Item(itemID, itemName, dateAdded, itemQuantity);
-                            newPantry.items.add(newItem);
+                            newItem = new Item(itemID, itemName, dateAdded, itemQuantity, expirationDate);
                         }
+                        newPantry.items.add(newItem);
                     }
                 }
                 Kitchen.inventory.add(newPantry);
