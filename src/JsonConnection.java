@@ -12,8 +12,6 @@ import com.google.gson.JsonParser;
 import java.util.ArrayList;
 
 public class JsonConnection extends Connection {
-    // Object for the file
-    File jsonFile;
     // An overall Json Object for the file
     private JsonObject jsonObject;
     // Json Objects for saving and retrieving different kinds of data
@@ -34,8 +32,8 @@ public class JsonConnection extends Connection {
         FileReader inputFile;
         try {
             // If it is present, get the contents of the file into a String
-            jsonFile = new File(FILE_NAME);
-            inputFile = new FileReader(jsonFile);
+            file = new File(FILE_NAME);
+            inputFile = new FileReader(file);
         // If the file is not present, simply print it out and exit the method
         } catch (FileNotFoundException e) {
             return;
@@ -176,7 +174,7 @@ public class JsonConnection extends Connection {
             if (newFile.createNewFile()) {
                 System.out.println("Previous data file could not be found, creating a new file to save");
             }
-            FileWriter jsonFile = new FileWriter(FILE_NAME);
+            FileWriter jsonWriter = new FileWriter(newFile);
             JsonObject newObject = new JsonObject();
             cookbook.add("recipes", recipes);
             notifications.add("listNotifications", listNotifications);
@@ -188,8 +186,8 @@ public class JsonConnection extends Connection {
             newObject.add("cookbook", cookbook);
             newObject.add("notifications", notifications);
             Gson gson = new Gson();
-            gson.toJson(newObject, jsonFile);
-            jsonFile.close();
+            gson.toJson(newObject, jsonWriter);
+            jsonWriter.close();
         // Catching any errors that may come when trying to create or retrieve the file
         } catch (IOException e) {
             System.out.println("An Error occured when trying to save to the file");
