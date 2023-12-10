@@ -50,5 +50,4 @@ public class MealDBTest {
         assertNotNull("not null", randomRecipe);
     }
 
-    
 }
