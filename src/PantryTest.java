@@ -118,6 +118,18 @@ public class PantryTest {
         assertEquals(testName, testPantry.getPantryName());
     }
 
+    @Test
+    public void testGettingCurrentItemID() {
+        assertEquals(2, testPantry.getCurrentItemID());
+    }
+
+    @Test
+    public void testSettingCurrentItemID() {
+        int newCurItemID = 5;
+        testPantry.setCurrentItemID(newCurItemID);
+        assertEquals(newCurItemID, testPantry.getCurrentItemID());
+    }
+
     @After
     public void cleanUp()
     {
