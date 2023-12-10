@@ -15,14 +15,12 @@ public class MealDBTest {
 
     @Test
     public void testExistingMeal() {
-        mealDB = new MealDB();
-        Recipe recipe = mealDB.queryByName("Spaghetti");
-        assertNotNull("Not null", recipe);
+        Recipe recipe = mealDB.queryByName("rice");
+        assertNotNull(recipe);
     }
 
     @Test
     public void testNonExistingMeal() {
-        mealDB = new MealDB();
         Recipe recipe = mealDB.queryByName("Peanut butter and sardines sandwich");
         assertNull("Null", recipe);
     }
