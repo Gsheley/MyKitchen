@@ -101,6 +101,23 @@ public class PantryTest {
         assertNull(testPantry.getItem(1));
     }
 
+    @Test
+    public void testGettingPantryID() {
+        assertEquals(testID, testPantry.getPantryID());
+    }
+
+    @Test 
+    public void testGettingPantryName() {
+        assertEquals(testName, testPantry.getPantryName());
+    }
+
+    @Test
+    public void testSettingPantryName() {
+        testName = "hello";
+        testPantry.setPantryName(testName);
+        assertEquals(testName, testPantry.getPantryName());
+    }
+
     @After
     public void cleanUp()
     {
