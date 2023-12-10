@@ -47,5 +47,5 @@ Here is an overview of the program files used in MyKitchen:
 To run MyKitchen:
 - Simply download the zip file from this repository or clone the repository locally
 - Open up the project in an IDE (preferably VSCode)
-- Run the project
+- Run the project from `Controller.java`
 - Have fun!
