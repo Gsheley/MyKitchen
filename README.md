@@ -39,6 +39,7 @@ Here is an overview of the program files used in MyKitchen:
 - `ViewNotification.java`: An implementation of Notification that gives print messages to alert with notifications.
 
 > There are also various Test files included that test the above program files
+
 > A json file `MyKitchenData.json` will also be created upon saving data to the application, which will save user data between executions
 
 ## Running MyKitchen
