@@ -93,7 +93,16 @@ public class Pantry {
     }
 
     public Item getItem(int itemID) {
-        return items.get(itemID);
+        Iterator<Item> iterator = this.items.iterator();
+        Item output = null;
+        while (iterator.hasNext()) {
+            Item item = iterator.next();
+            if (item.getItemID() == itemID) {
+                output = item;
+                break;
+            }
+        }
+        return output;
     }
 
     public void setCurrentItemID(int itemID) { 

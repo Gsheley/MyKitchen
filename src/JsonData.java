@@ -254,8 +254,9 @@ public class JsonData extends SaveAppData {
             if (obj.getExpirationDate() != null) {
                 output.add("expirationDate", calendarToJson(obj.getExpirationDate()));
             }
-        } else {
-            output.addProperty("quantityThreshold", obj.getLowQuantityNotifThreshold());
+            if (obj.getLowQuantityNotifThreshold() != -1) {
+                output.addProperty("quantityThreshold", obj.getLowQuantityNotifThreshold());
+            }
         }
         return output;
     }

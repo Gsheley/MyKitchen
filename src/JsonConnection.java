@@ -89,19 +89,29 @@ public class JsonConnection extends Connection {
                         if (itemAddedEntry != null) { 
                             dateAdded = jsonToCalendar(itemAddedEntry);
                         }
+                        // Variable for the item quantity
                         int itemQuantity = currentItem.get("quantity").getAsInt();
+                        // New item object to be added to the app
                         Item newItem;
-                        if (currentItem.has("quantityThreshold")){
-                            int lowQuantityNotifThreshold = currentItem.get("quantityThreshold").getAsInt();
-                            newItem = new Item(itemID, itemName, dateAdded, itemQuantity, lowQuantityNotifThreshold);
-                            newPantry.items.add(newItem);
-                        } else { 
+                        // If this item is in a Kitchen Inventory, we will have a few extra attributes
+                        if (pantryID < PantryService.getRange()) {
+                            // Object for the expiration date
                             Calendar expirationDate = null;
+                            // If there is an expiration date, we need to record it
                             if (currentItem.has("expirationDate")) {
                                 JsonObject expirationEntry = currentItem.get("expirationDate").getAsJsonObject();
                                 expirationDate = jsonToCalendar(expirationEntry);
+                            } 
+                            if (currentItem.has("quantityThreshold")) {
+                                // Getting the low quanitity threshold recorded
+                                int lowQuantityNotifThreshold = currentItem.get("quantityThreshold").getAsInt();
+                                newItem = new Item(itemID, itemName, dateAdded, itemQuantity, expirationDate, lowQuantityNotifThreshold);
+                            // Otherwise, use the contructor that makes use of the attribute
+                            } else {
+                                newItem = new Item(itemID, itemName, dateAdded, itemQuantity, expirationDate);
                             }
-                            newItem = new Item(itemID, itemName, dateAdded, itemQuantity, expirationDate);
+                        } else {                             
+                            newItem = new Item(itemID, itemName, dateAdded, itemQuantity);
                         }
                         newPantry.items.add(newItem);
                     }
