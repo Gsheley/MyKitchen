@@ -185,8 +185,12 @@ public class Controller {
                         }
                         break; 
                 }
-
-                kitchen.retrievePantry(pantryID).editItem(item.getItemID(), newName, newExpirationDate, newQuantity);
+                
+                if (type == PantryType.SHOPPING_CART) {
+                    kitchen.retrievePantry(pantryID).editItem(item.getItemID(), newName, item.getDateAdded(), newQuantity);
+                } else {
+                    kitchen.retrievePantry(pantryID).editItem(item.getItemID(), newName, item.getDateAdded(), newQuantity, newExpirationDate, newLowQuantityNotifThreshold);
+                }
                 
                 Navigation.bufferContinue();
             case 5:

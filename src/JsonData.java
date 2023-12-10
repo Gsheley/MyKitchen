@@ -122,7 +122,7 @@ public class JsonData extends SaveAppData {
         // The items will be represented by a JsonArray
         JsonArray items = new JsonArray();
         for (int index = 0; index < obj.items.size(); index++) {
-            items.add(itemToJson(obj.getPantryID(), obj.getItem(index)));
+            items.add(itemToJson(obj.getPantryID(), obj.getItemByIndex(index)));
         }
         newPantry.add("items", items);
         conn.inventory.add(newPantry);
@@ -158,7 +158,7 @@ public class JsonData extends SaveAppData {
             // The items will be represented by a JsonArray
             JsonArray items = new JsonArray();
             for (int i = 0; i < obj.items.size(); i++) {
-                items.add(itemToJson(obj.getPantryID(), obj.getItem(i)));
+                items.add(itemToJson(obj.getPantryID(), obj.getItemByIndex(i)));
             }
             jsonPantry.add("items", items);
             conn.inventory.set(index, jsonPantry);
