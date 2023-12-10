@@ -69,13 +69,13 @@ public class Controller {
         int lowQuantityNotifThreshold = -1;
 
         Navigation.clearConsole();
-        System.out.println("Please enter the name of the Item");
+        System.out.println("\nPlease enter the name of the Item");
         name = Navigation.getUserInputString(true, 30);
-        System.out.println("Please enter the quantity of the Item");
+        System.out.println("\nPlease enter the quantity of the Item");
         quantity = Navigation.getUserInputInt(1, Integer.MAX_VALUE);
 
         if (pantryID < PantryService.getRange()) { // if is of type PANTRY
-            System.out.println("Would you like to add an expiration date to your Item?\n" + 
+            System.out.println("\nWould you like to add an expiration date to your Item?\n" + 
             "1. Yes\n" +
             "2. No");
             int userInput = Navigation.getUserInputInt(1, 2);
@@ -87,7 +87,7 @@ public class Controller {
                 case 2:
                     break;
             }
-            System.out.println("Would you like to be notified when you are running low on this item?\n" +
+            System.out.println("\nWould you like to be notified when you are running low on this item?\n" +
             "1. Yes\n" +
             "2. No");
             int userInput2 = Navigation.getUserInputInt(1, 2);
@@ -175,7 +175,7 @@ public class Controller {
                         }
                         break;
                     case 4:
-                        if (newLowQuantityNotifThreshold != -1) {
+                        if (newLowQuantityNotifThreshold != -1 && newExpirationDate != null) {
                             System.out.println("Enter new low quantity notification threshold");
                             newLowQuantityNotifThreshold = Navigation.getUserInputInt(1,Integer.MAX_VALUE);
                             Navigation.clearConsole();

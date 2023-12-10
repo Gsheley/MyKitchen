@@ -388,7 +388,7 @@ public class Navigation {
         int listSize = 1;
         Pantry pantry = contr.kitchen.retrievePantry(pantryToModify);
         System.out.println("Items in " + type.name().replace("_", " ").toLowerCase() + " named " + pantry.getPantryName() + 
-        "\nChoose an item to view/edit its contents.\n");
+        "\nChoose an item to view/edit its contents.");
 
         if (pantry.items.isEmpty()) {
             System.out.println("This " + type.name().replace("_", " ").toLowerCase() + " is empty!");
@@ -406,14 +406,14 @@ public class Navigation {
                 // Print the item details with aligned quantities
                 System.out.print("\n" + (i + 1) + ". " + itemName + spaces + "Quantity: " + itemQuantity);
                 if (itemQuantity <= pantry.items.get(i).getLowQuantityNotifThreshold()) {
-                    System.out.println(" (Running Low!)");
+                    System.out.print(" (Running Low!)");
                 }
                 if (pantry.items.get(i).getExpirationDate() != null) {
                     // Same space alignment but with expiration date (if applicable)
                     if (itemQuantity <= pantry.items.get(i).getLowQuantityNotifThreshold()) {
-                        spacesToAdd = 10 - String.valueOf(itemQuantity).length() + 4 - 13; // "(Running Low!)"" takes up 13 spaces
+                        spacesToAdd = 10 - String.valueOf(itemQuantity).length() + 4; 
                     } else {
-                        spacesToAdd = 10 - String.valueOf(itemQuantity).length() + 4;
+                        spacesToAdd = 10 - String.valueOf(itemQuantity).length() + 4 + 15; // "(Running Low!)"" takes up 15 spaces
                     }
                     spaces = new String(new char[spacesToAdd]).replace('\0', ' ');
                     System.out.print(spaces + "Expires: " + pantry.items.get(i).getExpirationDate().getTime());

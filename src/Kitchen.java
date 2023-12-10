@@ -51,7 +51,7 @@ public class Kitchen
     public Pantry addItem(int pantryID, String name, Calendar dateAdded, int quantity, Calendar expirDate, int lowQuantityNotifThreshold) {
         int index = getPantryIndex(pantryID);
         if (index != -1) {
-            inventory.get(index).addItem(name, dateAdded, quantity, expirDate);
+            inventory.get(index).addItem(name, dateAdded, quantity, expirDate, lowQuantityNotifThreshold);
         }
         return inventory.get(index);
     }
@@ -59,7 +59,7 @@ public class Kitchen
     public Pantry editItem(int pantryID, int itemID, String name, Calendar dateAdded, int quantity, Calendar expirDate, int lowQuantityNotifThreshold) {
         int index = getPantryIndex(pantryID);
         if (index != -1) {
-            inventory.get(index).editItem(itemID, name, dateAdded, quantity, expirDate);
+            inventory.get(index).editItem(itemID, name, dateAdded, quantity, expirDate, lowQuantityNotifThreshold);
         }
         return inventory.get(index);
     }

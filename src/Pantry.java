@@ -21,6 +21,14 @@ public class Pantry {
         return this;
     }
 
+    //To add items that have all attribute types
+    public void addItem(String name, Calendar dateAdded, int quantity, Calendar expirDate, int lowQuantityNotifThreshold)
+    {
+        Item newItem = new Item(currentItemID, name, dateAdded, quantity, expirDate, lowQuantityNotifThreshold);
+        items.add(newItem);
+        currentItemID++;
+    }
+
     //To add items that have expiration dates
     public void addItem(String name, Calendar dateAdded, int quantity, Calendar expirDate)
     {
@@ -38,7 +46,7 @@ public class Pantry {
     }
    
     //To edit Items that have an expiration dates
-    public void editItem(int itemID, String name, Calendar dateAdded, int quantity, Calendar expirDate)
+    public void editItem(int itemID, String name, Calendar dateAdded, int quantity, Calendar expirDate, int lowQuantityNotifThreshold)
     {
         for(int i = 0; i < items.size(); i++) {
             int curItemID = (items.get(i)).getItemID();
@@ -47,6 +55,7 @@ public class Pantry {
                 (items.get(i)).setDateAdded(dateAdded);
                 (items.get(i)).setQuantity(quantity);
                 (items.get(i)).setExpirationDate(expirDate);
+                (items.get(i)).setLowQuantityNotifThreshold(lowQuantityNotifThreshold);
             }
 
         }
