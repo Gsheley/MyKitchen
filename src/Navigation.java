@@ -121,11 +121,10 @@ public class Navigation {
         System.out.println("\nSelect a navigation option below.\n" +
         "1. View/Remove Recipes in Cookbook\n" +
         "2. Find New Recipes\n" +
-        "3. Sort Recipes by Name\n" +
         "\n" +
-        "4. Go Back\n");
+        "3. Go Back\n");
 
-        int userInput = Navigation.getUserInputInt(1, 4);
+        int userInput = Navigation.getUserInputInt(1, 3);
         switch (userInput) {
             case 1:
                 printRecipeList(); 
@@ -135,13 +134,6 @@ public class Navigation {
                 printRecipeQueryOptions();
                 break;
             case 3:
-                contr.sortRecipeNames();      
-                
-                Navigation.clearConsole();
-                System.out.println("Recipes sorted!");
-                Navigation.bufferContinue();
-                printCookbookPage();
-            case 4:
                 printHomePage();
                 break;         
         }
@@ -321,7 +313,7 @@ public class Navigation {
             if (isPantry) {
                 printItem(pantryID, pantryResults.get(userInput - 1).getItemID(), type);
             } else {
-                printRecipe(cookbookResults.get(userInput - 1), true);
+                printRecipe(cookbookResults.get(userInput - 1), false);
             }
         }
     }
@@ -424,7 +416,7 @@ public class Navigation {
             }
             System.out.println();
         }
-        // TODO add option to sort list
+
         int goBackNum = listSize + 3;
         System.out.println("\n" + listSize + ". Add a New Item" + 
                             "\n" + (listSize + 1) + ". Search this " + type.name().replace("_"," ").toLowerCase() +
@@ -643,12 +635,31 @@ public class Navigation {
             }
         }
 
-        System.out.println("\n" + listSize + ". Go back");
+        System.out.println("\n" + listSize + ". Sort Recipes by Name" + 
+                            "\n" + (listSize + 1) + ". Search for Recipe in Cookbook " +
+                            "\n" + (listSize + 2) + ". Go Back \n");
 
-        int userInput = getUserInputInt(1, listSize);
+        int userInput = getUserInputInt(1, listSize + 2);
 
-        if (userInput == listSize) {
+        if (userInput == listSize + 2) {
             printCookbookPage();
+        } else if (userInput == listSize) {
+            contr.sortRecipeNames();      
+                
+            Navigation.clearConsole();
+            System.out.println("Recipes sorted!");
+            Navigation.bufferContinue();
+            printCookbookPage();
+        } else if (userInput == listSize + 1) {
+            System.out.println("Enter search query.");
+            String query = getUserInputString(true, 30);
+
+            ArrayList<Object> objectList = new ArrayList<>();
+            for (Recipe recipe : Cookbook.recipes) {
+                objectList.add(recipe); // Adding each Recipe object to the Object list
+            }
+
+            printSearchResults(query.toLowerCase(), objectList, 0, null);
         } else {
             printRecipe(Cookbook.recipes.get(userInput - 1), false);
         }
