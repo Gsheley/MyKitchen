@@ -130,7 +130,6 @@ public class Navigation {
                 printRecipeList(); 
                 break;                              
             case 2:
-                Navigation.clearConsole();
                 printRecipeQueryOptions();
                 break;
             case 3:
@@ -182,7 +181,7 @@ public class Navigation {
         if (!fromSearch) {
             Navigation.clearConsole();
         }
-        ArrayList<Recipe> recipeList = Cookbook.recipes;
+
         recipe.printRecipe();
 
         System.out.println("\nSelect a navigation option below.");
@@ -199,6 +198,7 @@ public class Navigation {
         int userInput = Navigation.getUserInputInt(1, 2);
         switch (userInput) {
             case 1:
+                Navigation.clearConsole();
                 if (fromSearch) {
                     Cookbook.saveRecipe(recipe);
                     System.out.println("Recipe saved to cookbook!");
@@ -667,6 +667,7 @@ public class Navigation {
 
     public void printRecipeQueryOptions() {
         MealDB mealDB = new MealDB();
+        Navigation.clearConsole();
         System.out.println("\nSelect a recipe option below.\n" +
         "1. Find recipes by name\n" +
         "2. Find recipes by main ingredient\n" +
@@ -684,7 +685,6 @@ public class Navigation {
                     System.out.println("\nSorry, it doesn't look like our database has a recipe for that meal!\n");
                 }
                 else {
-                    newRecipe.printRecipe();
                     printRecipe(newRecipe, true);
                 }
                 printRecipeQueryOptions();
@@ -694,9 +694,13 @@ public class Navigation {
                 String mainIngredient = Navigation.getUserInputString(true, 40);
                 ArrayList <Recipe> returnedRecipes = mealDB.queryByIngredient(mainIngredient);
                 if(returnedRecipes != null){
+                    Navigation.clearConsole();
+                    System.out.println("Results from query: " + mainIngredient + "\n");
                     for(int i = 0; i < returnedRecipes.size(); i++){
                         System.out.println(returnedRecipes.get(i).getName());
                     }
+                    System.out.println("\nHere are the recipes found with the specified main ingredient. Return to the previous menu and search one by name to view/save it!\n");
+                    bufferContinue();
                 }
                 else{
                     System.out.println("\nSorry, it doesn't look like there are any recipes with that main ingredient in the database!\n");
@@ -707,7 +711,6 @@ public class Navigation {
                 Recipe randomRecipe = mealDB.queryRandom();
                 if(randomRecipe != null)
                 {
-                    randomRecipe.printRecipe();
                     printRecipe(randomRecipe, true);
                 }
                 printRecipeQueryOptions();
